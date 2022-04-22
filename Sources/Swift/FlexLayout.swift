@@ -13,9 +13,7 @@
 // Created by Luc Dion on 2017-06-19.
 
 import UIKit
-#if FLEXLAYOUT_SWIFT_PACKAGE
 import FlexLayoutYogaKit
-#endif
 
 /**
  FlexLayout interface.
@@ -874,7 +872,7 @@ public final class Flex {
      */
     @available(tvOS 11.0, iOS 11.0, *)
     @discardableResult
-    public func margin(_ directionalInsets: NSDirectionalEdgeInsets) -> Flex {
+    func margin(_ directionalInsets: NSDirectionalEdgeInsets) -> Flex {
         yoga.marginTop = YGValue(directionalInsets.top)
         yoga.marginStart = YGValue(directionalInsets.leading)
         yoga.marginBottom = YGValue(directionalInsets.bottom)
@@ -900,15 +898,13 @@ public final class Flex {
     /**
      Set the individually vertical margins (top, bottom) and horizontal margins (left, right, start, end).
      */
-    @discardableResult
-    public func margin(_ vertical: CGFloat, _ horizontal: CGFloat) -> Flex {
+    @discardableResult func margin(_ vertical: CGFloat, _ horizontal: CGFloat) -> Flex {
         yoga.marginVertical = YGValue(vertical)
         yoga.marginHorizontal = YGValue(horizontal)
         return self
     }
     
-    @discardableResult
-    public func margin(_ vertical: FPercent, _ horizontal: FPercent) -> Flex {
+    @discardableResult func margin(_ vertical: FPercent, _ horizontal: FPercent) -> Flex {
         yoga.marginVertical = YGValue(value: Float(vertical.value), unit: .percent)
         yoga.marginHorizontal = YGValue(value: Float(horizontal.value), unit: .percent)
         return self
@@ -917,16 +913,14 @@ public final class Flex {
     /**
      Set the individually top, horizontal margins and bottom margin.
      */
-    @discardableResult
-    public func margin(_ top: CGFloat, _ horizontal: CGFloat, _ bottom: CGFloat) -> Flex {
+    @discardableResult func margin(_ top: CGFloat, _ horizontal: CGFloat, _ bottom: CGFloat) -> Flex {
         yoga.marginTop = YGValue(top)
         yoga.marginHorizontal = YGValue(horizontal)
         yoga.marginBottom = YGValue(bottom)
         return self
     }
     
-    @discardableResult
-    public func margin(_ top: FPercent, _ horizontal: FPercent, _ bottom: FPercent) -> Flex {
+    @discardableResult func margin(_ top: FPercent, _ horizontal: FPercent, _ bottom: FPercent) -> Flex {
         yoga.marginTop = YGValue(value: Float(top.value), unit: .percent)
         yoga.marginHorizontal = YGValue(value: Float(horizontal.value), unit: .percent)
         yoga.marginBottom = YGValue(value: Float(bottom.value), unit: .percent)
@@ -1004,7 +998,7 @@ public final class Flex {
     }
 
     /**
-     Set the right padding. Right padding specify the **offset children should have** from the container's right edge.
+     Set the top padding. Top padding specify the **offset children should have** from the container's top edge.
      */
     @discardableResult
     public func paddingRight(_ value: CGFloat) -> Flex {
@@ -1107,7 +1101,7 @@ public final class Flex {
      */
     @available(tvOS 11.0, iOS 11.0, *)
     @discardableResult
-    public func padding(_ directionalInsets: NSDirectionalEdgeInsets) -> Flex {
+    func padding(_ directionalInsets: NSDirectionalEdgeInsets) -> Flex {
         yoga.paddingTop = YGValue(directionalInsets.top)
         yoga.paddingStart = YGValue(directionalInsets.leading)
         yoga.paddingBottom = YGValue(directionalInsets.bottom)
@@ -1133,8 +1127,7 @@ public final class Flex {
     /**
      Set the individually vertical paddings (top, bottom) and horizontal paddings (left, right, start, end).
      */
-    @discardableResult
-    public func padding(_ vertical: CGFloat, _ horizontal: CGFloat) -> Flex {
+    @discardableResult func padding(_ vertical: CGFloat, _ horizontal: CGFloat) -> Flex {
         yoga.paddingVertical = YGValue(vertical)
         yoga.paddingHorizontal = YGValue(horizontal)
         return self
@@ -1150,16 +1143,14 @@ public final class Flex {
     /**
      Set the individually top, horizontal paddings and bottom padding.
      */
-    @discardableResult
-    public func padding(_ top: CGFloat, _ horizontal: CGFloat, _ bottom: CGFloat) -> Flex {
+    @discardableResult func padding(_ top: CGFloat, _ horizontal: CGFloat, _ bottom: CGFloat) -> Flex {
         yoga.paddingTop = YGValue(top)
         yoga.paddingHorizontal = YGValue(horizontal)
         yoga.paddingBottom = YGValue(bottom)
         return self
     }
 
-    @discardableResult
-    public func padding(_ top: FPercent, _ horizontal: FPercent, _ bottom: FPercent) -> Flex {
+    @discardableResult func padding(_ top: FPercent, _ horizontal: FPercent, _ bottom: FPercent) -> Flex {
         yoga.paddingTop = YGValue(value: Float(top.value), unit: .percent)
         yoga.paddingHorizontal = YGValue(value: Float(horizontal.value), unit: .percent)
         yoga.paddingBottom = YGValue(value: Float(bottom.value), unit: .percent)
