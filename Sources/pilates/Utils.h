@@ -6,8 +6,8 @@
  */
 
 #pragma once
-#include "YGNode.h"
-#include "Yoga-internal.h"
+#include "PilatesNode.h"
+#include "Pilates-internal.h"
 
 // This struct is an helper model to hold the data for step 4 of flexbox
 // algo, which is collecting the flex items in a line.

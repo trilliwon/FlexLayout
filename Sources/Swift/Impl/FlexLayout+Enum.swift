@@ -14,7 +14,7 @@
 
 import UIKit
 
-import FlexLayoutYoga
+import FlexLayoutPilates
 
 extension YGFlexDirection {
     static let column = YGFlexDirectionColumn
@@ -71,7 +71,7 @@ extension YGUnit {
 }
 
 extension Flex.Direction {
-    var yogaValue: YGFlexDirection {
+    var pilatesValue: YGFlexDirection {
         switch self {
         case .column:        return YGFlexDirection.column
         case .columnReverse: return YGFlexDirection.columnReverse
@@ -82,7 +82,7 @@ extension Flex.Direction {
 }
 
 extension Flex.JustifyContent {
-    var yogaValue: YGJustify {
+    var pilatesValue: YGJustify {
         switch self {
         case .start:        return YGJustify.flexStart
         case .center:       return YGJustify.center
@@ -95,7 +95,7 @@ extension Flex.JustifyContent {
 }
 
 extension Flex.AlignContent {
-    var yogaValue: YGAlign {
+    var pilatesValue: YGAlign {
         switch self {
         case .stretch:      return YGAlign.stretch
         case .start:        return YGAlign.flexStart
@@ -108,7 +108,7 @@ extension Flex.AlignContent {
 }
 
 extension Flex.AlignItems {
-    var yogaValue: YGAlign {
+    var pilatesValue: YGAlign {
         switch self {
         case .stretch:      return YGAlign.stretch
         case .start:        return YGAlign.flexStart
@@ -120,7 +120,7 @@ extension Flex.AlignItems {
 }
 
 extension Flex.AlignSelf {
-    var yogaValue: YGAlign {
+    var pilatesValue: YGAlign {
         switch self {
         case .auto:         return YGAlign.auto
         case .stretch:      return YGAlign.stretch
@@ -133,7 +133,7 @@ extension Flex.AlignSelf {
 }
 
 extension Flex.Wrap {
-    var yogaValue: YGWrap {
+    var pilatesValue: YGWrap {
         switch self {
         case .noWrap:      return YGWrap.noWrap
         case .wrap:        return YGWrap.wrap
@@ -143,7 +143,7 @@ extension Flex.Wrap {
 }
 
 extension Flex.Position {
-    var yogaValue: YGPositionType {
+    var pilatesValue: YGPositionType {
         switch self {
         case .relative: return YGPositionType.relative
         case .absolute: return YGPositionType.absolute
@@ -152,7 +152,7 @@ extension Flex.Position {
 }
 
 extension Flex.LayoutDirection {
-    var yogaValue: YGDirection {
+    var pilatesValue: YGDirection {
         switch self {
         case .ltr: return YGDirection.LTR
         case .rtl: return YGDirection.RTL
@@ -162,7 +162,7 @@ extension Flex.LayoutDirection {
 }
 
 extension Flex.Display {
-    var yogaValue: YGDisplay {
+    var pilatesValue: YGDisplay {
         switch self {
         case .flex: return YGDisplay.flex
         case .none: return YGDisplay.none
@@ -171,7 +171,7 @@ extension Flex.Display {
 }
 
 /*extension Flex.Overflow {
-    var yogaValue: YGOverflow {
+    var pilatesValue: YGOverflow {
         switch self {
         case .visible: return YGOverflow.visible
         case .hidden:  return YGOverflow.hidden

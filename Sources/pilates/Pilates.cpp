@@ -5,13 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#include "Yoga.h"
+#include "Pilates.h"
 #include <string.h>
 #include <algorithm>
 #include "Utils.h"
-#include "YGNode.h"
-#include "YGNodePrint.h"
-#include "Yoga-internal.h"
+#include "PilatesNode.h"
+#include "PilatesNodePrint.h"
+#include "Pilates-internal.h"
 
 #ifdef _MSC_VER
 #include <float.h>
@@ -88,7 +88,7 @@ static int YGAndroidLog(const YGConfigRef config,
       androidLevel = ANDROID_LOG_VERBOSE;
       break;
   }
-  const int result = __android_log_vprint(androidLevel, "yoga", format, args);
+  const int result = __android_log_vprint(androidLevel, "pilates", format, args);
   return result;
 }
 #else
@@ -758,7 +758,7 @@ YG_NODE_STYLE_PROPERTY_UNIT_IMPL(YGValue, MinHeight, minHeight, minDimensions[YG
 YG_NODE_STYLE_PROPERTY_UNIT_IMPL(YGValue, MaxWidth, maxWidth, maxDimensions[YGDimensionWidth]);
 YG_NODE_STYLE_PROPERTY_UNIT_IMPL(YGValue, MaxHeight, maxHeight, maxDimensions[YGDimensionHeight]);
 
-// Yoga specific properties, not compatible with flexbox specification
+// Pilates specific properties, not compatible with flexbox specification
 YG_NODE_STYLE_PROPERTY_IMPL(float, AspectRatio, aspectRatio, aspectRatio);
 
 YG_NODE_LAYOUT_PROPERTY_IMPL(float, Left, position[YGEdgeLeft]);
@@ -804,7 +804,7 @@ bool YGFloatsEqual(const float a, const float b) {
 static void YGNodePrintInternal(const YGNodeRef node,
                                 const YGPrintOptions options) {
   std::string str;
-  facebook::yoga::YGNodeToString(&str, node, options, 0);
+  facebook::pilates::YGNodeToString(&str, node, options, 0);
   YGLog(node, YGLogLevelDebug, str.c_str());
 }
 
@@ -2329,12 +2329,12 @@ static void YGNodelayoutImpl(const YGNodeRef node,
                    YGFloatIsUndefined(availableWidth) ? widthMeasureMode == YGMeasureModeUndefined
                                                       : true,
                    "availableWidth is indefinite so widthMeasureMode must be "
-                   "YGMeasureModeUndefined");
+                   "PilatesMeasureModeUndefined");
   YGAssertWithNode(node,
                    YGFloatIsUndefined(availableHeight) ? heightMeasureMode == YGMeasureModeUndefined
                                                        : true,
                    "availableHeight is indefinite so heightMeasureMode must be "
-                   "YGMeasureModeUndefined");
+                   "PilatesMeasureModeUndefined");
 
   // Set the resolved resolution in the node's layout.
   const YGDirection direction = node->resolveDirection(parentDirection);
@@ -3621,7 +3621,7 @@ void YGNodeCalculateLayout(const YGNodeRef node,
   }
 
   // We want to get rid off `useLegacyStretchBehaviour` from YGConfig. But we
-  // aren't sure whether client's of yoga have gotten rid off this flag or not.
+  // aren't sure whether client's of pilates have gotten rid off this flag or not.
   // So logging this in YGLayout would help to find out the call sites depending
   // on this flag. This check would be removed once we are sure no one is
   // dependent on this flag anymore. The flag

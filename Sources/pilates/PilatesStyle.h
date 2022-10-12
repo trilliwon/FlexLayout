@@ -7,8 +7,8 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 #pragma once
-#include "Yoga-internal.h"
-#include "Yoga.h"
+#include "Pilates-internal.h"
+#include "Pilates.h"
 
 struct YGStyle {
   YGDirection direction;
@@ -35,7 +35,7 @@ struct YGStyle {
   float aspectRatio;
 
   YGStyle();
-  // Yoga specific properties, not compatible with flexbox specification
+  // Pilates specific properties, not compatible with flexbox specification
   bool operator==(const YGStyle& style);
 
   bool operator!=(YGStyle style);

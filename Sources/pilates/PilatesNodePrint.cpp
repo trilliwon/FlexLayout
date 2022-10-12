@@ -5,14 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#include "YGNodePrint.h"
+#include "PilatesNodePrint.h"
 #include <stdarg.h>
-#include "YGEnums.h"
-#include "YGNode.h"
-#include "Yoga-internal.h"
+#include "PilatesEnums.h"
+#include "PilatesNode.h"
+#include "Pilates-internal.h"
 
 namespace facebook {
-namespace yoga {
+namespace pilates {
 typedef std::string string;
 
 static void indent(string* base, uint32_t level) {
@@ -221,5 +221,5 @@ void YGNodeToString(
   }
   appendFormatedString(str, "</div>");
 }
-} // namespace yoga
+} // namespace pilates
 } // namespace facebook

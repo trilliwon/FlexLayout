@@ -7,10 +7,10 @@
 #pragma once
 #include <string>
 
-#include "Yoga.h"
+#include "Pilates.h"
 
 namespace facebook {
-namespace yoga {
+namespace pilates {
 
 void YGNodeToString(
     std::string* str,
@@ -18,5 +18,5 @@ void YGNodeToString(
     YGPrintOptions options,
     uint32_t level);
 
-} // namespace yoga
+} // namespace pilates
 } // namespace facebook

@@ -26,8 +26,8 @@ static const unsigned long __nan[2] = {0xffffffff, 0x7fffffff};
 
 #define YGUndefined NAN
 
-#include "YGEnums.h"
-#include "YGMacros.h"
+#include "PilatesEnums.h"
+#include "PilatesMacros.h"
 
 YG_EXTERN_C_BEGIN
 
@@ -97,7 +97,7 @@ WIN_EXPORT void YGNodeCalculateLayout(const YGNodeRef node,
 // marking manually.
 WIN_EXPORT void YGNodeMarkDirty(const YGNodeRef node);
 
-// This function marks the current node and all its descendants as dirty. This function is added to test yoga benchmarks.
+// This function marks the current node and all its descendants as dirty. This function is added to test pilates benchmarks.
 // This function is not expected to be used in production as calling `YGCalculateLayout` will cause the recalculation of each and every node.
 WIN_EXPORT void YGNodeMarkDirtyAndPropogateToDescendants(const YGNodeRef node);
 
@@ -208,7 +208,7 @@ YG_NODE_STYLE_PROPERTY_UNIT(YGValue, MinHeight, minHeight);
 YG_NODE_STYLE_PROPERTY_UNIT(YGValue, MaxWidth, maxWidth);
 YG_NODE_STYLE_PROPERTY_UNIT(YGValue, MaxHeight, maxHeight);
 
-// Yoga specific properties, not compatible with flexbox specification
+// Pilates specific properties, not compatible with flexbox specification
 // Aspect ratio control the size of the undefined dimension of a node.
 // Aspect ratio is encoded as a floating point value width/height. e.g. A value of 2 leads to a node
 // with a width twice the size of its height while a value of 0.5 gives the opposite effect.
@@ -253,7 +253,7 @@ WIN_EXPORT void YGAssertWithConfig(const YGConfigRef config,
 // If you want to avoid rounding - set PointScaleFactor to 0
 WIN_EXPORT void YGConfigSetPointScaleFactor(const YGConfigRef config, const float pixelsInPoint);
 
-// Yoga previously had an error where containers would take the maximum space possible instead of
+// Pilates previously had an error where containers would take the maximum space possible instead of
 // the minimum
 // like they are supposed to. In practice this resulted in implicit behaviour similar to align-self:
 // stretch;

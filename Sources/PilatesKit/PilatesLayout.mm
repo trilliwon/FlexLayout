@@ -5,8 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "YGLayout+Private.h"
-#import "UIView+Yoga.h"
+#import "PilatesLayout+Private.h"
+#import "UIView+Pilates.h"
 
 #define YG_PROPERTY(type, lowercased_name, capitalized_name)    \
 - (type)lowercased_name                                         \
@@ -192,7 +192,7 @@ static YGConfigRef globalConfig;
     return;
   }
 
-  // Yoga is not happy if we try to mark a node as "dirty" before we have set
+  // Pilates is not happy if we try to mark a node as "dirty" before we have set
   // the measure function. Since we already know that this is a leaf,
   // this *should* be fine. Forgive me Hack Gods.
   const YGNodeRef node = self.node;
@@ -213,8 +213,8 @@ static YGConfigRef globalConfig;
   NSAssert([NSThread isMainThread], @"This method must be called on the main thread.");
   if (self.isEnabled) {
     for (UIView *subview in self.view.subviews) {
-      YGLayout *const yoga = subview.yoga;
-      if (yoga.isEnabled && yoga.isIncludedInLayout) {
+      YGLayout *const pilates = subview.pilates;
+      if (pilates.isEnabled && pilates.isIncludedInLayout) {
         return NO;
       }
     }
@@ -318,8 +318,8 @@ YG_PROPERTY(CGFloat, aspectRatio, AspectRatio)
 
 - (CGSize)calculateLayoutWithSize:(CGSize)size
 {
-  NSAssert([NSThread isMainThread], @"Yoga calculation must be done on main.");
-  NSAssert(self.isEnabled, @"Yoga is not enabled for this view.");
+  NSAssert([NSThread isMainThread], @"Pilates calculation must be done on main.");
+  NSAssert(self.isEnabled, @"Pilates is not enabled for this view.");
 
   YGAttachNodesFromViewHierachy(self.view);
 
@@ -420,7 +420,7 @@ static BOOL YGNodeHasExactSameChildren(const YGNodeRef node, NSArray<UIView *> *
   }
 
   for (int i=0; i<subviews.count; i++) {
-    if (YGNodeGetChild(node, i) != subviews[i].yoga.node) {
+    if (YGNodeGetChild(node, i) != subviews[i].pilates.node) {
       return NO;
     }
   }
@@ -430,11 +430,11 @@ static BOOL YGNodeHasExactSameChildren(const YGNodeRef node, NSArray<UIView *> *
 
 static void YGAttachNodesFromViewHierachy(UIView *const view)
 {
-  YGLayout *const yoga = view.yoga;
-  const YGNodeRef node = yoga.node;
+  YGLayout *const pilates = view.pilates;
+  const YGNodeRef node = pilates.node;
 
   // Only leaf nodes should have a measure function
-  if (yoga.isLeaf) {
+  if (pilates.isLeaf) {
     YGRemoveAllChildren(node);
     YGNodeSetMeasureFunc(node, YGMeasureView);
   } else {
@@ -442,7 +442,7 @@ static void YGAttachNodesFromViewHierachy(UIView *const view)
 
     NSMutableArray<UIView *> *subviewsToInclude = [[NSMutableArray alloc] initWithCapacity:view.subviews.count];
     for (UIView *subview in view.subviews) {
-      if (subview.yoga.isIncludedInLayout) {
+      if (subview.pilates.isIncludedInLayout) {
         [subviewsToInclude addObject:subview];
       }
     }
@@ -450,7 +450,7 @@ static void YGAttachNodesFromViewHierachy(UIView *const view)
     if (!YGNodeHasExactSameChildren(node, subviewsToInclude)) {
       YGRemoveAllChildren(node);
       for (int i=0; i<subviewsToInclude.count; i++) {
-        YGNodeRef child = subviewsToInclude[i].yoga.node;
+        YGNodeRef child = subviewsToInclude[i].pilates.node;
         YGNodeRef parent = YGNodeGetParent(child);
         if (parent != NULL) {
           YGNodeRemoveChild(parent, child);
@@ -491,13 +491,13 @@ static void YGApplyLayoutToViewHierarchy(UIView *view, BOOL preserveOrigin)
 {
   NSCAssert([NSThread isMainThread], @"Framesetting should only be done on the main thread.");
 
-  const YGLayout *yoga = view.yoga;
+  const YGLayout *pilates = view.pilates;
 
-  if (!yoga.isIncludedInLayout) {
+  if (!pilates.isIncludedInLayout) {
      return;
   }
 
-  YGNodeRef node = yoga.node;
+  YGNodeRef node = pilates.node;
   const CGPoint topLeft = {
     YGNodeLayoutGetLeft(node),
     YGNodeLayoutGetTop(node),
@@ -520,7 +520,7 @@ static void YGApplyLayoutToViewHierarchy(UIView *view, BOOL preserveOrigin)
     },
   };
 
-  if (!yoga.isLeaf) {
+  if (!pilates.isLeaf) {
     for (NSUInteger i=0; i<view.subviews.count; i++) {
       YGApplyLayoutToViewHierarchy(view.subviews[i], NO);
     }

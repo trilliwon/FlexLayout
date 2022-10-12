@@ -5,26 +5,26 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "YGLayout.h"
+#import "PilatesLayout.h"
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^YGLayoutConfigurationBlock)(YGLayout *layout);
 
-@interface UIView (Yoga)
+@interface UIView (Pilates)
 
 /**
  The YGLayout that is attached to this view. It is lazily created.
  */
-@property (nonatomic, readonly, strong) YGLayout *yoga;
+@property (nonatomic, readonly, strong) YGLayout *pilates;
 /**
- Indicates whether or not Yoga is enabled
+ Indicates whether or not Pilates is enabled
  */
-@property (nonatomic, readonly, assign) BOOL isYogaEnabled;
+@property (nonatomic, readonly, assign) BOOL isPilatesEnabled;
 
 /**
- In ObjC land, every time you access `view.yoga.*` you are adding another `objc_msgSend`
+ In ObjC land, every time you access `view.pilates.*` you are adding another `objc_msgSend`
  to your code. If you plan on making multiple changes to YGLayout, it's more performant
  to use this method, which uses a single objc_msgSend call.
  */

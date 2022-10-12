@@ -8,13 +8,13 @@
 #import <UIKit/UIKit.h>
 
 #if FLEXLAYOUT_SWIFT_PACKAGE
-#import <yoga/YGEnums.h>
-#import <yoga/Yoga.h>
-#import <yoga/YGMacros.h>
+#import <pilates/PilatesEnums.h>
+#import <pilates/Pilates.h>
+#import <pilates/PilatesMacros.h>
 #else
-#import "YGEnums.h"
-#import "Yoga.h"
-#import "YGMacros.h"
+#import "PilatesEnums.h"
+#import "Pilates.h"
+#import "PilatesMacros.h"
 #endif
 
 YG_EXTERN_C_BEGIN
@@ -109,7 +109,7 @@ typedef NS_OPTIONS(NSInteger, YGDimensionFlexibility) {
 @property (nonatomic, readwrite, assign) YGValue maxWidth;
 @property (nonatomic, readwrite, assign) YGValue maxHeight;
 
-// Yoga specific properties, not compatible with flexbox specification
+// Pilates specific properties, not compatible with flexbox specification
 @property (nonatomic, readwrite, assign) CGFloat aspectRatio;
 
 /**
@@ -151,7 +151,7 @@ typedef NS_OPTIONS(NSInteger, YGDimensionFlexibility) {
 
 /**
  Return a BOOL indiciating whether or not we this node contains any subviews that are included in
- Yoga's layout.
+ Pilates's layout.
  */
 @property (nonatomic, readonly, assign) BOOL isLeaf;
 

@@ -23,7 +23,6 @@ public struct FPercent {
     let value: CGFloat
 }
 
-postfix operator %
 public postfix func % (v: CGFloat) -> FPercent {
     return FPercent(value: v)
 }

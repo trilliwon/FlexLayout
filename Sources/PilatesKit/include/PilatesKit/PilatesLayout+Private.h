@@ -5,11 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "YGLayout.h"
+#import "PilatesLayout.h"
 #if FLEXLAYOUT_SWIFT_PACKAGE
-#import <yoga/Yoga.h>
+#import <pilates/Pilates.h>
 #else
-#import "Yoga.h"
+#import "Pilates.h"
 #endif
 
 @interface YGLayout ()

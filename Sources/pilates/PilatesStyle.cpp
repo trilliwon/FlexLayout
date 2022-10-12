@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
  */
-#include "YGStyle.h"
+#include "PilatesStyle.h"
 
 const YGValue kYGValueUndefined = {YGUndefined, YGUnitUndefined};
 
@@ -53,7 +53,7 @@ YGStyle::YGStyle()
       maxDimensions(kYGDefaultDimensionValuesUnit),
       aspectRatio(YGUndefined) {}
 
-// Yoga specific properties, not compatible with flexbox specification
+// Pilates specific properties, not compatible with flexbox specification
 bool YGStyle::operator==(const YGStyle& style) {
   bool areNonFloatValuesEqual = direction == style.direction &&
       flexDirection == style.flexDirection &&

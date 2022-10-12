@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#include "YGNode.h"
+#include "PilatesNode.h"
 #include <iostream>
 #include "Utils.h"
 
@@ -540,7 +540,7 @@ YGNode::~YGNode() {
 // Other Methods
 
 void YGNode::cloneChildrenIfNeeded() {
-  // YGNodeRemoveChild in yoga.cpp has a forked variant of this algorithm
+  // YGNodeRemoveChild in pilates.cpp has a forked variant of this algorithm
   // optimized for deletions.
 
   const uint32_t childCount = static_cast<uint32_t>(children_.size());

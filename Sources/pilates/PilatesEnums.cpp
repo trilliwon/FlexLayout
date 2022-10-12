@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#include "YGEnums.h"
+#include "PilatesEnums.h"
 
 const char *YGAlignToString(const YGAlign value){
   switch(value){
