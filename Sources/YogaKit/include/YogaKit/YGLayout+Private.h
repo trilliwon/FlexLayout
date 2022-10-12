@@ -5,11 +5,7 @@
  * file in the root directory of this source tree.
  */
 #import "YGLayout.h"
-#if FLEXLAYOUT_SWIFT_PACKAGE
 #import <yoga/Yoga.h>
-#else
-#import "Yoga.h"
-#endif
 
 @interface YGLayout ()
 

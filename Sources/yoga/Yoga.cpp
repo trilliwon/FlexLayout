@@ -506,11 +506,11 @@ YGNodeRef YGNodeGetParent(const YGNodeRef node) {
 }
 
 void YGNodeMarkDirty(const YGNodeRef node) {
-  YGAssertWithNode(
-      node,
-      node->hasMeasureFunc(),
-      "Only leaf nodes with custom measure functions"
-      "should manually mark themselves as dirty");
+//   YGAssertWithNode(
+//       node,
+//       node->hasMeasureFunc(),
+//       "Only leaf nodes with custom measure functions"
+//       "should manually mark themselves as dirty");
 
   node->markDirtyAndPropogate();
 }
