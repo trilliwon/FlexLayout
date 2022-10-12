@@ -9,263 +9,263 @@
 #include <iostream>
 #include "Utils.h"
 
-void* YGNode::getContext() const {
+void* PilatesNode::getContext() const {
   return context_;
 }
 
-YGPrintFunc YGNode::getPrintFunc() const {
+PilatesPrintFunc PilatesNode::getPrintFunc() const {
   return print_;
 }
 
-bool YGNode::getHasNewLayout() const {
+bool PilatesNode::getHasNewLayout() const {
   return hasNewLayout_;
 }
 
-YGNodeType YGNode::getNodeType() const {
+PilatesNodeType PilatesNode::getNodeType() const {
   return nodeType_;
 }
 
-YGMeasureFunc YGNode::getMeasure() const {
+PilatesMeasureFunc PilatesNode::getMeasure() const {
   return measure_;
 }
 
-YGBaselineFunc YGNode::getBaseline() const {
+PilatesBaselineFunc PilatesNode::getBaseline() const {
   return baseline_;
 }
 
-YGDirtiedFunc YGNode::getDirtied() const {
+PilatesDirtiedFunc PilatesNode::getDirtied() const {
   return dirtied_;
 }
 
-YGStyle& YGNode::getStyle() {
+PilatesStyle& PilatesNode::getStyle() {
   return style_;
 }
 
-YGLayout& YGNode::getLayout() {
+PilatesLayout& PilatesNode::getLayout() {
   return layout_;
 }
 
-uint32_t YGNode::getLineIndex() const {
+uint32_t PilatesNode::getLineIndex() const {
   return lineIndex_;
 }
 
-YGNodeRef YGNode::getParent() const {
+PilatesNodeRef PilatesNode::getParent() const {
   return parent_;
 }
 
-YGVector YGNode::getChildren() const {
+PilatesVector PilatesNode::getChildren() const {
   return children_;
 }
 
-uint32_t YGNode::getChildrenCount() const {
+uint32_t PilatesNode::getChildrenCount() const {
   return static_cast<uint32_t>(children_.size());
 }
 
-YGNodeRef YGNode::getChild(uint32_t index) const {
+PilatesNodeRef PilatesNode::getChild(uint32_t index) const {
   return children_.at(index);
 }
 
-YGNodeRef YGNode::getNextChild() const {
+PilatesNodeRef PilatesNode::getNextChild() const {
   return nextChild_;
 }
 
-YGConfigRef YGNode::getConfig() const {
+PilatesConfigRef PilatesNode::getConfig() const {
   return config_;
 }
 
-bool YGNode::isDirty() const {
+bool PilatesNode::isDirty() const {
   return isDirty_;
 }
 
-YGValue YGNode::getResolvedDimension(int index) {
+PilatesValue PilatesNode::getResolvedDimension(int index) {
   return resolvedDimensions_[index];
 }
 
-std::array<YGValue, 2> YGNode::getResolvedDimensions() const {
+std::array<PilatesValue, 2> PilatesNode::getResolvedDimensions() const {
   return resolvedDimensions_;
 }
 
-float YGNode::getLeadingPosition(
-    const YGFlexDirection axis,
+float PilatesNode::getLeadingPosition(
+    const PilatesFlexDirection axis,
     const float axisSize) {
-  if (YGFlexDirectionIsRow(axis)) {
-    const YGValue* leadingPosition =
-        YGComputedEdgeValue(style_.position, YGEdgeStart, &YGValueUndefined);
-    if (leadingPosition->unit != YGUnitUndefined) {
-      return YGResolveValue(*leadingPosition, axisSize);
+  if (PilatesFlexDirectionIsRow(axis)) {
+    const PilatesValue* leadingPosition =
+        PilatesComputedEdgeValue(style_.position, PilatesEdgeStart, &PilatesValueUndefined);
+    if (leadingPosition->unit != PilatesUnitUndefined) {
+      return PilatesResolveValue(*leadingPosition, axisSize);
     }
   }
 
-  const YGValue* leadingPosition =
-      YGComputedEdgeValue(style_.position, leading[axis], &YGValueUndefined);
+  const PilatesValue* leadingPosition =
+      PilatesComputedEdgeValue(style_.position, leading[axis], &PilatesValueUndefined);
 
-  return leadingPosition->unit == YGUnitUndefined
+  return leadingPosition->unit == PilatesUnitUndefined
       ? 0.0f
-      : YGResolveValue(*leadingPosition, axisSize);
+      : PilatesResolveValue(*leadingPosition, axisSize);
 }
 
-float YGNode::getTrailingPosition(
-    const YGFlexDirection axis,
+float PilatesNode::getTrailingPosition(
+    const PilatesFlexDirection axis,
     const float axisSize) {
-  if (YGFlexDirectionIsRow(axis)) {
-    const YGValue* trailingPosition =
-        YGComputedEdgeValue(style_.position, YGEdgeEnd, &YGValueUndefined);
-    if (trailingPosition->unit != YGUnitUndefined) {
-      return YGResolveValue(*trailingPosition, axisSize);
+  if (PilatesFlexDirectionIsRow(axis)) {
+    const PilatesValue* trailingPosition =
+        PilatesComputedEdgeValue(style_.position, PilatesEdgeEnd, &PilatesValueUndefined);
+    if (trailingPosition->unit != PilatesUnitUndefined) {
+      return PilatesResolveValue(*trailingPosition, axisSize);
     }
   }
 
-  const YGValue* trailingPosition =
-      YGComputedEdgeValue(style_.position, trailing[axis], &YGValueUndefined);
+  const PilatesValue* trailingPosition =
+      PilatesComputedEdgeValue(style_.position, trailing[axis], &PilatesValueUndefined);
 
-  return trailingPosition->unit == YGUnitUndefined
+  return trailingPosition->unit == PilatesUnitUndefined
       ? 0.0f
-      : YGResolveValue(*trailingPosition, axisSize);
+      : PilatesResolveValue(*trailingPosition, axisSize);
 }
 
-bool YGNode::isLeadingPositionDefined(const YGFlexDirection axis) {
-  return (YGFlexDirectionIsRow(axis) &&
-          YGComputedEdgeValue(style_.position, YGEdgeStart, &YGValueUndefined)
-                  ->unit != YGUnitUndefined) ||
-      YGComputedEdgeValue(style_.position, leading[axis], &YGValueUndefined)
-          ->unit != YGUnitUndefined;
+bool PilatesNode::isLeadingPositionDefined(const PilatesFlexDirection axis) {
+  return (PilatesFlexDirectionIsRow(axis) &&
+          PilatesComputedEdgeValue(style_.position, PilatesEdgeStart, &PilatesValueUndefined)
+                  ->unit != PilatesUnitUndefined) ||
+      PilatesComputedEdgeValue(style_.position, leading[axis], &PilatesValueUndefined)
+          ->unit != PilatesUnitUndefined;
 }
 
-bool YGNode::isTrailingPosDefined(const YGFlexDirection axis) {
-  return (YGFlexDirectionIsRow(axis) &&
-          YGComputedEdgeValue(style_.position, YGEdgeEnd, &YGValueUndefined)
-                  ->unit != YGUnitUndefined) ||
-      YGComputedEdgeValue(style_.position, trailing[axis], &YGValueUndefined)
-          ->unit != YGUnitUndefined;
+bool PilatesNode::isTrailingPosDefined(const PilatesFlexDirection axis) {
+  return (PilatesFlexDirectionIsRow(axis) &&
+          PilatesComputedEdgeValue(style_.position, PilatesEdgeEnd, &PilatesValueUndefined)
+                  ->unit != PilatesUnitUndefined) ||
+      PilatesComputedEdgeValue(style_.position, trailing[axis], &PilatesValueUndefined)
+          ->unit != PilatesUnitUndefined;
 }
 
-float YGNode::getLeadingMargin(
-    const YGFlexDirection axis,
+float PilatesNode::getLeadingMargin(
+    const PilatesFlexDirection axis,
     const float widthSize) {
-  if (YGFlexDirectionIsRow(axis) &&
-      style_.margin[YGEdgeStart].unit != YGUnitUndefined) {
-    return YGResolveValueMargin(style_.margin[YGEdgeStart], widthSize);
+  if (PilatesFlexDirectionIsRow(axis) &&
+      style_.margin[PilatesEdgeStart].unit != PilatesUnitUndefined) {
+    return PilatesResolveValueMargin(style_.margin[PilatesEdgeStart], widthSize);
   }
 
-  return YGResolveValueMargin(
-      *YGComputedEdgeValue(style_.margin, leading[axis], &YGValueZero),
+  return PilatesResolveValueMargin(
+      *PilatesComputedEdgeValue(style_.margin, leading[axis], &PilatesValueZero),
       widthSize);
 }
 
-float YGNode::getTrailingMargin(
-    const YGFlexDirection axis,
+float PilatesNode::getTrailingMargin(
+    const PilatesFlexDirection axis,
     const float widthSize) {
-  if (YGFlexDirectionIsRow(axis) &&
-      style_.margin[YGEdgeEnd].unit != YGUnitUndefined) {
-    return YGResolveValueMargin(style_.margin[YGEdgeEnd], widthSize);
+  if (PilatesFlexDirectionIsRow(axis) &&
+      style_.margin[PilatesEdgeEnd].unit != PilatesUnitUndefined) {
+    return PilatesResolveValueMargin(style_.margin[PilatesEdgeEnd], widthSize);
   }
 
-  return YGResolveValueMargin(
-      *YGComputedEdgeValue(style_.margin, trailing[axis], &YGValueZero),
+  return PilatesResolveValueMargin(
+      *PilatesComputedEdgeValue(style_.margin, trailing[axis], &PilatesValueZero),
       widthSize);
 }
 
-float YGNode::getMarginForAxis(
-    const YGFlexDirection axis,
+float PilatesNode::getMarginForAxis(
+    const PilatesFlexDirection axis,
     const float widthSize) {
   return getLeadingMargin(axis, widthSize) + getTrailingMargin(axis, widthSize);
 }
 
 // Setters
 
-void YGNode::setContext(void* context) {
+void PilatesNode::setContext(void* context) {
   context_ = context;
 }
 
-void YGNode::setPrintFunc(YGPrintFunc printFunc) {
+void PilatesNode::setPrintFunc(PilatesPrintFunc printFunc) {
   print_ = printFunc;
 }
 
-void YGNode::setHasNewLayout(bool hasNewLayout) {
+void PilatesNode::setHasNewLayout(bool hasNewLayout) {
   hasNewLayout_ = hasNewLayout;
 }
 
-void YGNode::setNodeType(YGNodeType nodeType) {
+void PilatesNode::setNodeType(PilatesNodeType nodeType) {
   nodeType_ = nodeType;
 }
 
-void YGNode::setStyleFlexDirection(YGFlexDirection direction) {
+void PilatesNode::setStyleFlexDirection(PilatesFlexDirection direction) {
   style_.flexDirection = direction;
 }
 
-void YGNode::setStyleAlignContent(YGAlign alignContent) {
+void PilatesNode::setStyleAlignContent(PilatesAlign alignContent) {
   style_.alignContent = alignContent;
 }
 
-void YGNode::setMeasureFunc(YGMeasureFunc measureFunc) {
+void PilatesNode::setMeasureFunc(PilatesMeasureFunc measureFunc) {
   if (measureFunc == nullptr) {
     measure_ = nullptr;
     // TODO: t18095186 Move nodeType to opt-in function and mark appropriate
     // places in Litho
-    nodeType_ = YGNodeTypeDefault;
+    nodeType_ = PilatesNodeTypeDefault;
   } else {
-    YGAssertWithNode(
+    PilatesAssertWithNode(
         this,
         children_.size() == 0,
         "Cannot set measure function: Nodes with measure functions cannot have children.");
     measure_ = measureFunc;
     // TODO: t18095186 Move nodeType to opt-in function and mark appropriate
     // places in Litho
-    setNodeType(YGNodeTypeText);
+    setNodeType(PilatesNodeTypeText);
   }
 
   measure_ = measureFunc;
 }
 
-void YGNode::setBaseLineFunc(YGBaselineFunc baseLineFunc) {
+void PilatesNode::setBaseLineFunc(PilatesBaselineFunc baseLineFunc) {
   baseline_ = baseLineFunc;
 }
 
-void YGNode::setDirtiedFunc(YGDirtiedFunc dirtiedFunc) {
+void PilatesNode::setDirtiedFunc(PilatesDirtiedFunc dirtiedFunc) {
   dirtied_ = dirtiedFunc;
 }
 
-void YGNode::setStyle(YGStyle style) {
+void PilatesNode::setStyle(PilatesStyle style) {
   style_ = style;
 }
 
-void YGNode::setLayout(YGLayout layout) {
+void PilatesNode::setLayout(PilatesLayout layout) {
   layout_ = layout;
 }
 
-void YGNode::setLineIndex(uint32_t lineIndex) {
+void PilatesNode::setLineIndex(uint32_t lineIndex) {
   lineIndex_ = lineIndex;
 }
 
-void YGNode::setParent(YGNodeRef parent) {
+void PilatesNode::setParent(PilatesNodeRef parent) {
   parent_ = parent;
 }
 
-void YGNode::setChildren(YGVector children) {
+void PilatesNode::setChildren(PilatesVector children) {
   children_ = children;
 }
 
-void YGNode::setNextChild(YGNodeRef nextChild) {
+void PilatesNode::setNextChild(PilatesNodeRef nextChild) {
   nextChild_ = nextChild;
 }
 
-void YGNode::replaceChild(YGNodeRef child, uint32_t index) {
+void PilatesNode::replaceChild(PilatesNodeRef child, uint32_t index) {
   children_[index] = child;
 }
 
-void YGNode::replaceChild(YGNodeRef oldChild, YGNodeRef newChild) {
+void PilatesNode::replaceChild(PilatesNodeRef oldChild, PilatesNodeRef newChild) {
   std::replace(children_.begin(), children_.end(), oldChild, newChild);
 }
 
-void YGNode::insertChild(YGNodeRef child, uint32_t index) {
+void PilatesNode::insertChild(PilatesNodeRef child, uint32_t index) {
   children_.insert(children_.begin() + index, child);
 }
 
-void YGNode::setConfig(YGConfigRef config) {
+void PilatesNode::setConfig(PilatesConfigRef config) {
   config_ = config;
 }
 
-void YGNode::setDirty(bool isDirty) {
+void PilatesNode::setDirty(bool isDirty) {
   if (isDirty == isDirty_) {
     return;
   }
@@ -275,8 +275,8 @@ void YGNode::setDirty(bool isDirty) {
   }
 }
 
-bool YGNode::removeChild(YGNodeRef child) {
-  std::vector<YGNodeRef>::iterator p =
+bool PilatesNode::removeChild(PilatesNodeRef child) {
+  std::vector<PilatesNodeRef>::iterator p =
       std::find(children_.begin(), children_.end(), child);
   if (p != children_.end()) {
     children_.erase(p);
@@ -285,77 +285,77 @@ bool YGNode::removeChild(YGNodeRef child) {
   return false;
 }
 
-void YGNode::removeChild(uint32_t index) {
+void PilatesNode::removeChild(uint32_t index) {
   children_.erase(children_.begin() + index);
 }
 
-void YGNode::setLayoutDirection(YGDirection direction) {
+void PilatesNode::setLayoutDirection(PilatesDirection direction) {
   layout_.direction = direction;
 }
 
-void YGNode::setLayoutMargin(float margin, int index) {
+void PilatesNode::setLayoutMargin(float margin, int index) {
   layout_.margin[index] = margin;
 }
 
-void YGNode::setLayoutBorder(float border, int index) {
+void PilatesNode::setLayoutBorder(float border, int index) {
   layout_.border[index] = border;
 }
 
-void YGNode::setLayoutPadding(float padding, int index) {
+void PilatesNode::setLayoutPadding(float padding, int index) {
   layout_.padding[index] = padding;
 }
 
-void YGNode::setLayoutLastParentDirection(YGDirection direction) {
+void PilatesNode::setLayoutLastParentDirection(PilatesDirection direction) {
   layout_.lastParentDirection = direction;
 }
 
-void YGNode::setLayoutComputedFlexBasis(float computedFlexBasis) {
+void PilatesNode::setLayoutComputedFlexBasis(float computedFlexBasis) {
   layout_.computedFlexBasis = computedFlexBasis;
 }
 
-void YGNode::setLayoutPosition(float position, int index) {
+void PilatesNode::setLayoutPosition(float position, int index) {
   layout_.position[index] = position;
 }
 
-void YGNode::setLayoutComputedFlexBasisGeneration(
+void PilatesNode::setLayoutComputedFlexBasisGeneration(
     uint32_t computedFlexBasisGeneration) {
   layout_.computedFlexBasisGeneration = computedFlexBasisGeneration;
 }
 
-void YGNode::setLayoutMeasuredDimension(float measuredDimension, int index) {
+void PilatesNode::setLayoutMeasuredDimension(float measuredDimension, int index) {
   layout_.measuredDimensions[index] = measuredDimension;
 }
 
-void YGNode::setLayoutHadOverflow(bool hadOverflow) {
+void PilatesNode::setLayoutHadOverflow(bool hadOverflow) {
   layout_.hadOverflow = hadOverflow;
 }
 
-void YGNode::setLayoutDimension(float dimension, int index) {
+void PilatesNode::setLayoutDimension(float dimension, int index) {
   layout_.dimensions[index] = dimension;
 }
 
 // If both left and right are defined, then use left. Otherwise return
 // +left or -right depending on which is defined.
-float YGNode::relativePosition(
-    const YGFlexDirection axis,
+float PilatesNode::relativePosition(
+    const PilatesFlexDirection axis,
     const float axisSize) {
   return isLeadingPositionDefined(axis) ? getLeadingPosition(axis, axisSize)
                                         : -getTrailingPosition(axis, axisSize);
 }
 
-void YGNode::setPosition(
-    const YGDirection direction,
+void PilatesNode::setPosition(
+    const PilatesDirection direction,
     const float mainSize,
     const float crossSize,
     const float parentWidth) {
   /* Root nodes should be always layouted as LTR, so we don't return negative
    * values. */
-  const YGDirection directionRespectingRoot =
-      parent_ != nullptr ? direction : YGDirectionLTR;
-  const YGFlexDirection mainAxis =
-      YGResolveFlexDirection(style_.flexDirection, directionRespectingRoot);
-  const YGFlexDirection crossAxis =
-      YGFlexDirectionCross(mainAxis, directionRespectingRoot);
+  const PilatesDirection directionRespectingRoot =
+      parent_ != nullptr ? direction : PilatesDirectionLTR;
+  const PilatesFlexDirection mainAxis =
+      PilatesResolveFlexDirection(style_.flexDirection, directionRespectingRoot);
+  const PilatesFlexDirection crossAxis =
+      PilatesFlexDirectionCross(mainAxis, directionRespectingRoot);
 
   const float relativePositionMain = relativePosition(mainAxis, mainSize);
   const float relativePositionCross = relativePosition(crossAxis, crossSize);
@@ -374,25 +374,25 @@ void YGNode::setPosition(
       trailing[crossAxis]);
 }
 
-YGNode::YGNode()
+PilatesNode::PilatesNode()
     : context_(nullptr),
       print_(nullptr),
       hasNewLayout_(true),
-      nodeType_(YGNodeTypeDefault),
+      nodeType_(PilatesNodeTypeDefault),
       measure_(nullptr),
       baseline_(nullptr),
       dirtied_(nullptr),
-      style_(YGStyle()),
-      layout_(YGLayout()),
+      style_(PilatesStyle()),
+      layout_(PilatesLayout()),
       lineIndex_(0),
       parent_(nullptr),
-      children_(YGVector()),
+      children_(PilatesVector()),
       nextChild_(nullptr),
       config_(nullptr),
       isDirty_(false),
-      resolvedDimensions_({{YGValueUndefined, YGValueUndefined}}) {}
+      resolvedDimensions_({{PilatesValueUndefined, PilatesValueUndefined}}) {}
 
-YGNode::YGNode(const YGNode& node)
+PilatesNode::PilatesNode(const PilatesNode& node)
     : context_(node.context_),
       print_(node.print_),
       hasNewLayout_(node.hasNewLayout_),
@@ -410,27 +410,27 @@ YGNode::YGNode(const YGNode& node)
       isDirty_(node.isDirty_),
       resolvedDimensions_(node.resolvedDimensions_) {}
 
-YGNode::YGNode(const YGConfigRef newConfig) : YGNode() {
+PilatesNode::PilatesNode(const PilatesConfigRef newConfig) : PilatesNode() {
   config_ = newConfig;
 }
 
-YGNode::YGNode(
+PilatesNode::PilatesNode(
     void* context,
-    YGPrintFunc print,
+    PilatesPrintFunc print,
     bool hasNewLayout,
-    YGNodeType nodeType,
-    YGMeasureFunc measure,
-    YGBaselineFunc baseline,
-    YGDirtiedFunc dirtied,
-    YGStyle style,
-    YGLayout layout,
+    PilatesNodeType nodeType,
+    PilatesMeasureFunc measure,
+    PilatesBaselineFunc baseline,
+    PilatesDirtiedFunc dirtied,
+    PilatesStyle style,
+    PilatesLayout layout,
     uint32_t lineIndex,
-    YGNodeRef parent,
-    YGVector children,
-    YGNodeRef nextChild,
-    YGConfigRef config,
+    PilatesNodeRef parent,
+    PilatesVector children,
+    PilatesNodeRef nextChild,
+    PilatesConfigRef config,
     bool isDirty,
-    std::array<YGValue, 2> resolvedDimensions)
+    std::array<PilatesValue, 2> resolvedDimensions)
     : context_(context),
       print_(print),
       hasNewLayout_(hasNewLayout),
@@ -448,7 +448,7 @@ YGNode::YGNode(
       isDirty_(isDirty),
       resolvedDimensions_(resolvedDimensions) {}
 
-YGNode& YGNode::operator=(const YGNode& node) {
+PilatesNode& PilatesNode::operator=(const PilatesNode& node) {
   if (&node == this) {
     return *this;
   }
@@ -477,39 +477,39 @@ YGNode& YGNode::operator=(const YGNode& node) {
   return *this;
 }
 
-YGValue YGNode::marginLeadingValue(const YGFlexDirection axis) const {
-  if (YGFlexDirectionIsRow(axis) &&
-      style_.margin[YGEdgeStart].unit != YGUnitUndefined) {
-    return style_.margin[YGEdgeStart];
+PilatesValue PilatesNode::marginLeadingValue(const PilatesFlexDirection axis) const {
+  if (PilatesFlexDirectionIsRow(axis) &&
+      style_.margin[PilatesEdgeStart].unit != PilatesUnitUndefined) {
+    return style_.margin[PilatesEdgeStart];
   } else {
     return style_.margin[leading[axis]];
   }
 }
 
-YGValue YGNode::marginTrailingValue(const YGFlexDirection axis) const {
-  if (YGFlexDirectionIsRow(axis) &&
-      style_.margin[YGEdgeEnd].unit != YGUnitUndefined) {
-    return style_.margin[YGEdgeEnd];
+PilatesValue PilatesNode::marginTrailingValue(const PilatesFlexDirection axis) const {
+  if (PilatesFlexDirectionIsRow(axis) &&
+      style_.margin[PilatesEdgeEnd].unit != PilatesUnitUndefined) {
+    return style_.margin[PilatesEdgeEnd];
   } else {
     return style_.margin[trailing[axis]];
   }
 }
 
-YGValue YGNode::resolveFlexBasisPtr() const {
-  YGValue flexBasis = style_.flexBasis;
-  if (flexBasis.unit != YGUnitAuto && flexBasis.unit != YGUnitUndefined) {
+PilatesValue PilatesNode::resolveFlexBasisPtr() const {
+  PilatesValue flexBasis = style_.flexBasis;
+  if (flexBasis.unit != PilatesUnitAuto && flexBasis.unit != PilatesUnitUndefined) {
     return flexBasis;
   }
-  if (!YGFloatIsUndefined(style_.flex) && style_.flex > 0.0f) {
-    return config_->useWebDefaults ? YGValueAuto : YGValueZero;
+  if (!PilatesFloatIsUndefined(style_.flex) && style_.flex > 0.0f) {
+    return config_->useWebDefaults ? PilatesValueAuto : PilatesValueZero;
   }
-  return YGValueAuto;
+  return PilatesValueAuto;
 }
 
-void YGNode::resolveDimension() {
-  for (uint32_t dim = YGDimensionWidth; dim < YGDimensionCount; dim++) {
-    if (getStyle().maxDimensions[dim].unit != YGUnitUndefined &&
-        YGValueEqual(
+void PilatesNode::resolveDimension() {
+  for (uint32_t dim = PilatesDimensionWidth; dim < PilatesDimensionCount; dim++) {
+    if (getStyle().maxDimensions[dim].unit != PilatesUnitUndefined &&
+        PilatesValueEqual(
             getStyle().maxDimensions[dim], style_.minDimensions[dim])) {
       resolvedDimensions_[dim] = style_.maxDimensions[dim];
     } else {
@@ -518,29 +518,29 @@ void YGNode::resolveDimension() {
   }
 }
 
-YGDirection YGNode::resolveDirection(const YGDirection parentDirection) {
-  if (style_.direction == YGDirectionInherit) {
-    return parentDirection > YGDirectionInherit ? parentDirection
-                                                : YGDirectionLTR;
+PilatesDirection PilatesNode::resolveDirection(const PilatesDirection parentDirection) {
+  if (style_.direction == PilatesDirectionInherit) {
+    return parentDirection > PilatesDirectionInherit ? parentDirection
+                                                : PilatesDirectionLTR;
   } else {
     return style_.direction;
   }
 }
 
-void YGNode::clearChildren() {
+void PilatesNode::clearChildren() {
   children_.clear();
   children_.shrink_to_fit();
 }
 
-YGNode::~YGNode() {
+PilatesNode::~PilatesNode() {
   // All the member variables are deallocated externally, so no need to
   // deallocate here
 }
 
 // Other Methods
 
-void YGNode::cloneChildrenIfNeeded() {
-  // YGNodeRemoveChild in pilates.cpp has a forked variant of this algorithm
+void PilatesNode::cloneChildrenIfNeeded() {
+  // PilatesNodeRemoveChild in pilates.cpp has a forked variant of this algorithm
   // optimized for deletions.
 
   const uint32_t childCount = static_cast<uint32_t>(children_.size());
@@ -549,7 +549,7 @@ void YGNode::cloneChildrenIfNeeded() {
     return;
   }
 
-  const YGNodeRef firstChild = children_.front();
+  const PilatesNodeRef firstChild = children_.front();
   if (firstChild->getParent() == this) {
     // If the first child has this node as its parent, we assume that it is
     // already unique. We can do this because if we have it has a child, that
@@ -558,10 +558,10 @@ void YGNode::cloneChildrenIfNeeded() {
     return;
   }
 
-  const YGNodeClonedFunc cloneNodeCallback = config_->cloneNodeCallback;
+  const PilatesNodeClonedFunc cloneNodeCallback = config_->cloneNodeCallback;
   for (uint32_t i = 0; i < childCount; ++i) {
-    const YGNodeRef oldChild = children_[i];
-    const YGNodeRef newChild = YGNodeClone(oldChild);
+    const PilatesNodeRef oldChild = children_[i];
+    const PilatesNodeRef newChild = PilatesNodeClone(oldChild);
     replaceChild(newChild, i);
     newChild->setParent(this);
     if (cloneNodeCallback) {
@@ -570,125 +570,125 @@ void YGNode::cloneChildrenIfNeeded() {
   }
 }
 
-void YGNode::markDirtyAndPropogate() {
+void PilatesNode::markDirtyAndPropogate() {
   if (!isDirty_) {
     setDirty(true);
-    setLayoutComputedFlexBasis(YGUndefined);
+    setLayoutComputedFlexBasis(PilatesUndefined);
     if (parent_) {
       parent_->markDirtyAndPropogate();
     }
   }
 }
 
-void YGNode::markDirtyAndPropogateDownwards() {
+void PilatesNode::markDirtyAndPropogateDownwards() {
   isDirty_ = true;
-  for_each(children_.begin(), children_.end(), [](YGNodeRef childNode) {
+  for_each(children_.begin(), children_.end(), [](PilatesNodeRef childNode) {
     childNode->markDirtyAndPropogateDownwards();
   });
 }
 
-float YGNode::resolveFlexGrow() {
+float PilatesNode::resolveFlexGrow() {
   // Root nodes flexGrow should always be 0
   if (parent_ == nullptr) {
     return 0.0;
   }
-  if (!YGFloatIsUndefined(style_.flexGrow)) {
+  if (!PilatesFloatIsUndefined(style_.flexGrow)) {
     return style_.flexGrow;
   }
-  if (!YGFloatIsUndefined(style_.flex) && style_.flex > 0.0f) {
+  if (!PilatesFloatIsUndefined(style_.flex) && style_.flex > 0.0f) {
     return style_.flex;
   }
   return kDefaultFlexGrow;
 }
 
-float YGNode::resolveFlexShrink() {
+float PilatesNode::resolveFlexShrink() {
   if (parent_ == nullptr) {
     return 0.0;
   }
-  if (!YGFloatIsUndefined(style_.flexShrink)) {
+  if (!PilatesFloatIsUndefined(style_.flexShrink)) {
     return style_.flexShrink;
   }
-  if (!config_->useWebDefaults && !YGFloatIsUndefined(style_.flex) &&
+  if (!config_->useWebDefaults && !PilatesFloatIsUndefined(style_.flex) &&
       style_.flex < 0.0f) {
     return -style_.flex;
   }
   return config_->useWebDefaults ? kWebDefaultFlexShrink : kDefaultFlexShrink;
 }
 
-bool YGNode::isNodeFlexible() {
+bool PilatesNode::isNodeFlexible() {
   return (
-      (style_.positionType == YGPositionTypeRelative) &&
+      (style_.positionType == PilatesPositionTypeRelative) &&
       (resolveFlexGrow() != 0 || resolveFlexShrink() != 0));
 }
 
-float YGNode::getLeadingBorder(const YGFlexDirection axis) {
-  if (YGFlexDirectionIsRow(axis) &&
-      style_.border[YGEdgeStart].unit != YGUnitUndefined &&
-      style_.border[YGEdgeStart].value >= 0.0f) {
-    return style_.border[YGEdgeStart].value;
+float PilatesNode::getLeadingBorder(const PilatesFlexDirection axis) {
+  if (PilatesFlexDirectionIsRow(axis) &&
+      style_.border[PilatesEdgeStart].unit != PilatesUnitUndefined &&
+      style_.border[PilatesEdgeStart].value >= 0.0f) {
+    return style_.border[PilatesEdgeStart].value;
   }
 
   return fmaxf(
-      YGComputedEdgeValue(style_.border, leading[axis], &YGValueZero)->value,
+      PilatesComputedEdgeValue(style_.border, leading[axis], &PilatesValueZero)->value,
       0.0f);
 }
 
-float YGNode::getTrailingBorder(const YGFlexDirection flexDirection) {
-  if (YGFlexDirectionIsRow(flexDirection) &&
-      style_.border[YGEdgeEnd].unit != YGUnitUndefined &&
-      style_.border[YGEdgeEnd].value >= 0.0f) {
-    return style_.border[YGEdgeEnd].value;
+float PilatesNode::getTrailingBorder(const PilatesFlexDirection flexDirection) {
+  if (PilatesFlexDirectionIsRow(flexDirection) &&
+      style_.border[PilatesEdgeEnd].unit != PilatesUnitUndefined &&
+      style_.border[PilatesEdgeEnd].value >= 0.0f) {
+    return style_.border[PilatesEdgeEnd].value;
   }
 
   return fmaxf(
-      YGComputedEdgeValue(style_.border, trailing[flexDirection], &YGValueZero)
+      PilatesComputedEdgeValue(style_.border, trailing[flexDirection], &PilatesValueZero)
           ->value,
       0.0f);
 }
 
-float YGNode::getLeadingPadding(
-    const YGFlexDirection axis,
+float PilatesNode::getLeadingPadding(
+    const PilatesFlexDirection axis,
     const float widthSize) {
-  if (YGFlexDirectionIsRow(axis) &&
-      style_.padding[YGEdgeStart].unit != YGUnitUndefined &&
-      YGResolveValue(style_.padding[YGEdgeStart], widthSize) >= 0.0f) {
-    return YGResolveValue(style_.padding[YGEdgeStart], widthSize);
+  if (PilatesFlexDirectionIsRow(axis) &&
+      style_.padding[PilatesEdgeStart].unit != PilatesUnitUndefined &&
+      PilatesResolveValue(style_.padding[PilatesEdgeStart], widthSize) >= 0.0f) {
+    return PilatesResolveValue(style_.padding[PilatesEdgeStart], widthSize);
   }
   return fmaxf(
-      YGResolveValue(
-          *YGComputedEdgeValue(style_.padding, leading[axis], &YGValueZero),
+      PilatesResolveValue(
+          *PilatesComputedEdgeValue(style_.padding, leading[axis], &PilatesValueZero),
           widthSize),
       0.0f);
 }
 
-float YGNode::getTrailingPadding(
-    const YGFlexDirection axis,
+float PilatesNode::getTrailingPadding(
+    const PilatesFlexDirection axis,
     const float widthSize) {
-  if (YGFlexDirectionIsRow(axis) &&
-      style_.padding[YGEdgeEnd].unit != YGUnitUndefined &&
-      YGResolveValue(style_.padding[YGEdgeEnd], widthSize) >= 0.0f) {
-    return YGResolveValue(style_.padding[YGEdgeEnd], widthSize);
+  if (PilatesFlexDirectionIsRow(axis) &&
+      style_.padding[PilatesEdgeEnd].unit != PilatesUnitUndefined &&
+      PilatesResolveValue(style_.padding[PilatesEdgeEnd], widthSize) >= 0.0f) {
+    return PilatesResolveValue(style_.padding[PilatesEdgeEnd], widthSize);
   }
   return fmaxf(
-      YGResolveValue(
-          *YGComputedEdgeValue(style_.padding, trailing[axis], &YGValueZero),
+      PilatesResolveValue(
+          *PilatesComputedEdgeValue(style_.padding, trailing[axis], &PilatesValueZero),
           widthSize),
       0.0f);
 }
 
-float YGNode::getLeadingPaddingAndBorder(
-    const YGFlexDirection axis,
+float PilatesNode::getLeadingPaddingAndBorder(
+    const PilatesFlexDirection axis,
     const float widthSize) {
   return getLeadingPadding(axis, widthSize) + getLeadingBorder(axis);
 }
 
-float YGNode::getTrailingPaddingAndBorder(
-    const YGFlexDirection axis,
+float PilatesNode::getTrailingPaddingAndBorder(
+    const PilatesFlexDirection axis,
     const float widthSize) {
   return getTrailingPadding(axis, widthSize) + getTrailingBorder(axis);
 }
 
-bool YGNode::didUseLegacyFlag() {
+bool PilatesNode::didUseLegacyFlag() {
   bool didUseLegacyFlag = layout_.didUseLegacyFlag;
   if (didUseLegacyFlag) {
     return true;
@@ -702,23 +702,23 @@ bool YGNode::didUseLegacyFlag() {
   return didUseLegacyFlag;
 }
 
-void YGNode::setAndPropogateUseLegacyFlag(bool useLegacyFlag) {
+void PilatesNode::setAndPropogateUseLegacyFlag(bool useLegacyFlag) {
   config_->useLegacyStretchBehaviour = useLegacyFlag;
-  for_each(children_.begin(), children_.end(), [=](YGNodeRef childNode) {
+  for_each(children_.begin(), children_.end(), [=](PilatesNodeRef childNode) {
     childNode->getConfig()->useLegacyStretchBehaviour = useLegacyFlag;
   });
 }
 
-void YGNode::setLayoutDoesLegacyFlagAffectsLayout(
+void PilatesNode::setLayoutDoesLegacyFlagAffectsLayout(
     bool doesLegacyFlagAffectsLayout) {
   layout_.doesLegacyStretchFlagAffectsLayout = doesLegacyFlagAffectsLayout;
 }
 
-void YGNode::setLayoutDidUseLegacyFlag(bool didUseLegacyFlag) {
+void PilatesNode::setLayoutDidUseLegacyFlag(bool didUseLegacyFlag) {
   layout_.didUseLegacyFlag = didUseLegacyFlag;
 }
 
-bool YGNode::isLayoutTreeEqualToNode(const YGNode& node) const {
+bool PilatesNode::isLayoutTreeEqualToNode(const PilatesNode& node) const {
   if (children_.size() != node.children_.size()) {
     return false;
   }
@@ -730,8 +730,8 @@ bool YGNode::isLayoutTreeEqualToNode(const YGNode& node) const {
   }
 
   bool isLayoutTreeEqual = true;
-  YGNodeRef otherNodeChildren = nullptr;
-  for (std::vector<YGNodeRef>::size_type i = 0; i < children_.size(); ++i) {
+  PilatesNodeRef otherNodeChildren = nullptr;
+  for (std::vector<PilatesNodeRef>::size_type i = 0; i < children_.size(); ++i) {
     otherNodeChildren = node.children_[i];
     isLayoutTreeEqual =
         children_[i]->isLayoutTreeEqualToNode(*otherNodeChildren);

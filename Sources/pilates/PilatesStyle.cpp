@@ -8,67 +8,67 @@
  */
 #include "PilatesStyle.h"
 
-const YGValue kYGValueUndefined = {YGUndefined, YGUnitUndefined};
+const PilatesValue kPilatesValueUndefined = {PilatesUndefined, PilatesUnitUndefined};
 
-const YGValue kYGValueAuto = {YGUndefined, YGUnitAuto};
+const PilatesValue kPilatesValueAuto = {PilatesUndefined, PilatesUnitAuto};
 
-const std::array<YGValue, YGEdgeCount> kYGDefaultEdgeValuesUnit = {
-    {kYGValueUndefined,
-     kYGValueUndefined,
-     kYGValueUndefined,
-     kYGValueUndefined,
-     kYGValueUndefined,
-     kYGValueUndefined,
-     kYGValueUndefined,
-     kYGValueUndefined,
-     kYGValueUndefined}};
+const std::array<PilatesValue, PilatesEdgeCount> kPilatesDefaultEdgeValuesUnit = {
+    {kPilatesValueUndefined,
+     kPilatesValueUndefined,
+     kPilatesValueUndefined,
+     kPilatesValueUndefined,
+     kPilatesValueUndefined,
+     kPilatesValueUndefined,
+     kPilatesValueUndefined,
+     kPilatesValueUndefined,
+     kPilatesValueUndefined}};
 
-const std::array<YGValue, 2> kYGDefaultDimensionValuesAutoUnit = {
-    {kYGValueAuto, kYGValueAuto}};
+const std::array<PilatesValue, 2> kPilatesDefaultDimensionValuesAutoUnit = {
+    {kPilatesValueAuto, kPilatesValueAuto}};
 
-const std::array<YGValue, 2> kYGDefaultDimensionValuesUnit = {
-    {kYGValueUndefined, kYGValueUndefined}};
+const std::array<PilatesValue, 2> kPilatesDefaultDimensionValuesUnit = {
+    {kPilatesValueUndefined, kPilatesValueUndefined}};
 
-YGStyle::YGStyle()
-    : direction(YGDirectionInherit),
-      flexDirection(YGFlexDirectionColumn),
-      justifyContent(YGJustifyFlexStart),
-      alignContent(YGAlignFlexStart),
-      alignItems(YGAlignStretch),
-      alignSelf(YGAlignAuto),
-      positionType(YGPositionTypeRelative),
-      flexWrap(YGWrapNoWrap),
-      overflow(YGOverflowVisible),
-      display(YGDisplayFlex),
-      flex(YGUndefined),
-      flexGrow(YGUndefined),
-      flexShrink(YGUndefined),
-      flexBasis(kYGValueAuto),
-      margin(kYGDefaultEdgeValuesUnit),
-      position(kYGDefaultEdgeValuesUnit),
-      padding(kYGDefaultEdgeValuesUnit),
-      border(kYGDefaultEdgeValuesUnit),
-      dimensions(kYGDefaultDimensionValuesAutoUnit),
-      minDimensions(kYGDefaultDimensionValuesUnit),
-      maxDimensions(kYGDefaultDimensionValuesUnit),
-      aspectRatio(YGUndefined) {}
+PilatesStyle::PilatesStyle()
+    : direction(PilatesDirectionInherit),
+      flexDirection(PilatesFlexDirectionColumn),
+      justifyContent(PilatesJustifyFlexStart),
+      alignContent(PilatesAlignFlexStart),
+      alignItems(PilatesAlignStretch),
+      alignSelf(PilatesAlignAuto),
+      positionType(PilatesPositionTypeRelative),
+      flexWrap(PilatesWrapNoWrap),
+      overflow(PilatesOverflowVisible),
+      display(PilatesDisplayFlex),
+      flex(PilatesUndefined),
+      flexGrow(PilatesUndefined),
+      flexShrink(PilatesUndefined),
+      flexBasis(kPilatesValueAuto),
+      margin(kPilatesDefaultEdgeValuesUnit),
+      position(kPilatesDefaultEdgeValuesUnit),
+      padding(kPilatesDefaultEdgeValuesUnit),
+      border(kPilatesDefaultEdgeValuesUnit),
+      dimensions(kPilatesDefaultDimensionValuesAutoUnit),
+      minDimensions(kPilatesDefaultDimensionValuesUnit),
+      maxDimensions(kPilatesDefaultDimensionValuesUnit),
+      aspectRatio(PilatesUndefined) {}
 
 // Pilates specific properties, not compatible with flexbox specification
-bool YGStyle::operator==(const YGStyle& style) {
+bool PilatesStyle::operator==(const PilatesStyle& style) {
   bool areNonFloatValuesEqual = direction == style.direction &&
       flexDirection == style.flexDirection &&
       justifyContent == style.justifyContent &&
       alignContent == style.alignContent && alignItems == style.alignItems &&
       alignSelf == style.alignSelf && positionType == style.positionType &&
       flexWrap == style.flexWrap && overflow == style.overflow &&
-      display == style.display && YGValueEqual(flexBasis, style.flexBasis) &&
-      YGValueArrayEqual(margin, style.margin) &&
-      YGValueArrayEqual(position, style.position) &&
-      YGValueArrayEqual(padding, style.padding) &&
-      YGValueArrayEqual(border, style.border) &&
-      YGValueArrayEqual(dimensions, style.dimensions) &&
-      YGValueArrayEqual(minDimensions, style.minDimensions) &&
-      YGValueArrayEqual(maxDimensions, style.maxDimensions);
+      display == style.display && PilatesValueEqual(flexBasis, style.flexBasis) &&
+      PilatesValueArrayEqual(margin, style.margin) &&
+      PilatesValueArrayEqual(position, style.position) &&
+      PilatesValueArrayEqual(padding, style.padding) &&
+      PilatesValueArrayEqual(border, style.border) &&
+      PilatesValueArrayEqual(dimensions, style.dimensions) &&
+      PilatesValueArrayEqual(minDimensions, style.minDimensions) &&
+      PilatesValueArrayEqual(maxDimensions, style.maxDimensions);
 
   if (!(std::isnan(flex) && std::isnan(style.flex))) {
     areNonFloatValuesEqual = areNonFloatValuesEqual && flex == style.flex;
@@ -92,8 +92,8 @@ bool YGStyle::operator==(const YGStyle& style) {
   return areNonFloatValuesEqual;
 }
 
-bool YGStyle::operator!=(YGStyle style) {
+bool PilatesStyle::operator!=(PilatesStyle style) {
   return !(*this == style);
 }
 
-YGStyle::~YGStyle() {}
+PilatesStyle::~PilatesStyle() {}

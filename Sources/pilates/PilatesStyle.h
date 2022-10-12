@@ -10,34 +10,34 @@
 #include "Pilates-internal.h"
 #include "Pilates.h"
 
-struct YGStyle {
-  YGDirection direction;
-  YGFlexDirection flexDirection;
-  YGJustify justifyContent;
-  YGAlign alignContent;
-  YGAlign alignItems;
-  YGAlign alignSelf;
-  YGPositionType positionType;
-  YGWrap flexWrap;
-  YGOverflow overflow;
-  YGDisplay display;
+struct PilatesStyle {
+  PilatesDirection direction;
+  PilatesFlexDirection flexDirection;
+  PilatesJustify justifyContent;
+  PilatesAlign alignContent;
+  PilatesAlign alignItems;
+  PilatesAlign alignSelf;
+  PilatesPositionType positionType;
+  PilatesWrap flexWrap;
+  PilatesOverflow overflow;
+  PilatesDisplay display;
   float flex;
   float flexGrow;
   float flexShrink;
-  YGValue flexBasis;
-  std::array<YGValue, YGEdgeCount> margin;
-  std::array<YGValue, YGEdgeCount> position;
-  std::array<YGValue, YGEdgeCount> padding;
-  std::array<YGValue, YGEdgeCount> border;
-  std::array<YGValue, 2> dimensions;
-  std::array<YGValue, 2> minDimensions;
-  std::array<YGValue, 2> maxDimensions;
+  PilatesValue flexBasis;
+  std::array<PilatesValue, PilatesEdgeCount> margin;
+  std::array<PilatesValue, PilatesEdgeCount> position;
+  std::array<PilatesValue, PilatesEdgeCount> padding;
+  std::array<PilatesValue, PilatesEdgeCount> border;
+  std::array<PilatesValue, 2> dimensions;
+  std::array<PilatesValue, 2> minDimensions;
+  std::array<PilatesValue, 2> maxDimensions;
   float aspectRatio;
 
-  YGStyle();
+  PilatesStyle();
   // Pilates specific properties, not compatible with flexbox specification
-  bool operator==(const YGStyle& style);
+  bool operator==(const PilatesStyle& style);
 
-  bool operator!=(YGStyle style);
-  ~YGStyle();
+  bool operator!=(PilatesStyle style);
+  ~PilatesStyle();
 };

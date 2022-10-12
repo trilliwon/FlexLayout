@@ -24,189 +24,189 @@ static const unsigned long __nan[2] = {0xffffffff, 0x7fffffff};
 #define NAN (*(const float *) __nan)
 #endif
 
-#define YGUndefined NAN
+#define PilatesUndefined NAN
 
 #include "PilatesEnums.h"
 #include "PilatesMacros.h"
 
-YG_EXTERN_C_BEGIN
+Pilates_EXTERN_C_BEGIN
 
-typedef struct YGSize {
+typedef struct PilatesSize {
   float width;
   float height;
-} YGSize;
+} PilatesSize;
 
-typedef struct YGValue {
+typedef struct PilatesValue {
   float value;
-  YGUnit unit;
-} YGValue;
+  PilatesUnit unit;
+} PilatesValue;
 
-extern const YGValue YGValueUndefined;
-extern const YGValue YGValueAuto;
+extern const PilatesValue PilatesValueUndefined;
+extern const PilatesValue PilatesValueAuto;
 
-typedef struct YGConfig *YGConfigRef;
+typedef struct PilatesConfig *PilatesConfigRef;
 
-typedef struct YGNode* YGNodeRef;
+typedef struct PilatesNode* PilatesNodeRef;
 
-typedef YGSize (*YGMeasureFunc)(YGNodeRef node,
+typedef PilatesSize (*PilatesMeasureFunc)(PilatesNodeRef node,
                                 float width,
-                                YGMeasureMode widthMode,
+                                PilatesMeasureMode widthMode,
                                 float height,
-                                YGMeasureMode heightMode);
-typedef float (*YGBaselineFunc)(YGNodeRef node, const float width, const float height);
-typedef void (*YGDirtiedFunc)(YGNodeRef node);
-typedef void (*YGPrintFunc)(YGNodeRef node);
-typedef int (*YGLogger)(const YGConfigRef config,
-                        const YGNodeRef node,
-                        YGLogLevel level,
+                                PilatesMeasureMode heightMode);
+typedef float (*PilatesBaselineFunc)(PilatesNodeRef node, const float width, const float height);
+typedef void (*PilatesDirtiedFunc)(PilatesNodeRef node);
+typedef void (*PilatesPrintFunc)(PilatesNodeRef node);
+typedef int (*PilatesLogger)(const PilatesConfigRef config,
+                        const PilatesNodeRef node,
+                        PilatesLogLevel level,
                         const char *format,
                         va_list args);
-typedef void (*YGNodeClonedFunc)(YGNodeRef oldNode,
-                                 YGNodeRef newNode,
-                                 YGNodeRef parent,
+typedef void (*PilatesNodeClonedFunc)(PilatesNodeRef oldNode,
+                                 PilatesNodeRef newNode,
+                                 PilatesNodeRef parent,
                                  int childIndex);
 
-// YGNode
-WIN_EXPORT YGNodeRef YGNodeNew(void);
-WIN_EXPORT YGNodeRef YGNodeNewWithConfig(const YGConfigRef config);
-WIN_EXPORT YGNodeRef YGNodeClone(const YGNodeRef node);
-WIN_EXPORT void YGNodeFree(const YGNodeRef node);
-WIN_EXPORT void YGNodeFreeRecursive(const YGNodeRef node);
-WIN_EXPORT void YGNodeReset(const YGNodeRef node);
-WIN_EXPORT int32_t YGNodeGetInstanceCount(void);
+// PilatesNode
+WIN_EXPORT PilatesNodeRef PilatesNodeNew(void);
+WIN_EXPORT PilatesNodeRef PilatesNodeNewWithConfig(const PilatesConfigRef config);
+WIN_EXPORT PilatesNodeRef PilatesNodeClone(const PilatesNodeRef node);
+WIN_EXPORT void PilatesNodeFree(const PilatesNodeRef node);
+WIN_EXPORT void PilatesNodeFreeRecursive(const PilatesNodeRef node);
+WIN_EXPORT void PilatesNodeReset(const PilatesNodeRef node);
+WIN_EXPORT int32_t PilatesNodeGetInstanceCount(void);
 
-WIN_EXPORT void YGNodeInsertChild(const YGNodeRef node,
-                                  const YGNodeRef child,
+WIN_EXPORT void PilatesNodeInsertChild(const PilatesNodeRef node,
+                                  const PilatesNodeRef child,
                                   const uint32_t index);
-WIN_EXPORT void YGNodeRemoveChild(const YGNodeRef node, const YGNodeRef child);
-WIN_EXPORT void YGNodeRemoveAllChildren(const YGNodeRef node);
-WIN_EXPORT YGNodeRef YGNodeGetChild(const YGNodeRef node, const uint32_t index);
-WIN_EXPORT YGNodeRef YGNodeGetParent(const YGNodeRef node);
-WIN_EXPORT uint32_t YGNodeGetChildCount(const YGNodeRef node);
+WIN_EXPORT void PilatesNodeRemoveChild(const PilatesNodeRef node, const PilatesNodeRef child);
+WIN_EXPORT void PilatesNodeRemoveAllChildren(const PilatesNodeRef node);
+WIN_EXPORT PilatesNodeRef PilatesNodeGetChild(const PilatesNodeRef node, const uint32_t index);
+WIN_EXPORT PilatesNodeRef PilatesNodeGetParent(const PilatesNodeRef node);
+WIN_EXPORT uint32_t PilatesNodeGetChildCount(const PilatesNodeRef node);
 
-WIN_EXPORT void YGNodeCalculateLayout(const YGNodeRef node,
+WIN_EXPORT void PilatesNodeCalculateLayout(const PilatesNodeRef node,
                                       const float availableWidth,
                                       const float availableHeight,
-                                      const YGDirection parentDirection);
+                                      const PilatesDirection parentDirection);
 
 // Mark a node as dirty. Only valid for nodes with a custom measure function
 // set.
-// YG knows when to mark all other nodes as dirty but because nodes with
+// Pilates knows when to mark all other nodes as dirty but because nodes with
 // measure functions
-// depends on information not known to YG they must perform this dirty
+// depends on information not known to Pilates they must perform this dirty
 // marking manually.
-WIN_EXPORT void YGNodeMarkDirty(const YGNodeRef node);
+WIN_EXPORT void PilatesNodeMarkDirty(const PilatesNodeRef node);
 
 // This function marks the current node and all its descendants as dirty. This function is added to test pilates benchmarks.
-// This function is not expected to be used in production as calling `YGCalculateLayout` will cause the recalculation of each and every node.
-WIN_EXPORT void YGNodeMarkDirtyAndPropogateToDescendants(const YGNodeRef node);
+// This function is not expected to be used in production as calling `PilatesCalculateLayout` will cause the recalculation of each and every node.
+WIN_EXPORT void PilatesNodeMarkDirtyAndPropogateToDescendants(const PilatesNodeRef node);
 
-WIN_EXPORT void YGNodePrint(const YGNodeRef node, const YGPrintOptions options);
+WIN_EXPORT void PilatesNodePrint(const PilatesNodeRef node, const PilatesPrintOptions options);
 
-WIN_EXPORT bool YGFloatIsUndefined(const float value);
+WIN_EXPORT bool PilatesFloatIsUndefined(const float value);
 
-WIN_EXPORT bool YGNodeCanUseCachedMeasurement(const YGMeasureMode widthMode,
+WIN_EXPORT bool PilatesNodeCanUseCachedMeasurement(const PilatesMeasureMode widthMode,
                                               const float width,
-                                              const YGMeasureMode heightMode,
+                                              const PilatesMeasureMode heightMode,
                                               const float height,
-                                              const YGMeasureMode lastWidthMode,
+                                              const PilatesMeasureMode lastWidthMode,
                                               const float lastWidth,
-                                              const YGMeasureMode lastHeightMode,
+                                              const PilatesMeasureMode lastHeightMode,
                                               const float lastHeight,
                                               const float lastComputedWidth,
                                               const float lastComputedHeight,
                                               const float marginRow,
                                               const float marginColumn,
-                                              const YGConfigRef config);
+                                              const PilatesConfigRef config);
 
-WIN_EXPORT void YGNodeCopyStyle(const YGNodeRef dstNode, const YGNodeRef srcNode);
+WIN_EXPORT void PilatesNodeCopyStyle(const PilatesNodeRef dstNode, const PilatesNodeRef srcNode);
 
-#define YG_NODE_PROPERTY(type, name, paramName)                          \
-  WIN_EXPORT void YGNodeSet##name(const YGNodeRef node, type paramName); \
-  WIN_EXPORT type YGNodeGet##name(const YGNodeRef node);
+#define Pilates_NODE_PROPERTY(type, name, paramName)                          \
+  WIN_EXPORT void PilatesNodeSet##name(const PilatesNodeRef node, type paramName); \
+  WIN_EXPORT type PilatesNodeGet##name(const PilatesNodeRef node);
 
-#define YG_NODE_STYLE_PROPERTY(type, name, paramName)                               \
-  WIN_EXPORT void YGNodeStyleSet##name(const YGNodeRef node, const type paramName); \
-  WIN_EXPORT type YGNodeStyleGet##name(const YGNodeRef node);
+#define Pilates_NODE_STYLE_PROPERTY(type, name, paramName)                               \
+  WIN_EXPORT void PilatesNodeStyleSet##name(const PilatesNodeRef node, const type paramName); \
+  WIN_EXPORT type PilatesNodeStyleGet##name(const PilatesNodeRef node);
 
-#define YG_NODE_STYLE_PROPERTY_UNIT(type, name, paramName)                                    \
-  WIN_EXPORT void YGNodeStyleSet##name(const YGNodeRef node, const float paramName);          \
-  WIN_EXPORT void YGNodeStyleSet##name##Percent(const YGNodeRef node, const float paramName); \
-  WIN_EXPORT type YGNodeStyleGet##name(const YGNodeRef node);
+#define Pilates_NODE_STYLE_PROPERTY_UNIT(type, name, paramName)                                    \
+  WIN_EXPORT void PilatesNodeStyleSet##name(const PilatesNodeRef node, const float paramName);          \
+  WIN_EXPORT void PilatesNodeStyleSet##name##Percent(const PilatesNodeRef node, const float paramName); \
+  WIN_EXPORT type PilatesNodeStyleGet##name(const PilatesNodeRef node);
 
-#define YG_NODE_STYLE_PROPERTY_UNIT_AUTO(type, name, paramName) \
-  YG_NODE_STYLE_PROPERTY_UNIT(type, name, paramName)            \
-  WIN_EXPORT void YGNodeStyleSet##name##Auto(const YGNodeRef node);
+#define Pilates_NODE_STYLE_PROPERTY_UNIT_AUTO(type, name, paramName) \
+  Pilates_NODE_STYLE_PROPERTY_UNIT(type, name, paramName)            \
+  WIN_EXPORT void PilatesNodeStyleSet##name##Auto(const PilatesNodeRef node);
 
-#define YG_NODE_STYLE_EDGE_PROPERTY(type, name, paramName)    \
-  WIN_EXPORT void YGNodeStyleSet##name(const YGNodeRef node,  \
-                                       const YGEdge edge,     \
+#define Pilates_NODE_STYLE_EDGE_PROPERTY(type, name, paramName)    \
+  WIN_EXPORT void PilatesNodeStyleSet##name(const PilatesNodeRef node,  \
+                                       const PilatesEdge edge,     \
                                        const type paramName); \
-  WIN_EXPORT type YGNodeStyleGet##name(const YGNodeRef node, const YGEdge edge);
+  WIN_EXPORT type PilatesNodeStyleGet##name(const PilatesNodeRef node, const PilatesEdge edge);
 
-#define YG_NODE_STYLE_EDGE_PROPERTY_UNIT(type, name, paramName)         \
-  WIN_EXPORT void YGNodeStyleSet##name(const YGNodeRef node,            \
-                                       const YGEdge edge,               \
+#define Pilates_NODE_STYLE_EDGE_PROPERTY_UNIT(type, name, paramName)         \
+  WIN_EXPORT void PilatesNodeStyleSet##name(const PilatesNodeRef node,            \
+                                       const PilatesEdge edge,               \
                                        const float paramName);          \
-  WIN_EXPORT void YGNodeStyleSet##name##Percent(const YGNodeRef node,   \
-                                                const YGEdge edge,      \
+  WIN_EXPORT void PilatesNodeStyleSet##name##Percent(const PilatesNodeRef node,   \
+                                                const PilatesEdge edge,      \
                                                 const float paramName); \
-  WIN_EXPORT WIN_STRUCT(type) YGNodeStyleGet##name(const YGNodeRef node, const YGEdge edge);
+  WIN_EXPORT WIN_STRUCT(type) PilatesNodeStyleGet##name(const PilatesNodeRef node, const PilatesEdge edge);
 
-#define YG_NODE_STYLE_EDGE_PROPERTY_UNIT_AUTO(type, name) \
-  WIN_EXPORT void YGNodeStyleSet##name##Auto(const YGNodeRef node, const YGEdge edge);
+#define Pilates_NODE_STYLE_EDGE_PROPERTY_UNIT_AUTO(type, name) \
+  WIN_EXPORT void PilatesNodeStyleSet##name##Auto(const PilatesNodeRef node, const PilatesEdge edge);
 
-#define YG_NODE_LAYOUT_PROPERTY(type, name) \
-  WIN_EXPORT type YGNodeLayoutGet##name(const YGNodeRef node);
+#define Pilates_NODE_LAYOUT_PROPERTY(type, name) \
+  WIN_EXPORT type PilatesNodeLayoutGet##name(const PilatesNodeRef node);
 
-#define YG_NODE_LAYOUT_EDGE_PROPERTY(type, name) \
-  WIN_EXPORT type YGNodeLayoutGet##name(const YGNodeRef node, const YGEdge edge);
+#define Pilates_NODE_LAYOUT_EDGE_PROPERTY(type, name) \
+  WIN_EXPORT type PilatesNodeLayoutGet##name(const PilatesNodeRef node, const PilatesEdge edge);
 
-void* YGNodeGetContext(YGNodeRef node);
-void YGNodeSetContext(YGNodeRef node, void* context);
-YGMeasureFunc YGNodeGetMeasureFunc(YGNodeRef node);
-void YGNodeSetMeasureFunc(YGNodeRef node, YGMeasureFunc measureFunc);
-YGBaselineFunc YGNodeGetBaselineFunc(YGNodeRef node);
-void YGNodeSetBaselineFunc(YGNodeRef node, YGBaselineFunc baselineFunc);
-YGDirtiedFunc YGNodeGetDirtiedFunc(YGNodeRef node);
-void YGNodeSetDirtiedFunc(YGNodeRef node, YGDirtiedFunc dirtiedFunc);
-YGPrintFunc YGNodeGetPrintFunc(YGNodeRef node);
-void YGNodeSetPrintFunc(YGNodeRef node, YGPrintFunc printFunc);
-bool YGNodeGetHasNewLayout(YGNodeRef node);
-void YGNodeSetHasNewLayout(YGNodeRef node, bool hasNewLayout);
-YGNodeType YGNodeGetNodeType(YGNodeRef node);
-void YGNodeSetNodeType(YGNodeRef node, YGNodeType nodeType);
-bool YGNodeIsDirty(YGNodeRef node);
-bool YGNodeLayoutGetDidUseLegacyFlag(const YGNodeRef node);
+void* PilatesNodeGetContext(PilatesNodeRef node);
+void PilatesNodeSetContext(PilatesNodeRef node, void* context);
+PilatesMeasureFunc PilatesNodeGetMeasureFunc(PilatesNodeRef node);
+void PilatesNodeSetMeasureFunc(PilatesNodeRef node, PilatesMeasureFunc measureFunc);
+PilatesBaselineFunc PilatesNodeGetBaselineFunc(PilatesNodeRef node);
+void PilatesNodeSetBaselineFunc(PilatesNodeRef node, PilatesBaselineFunc baselineFunc);
+PilatesDirtiedFunc PilatesNodeGetDirtiedFunc(PilatesNodeRef node);
+void PilatesNodeSetDirtiedFunc(PilatesNodeRef node, PilatesDirtiedFunc dirtiedFunc);
+PilatesPrintFunc PilatesNodeGetPrintFunc(PilatesNodeRef node);
+void PilatesNodeSetPrintFunc(PilatesNodeRef node, PilatesPrintFunc printFunc);
+bool PilatesNodeGetHasNewLayout(PilatesNodeRef node);
+void PilatesNodeSetHasNewLayout(PilatesNodeRef node, bool hasNewLayout);
+PilatesNodeType PilatesNodeGetNodeType(PilatesNodeRef node);
+void PilatesNodeSetNodeType(PilatesNodeRef node, PilatesNodeType nodeType);
+bool PilatesNodeIsDirty(PilatesNodeRef node);
+bool PilatesNodeLayoutGetDidUseLegacyFlag(const PilatesNodeRef node);
 
-YG_NODE_STYLE_PROPERTY(YGDirection, Direction, direction);
-YG_NODE_STYLE_PROPERTY(YGFlexDirection, FlexDirection, flexDirection);
-YG_NODE_STYLE_PROPERTY(YGJustify, JustifyContent, justifyContent);
-YG_NODE_STYLE_PROPERTY(YGAlign, AlignContent, alignContent);
-YG_NODE_STYLE_PROPERTY(YGAlign, AlignItems, alignItems);
-YG_NODE_STYLE_PROPERTY(YGAlign, AlignSelf, alignSelf);
-YG_NODE_STYLE_PROPERTY(YGPositionType, PositionType, positionType);
-YG_NODE_STYLE_PROPERTY(YGWrap, FlexWrap, flexWrap);
-YG_NODE_STYLE_PROPERTY(YGOverflow, Overflow, overflow);
-YG_NODE_STYLE_PROPERTY(YGDisplay, Display, display);
+Pilates_NODE_STYLE_PROPERTY(PilatesDirection, Direction, direction);
+Pilates_NODE_STYLE_PROPERTY(PilatesFlexDirection, FlexDirection, flexDirection);
+Pilates_NODE_STYLE_PROPERTY(PilatesJustify, JustifyContent, justifyContent);
+Pilates_NODE_STYLE_PROPERTY(PilatesAlign, AlignContent, alignContent);
+Pilates_NODE_STYLE_PROPERTY(PilatesAlign, AlignItems, alignItems);
+Pilates_NODE_STYLE_PROPERTY(PilatesAlign, AlignSelf, alignSelf);
+Pilates_NODE_STYLE_PROPERTY(PilatesPositionType, PositionType, positionType);
+Pilates_NODE_STYLE_PROPERTY(PilatesWrap, FlexWrap, flexWrap);
+Pilates_NODE_STYLE_PROPERTY(PilatesOverflow, Overflow, overflow);
+Pilates_NODE_STYLE_PROPERTY(PilatesDisplay, Display, display);
 
-YG_NODE_STYLE_PROPERTY(float, Flex, flex);
-YG_NODE_STYLE_PROPERTY(float, FlexGrow, flexGrow);
-YG_NODE_STYLE_PROPERTY(float, FlexShrink, flexShrink);
-YG_NODE_STYLE_PROPERTY_UNIT_AUTO(YGValue, FlexBasis, flexBasis);
+Pilates_NODE_STYLE_PROPERTY(float, Flex, flex);
+Pilates_NODE_STYLE_PROPERTY(float, FlexGrow, flexGrow);
+Pilates_NODE_STYLE_PROPERTY(float, FlexShrink, flexShrink);
+Pilates_NODE_STYLE_PROPERTY_UNIT_AUTO(PilatesValue, FlexBasis, flexBasis);
 
-YG_NODE_STYLE_EDGE_PROPERTY_UNIT(YGValue, Position, position);
-YG_NODE_STYLE_EDGE_PROPERTY_UNIT(YGValue, Margin, margin);
-YG_NODE_STYLE_EDGE_PROPERTY_UNIT_AUTO(YGValue, Margin);
-YG_NODE_STYLE_EDGE_PROPERTY_UNIT(YGValue, Padding, padding);
-YG_NODE_STYLE_EDGE_PROPERTY(float, Border, border);
+Pilates_NODE_STYLE_EDGE_PROPERTY_UNIT(PilatesValue, Position, position);
+Pilates_NODE_STYLE_EDGE_PROPERTY_UNIT(PilatesValue, Margin, margin);
+Pilates_NODE_STYLE_EDGE_PROPERTY_UNIT_AUTO(PilatesValue, Margin);
+Pilates_NODE_STYLE_EDGE_PROPERTY_UNIT(PilatesValue, Padding, padding);
+Pilates_NODE_STYLE_EDGE_PROPERTY(float, Border, border);
 
-YG_NODE_STYLE_PROPERTY_UNIT_AUTO(YGValue, Width, width);
-YG_NODE_STYLE_PROPERTY_UNIT_AUTO(YGValue, Height, height);
-YG_NODE_STYLE_PROPERTY_UNIT(YGValue, MinWidth, minWidth);
-YG_NODE_STYLE_PROPERTY_UNIT(YGValue, MinHeight, minHeight);
-YG_NODE_STYLE_PROPERTY_UNIT(YGValue, MaxWidth, maxWidth);
-YG_NODE_STYLE_PROPERTY_UNIT(YGValue, MaxHeight, maxHeight);
+Pilates_NODE_STYLE_PROPERTY_UNIT_AUTO(PilatesValue, Width, width);
+Pilates_NODE_STYLE_PROPERTY_UNIT_AUTO(PilatesValue, Height, height);
+Pilates_NODE_STYLE_PROPERTY_UNIT(PilatesValue, MinWidth, minWidth);
+Pilates_NODE_STYLE_PROPERTY_UNIT(PilatesValue, MinHeight, minHeight);
+Pilates_NODE_STYLE_PROPERTY_UNIT(PilatesValue, MaxWidth, maxWidth);
+Pilates_NODE_STYLE_PROPERTY_UNIT(PilatesValue, MaxHeight, maxHeight);
 
 // Pilates specific properties, not compatible with flexbox specification
 // Aspect ratio control the size of the undefined dimension of a node.
@@ -221,37 +221,37 @@ YG_NODE_STYLE_PROPERTY_UNIT(YGValue, MaxHeight, maxHeight);
 // - On a node with flex grow/shrink aspect ratio controls the size of the node in the cross axis if
 // unset
 // - Aspect ratio takes min/max dimensions into account
-YG_NODE_STYLE_PROPERTY(float, AspectRatio, aspectRatio);
+Pilates_NODE_STYLE_PROPERTY(float, AspectRatio, aspectRatio);
 
-YG_NODE_LAYOUT_PROPERTY(float, Left);
-YG_NODE_LAYOUT_PROPERTY(float, Top);
-YG_NODE_LAYOUT_PROPERTY(float, Right);
-YG_NODE_LAYOUT_PROPERTY(float, Bottom);
-YG_NODE_LAYOUT_PROPERTY(float, Width);
-YG_NODE_LAYOUT_PROPERTY(float, Height);
-YG_NODE_LAYOUT_PROPERTY(YGDirection, Direction);
-YG_NODE_LAYOUT_PROPERTY(bool, HadOverflow);
+Pilates_NODE_LAYOUT_PROPERTY(float, Left);
+Pilates_NODE_LAYOUT_PROPERTY(float, Top);
+Pilates_NODE_LAYOUT_PROPERTY(float, Right);
+Pilates_NODE_LAYOUT_PROPERTY(float, Bottom);
+Pilates_NODE_LAYOUT_PROPERTY(float, Width);
+Pilates_NODE_LAYOUT_PROPERTY(float, Height);
+Pilates_NODE_LAYOUT_PROPERTY(PilatesDirection, Direction);
+Pilates_NODE_LAYOUT_PROPERTY(bool, HadOverflow);
 
 // Get the computed values for these nodes after performing layout. If they were set using
-// point values then the returned value will be the same as YGNodeStyleGetXXX. However if
+// point values then the returned value will be the same as PilatesNodeStyleGetXXX. However if
 // they were set using a percentage value then the returned value is the computed value used
 // during layout.
-YG_NODE_LAYOUT_EDGE_PROPERTY(float, Margin);
-YG_NODE_LAYOUT_EDGE_PROPERTY(float, Border);
-YG_NODE_LAYOUT_EDGE_PROPERTY(float, Padding);
+Pilates_NODE_LAYOUT_EDGE_PROPERTY(float, Margin);
+Pilates_NODE_LAYOUT_EDGE_PROPERTY(float, Border);
+Pilates_NODE_LAYOUT_EDGE_PROPERTY(float, Padding);
 
-WIN_EXPORT void YGConfigSetLogger(const YGConfigRef config, YGLogger logger);
-WIN_EXPORT void YGLog(const YGNodeRef node, YGLogLevel level, const char *message, ...);
-WIN_EXPORT void YGLogWithConfig(const YGConfigRef config, YGLogLevel level, const char *format, ...);
-WIN_EXPORT void YGAssert(const bool condition, const char *message);
-WIN_EXPORT void YGAssertWithNode(const YGNodeRef node, const bool condition, const char *message);
-WIN_EXPORT void YGAssertWithConfig(const YGConfigRef config,
+WIN_EXPORT void PilatesConfigSetLogger(const PilatesConfigRef config, PilatesLogger logger);
+WIN_EXPORT void PilatesLog(const PilatesNodeRef node, PilatesLogLevel level, const char *message, ...);
+WIN_EXPORT void PilatesLogWithConfig(const PilatesConfigRef config, PilatesLogLevel level, const char *format, ...);
+WIN_EXPORT void PilatesAssert(const bool condition, const char *message);
+WIN_EXPORT void PilatesAssertWithNode(const PilatesNodeRef node, const bool condition, const char *message);
+WIN_EXPORT void PilatesAssertWithConfig(const PilatesConfigRef config,
                                    const bool condition,
                                    const char *message);
 
 // Set this to number of pixels in 1 point to round calculation results
 // If you want to avoid rounding - set PointScaleFactor to 0
-WIN_EXPORT void YGConfigSetPointScaleFactor(const YGConfigRef config, const float pixelsInPoint);
+WIN_EXPORT void PilatesConfigSetPointScaleFactor(const PilatesConfigRef config, const float pixelsInPoint);
 
 // Pilates previously had an error where containers would take the maximum space possible instead of
 // the minimum
@@ -259,39 +259,39 @@ WIN_EXPORT void YGConfigSetPointScaleFactor(const YGConfigRef config, const floa
 // stretch;
 // Because this was such a long-standing bug we must allow legacy users to switch back to this
 // behaviour.
-WIN_EXPORT void YGConfigSetUseLegacyStretchBehaviour(const YGConfigRef config,
+WIN_EXPORT void PilatesConfigSetUseLegacyStretchBehaviour(const PilatesConfigRef config,
                                                      const bool useLegacyStretchBehaviour);
 
-// YGConfig
-WIN_EXPORT YGConfigRef YGConfigNew(void);
-WIN_EXPORT void YGConfigFree(const YGConfigRef config);
-WIN_EXPORT void YGConfigCopy(const YGConfigRef dest, const YGConfigRef src);
-WIN_EXPORT int32_t YGConfigGetInstanceCount(void);
+// PilatesConfig
+WIN_EXPORT PilatesConfigRef PilatesConfigNew(void);
+WIN_EXPORT void PilatesConfigFree(const PilatesConfigRef config);
+WIN_EXPORT void PilatesConfigCopy(const PilatesConfigRef dest, const PilatesConfigRef src);
+WIN_EXPORT int32_t PilatesConfigGetInstanceCount(void);
 
-WIN_EXPORT void YGConfigSetExperimentalFeatureEnabled(const YGConfigRef config,
-                                                      const YGExperimentalFeature feature,
+WIN_EXPORT void PilatesConfigSetExperimentalFeatureEnabled(const PilatesConfigRef config,
+                                                      const PilatesExperimentalFeature feature,
                                                       const bool enabled);
-WIN_EXPORT bool YGConfigIsExperimentalFeatureEnabled(const YGConfigRef config,
-                                                     const YGExperimentalFeature feature);
+WIN_EXPORT bool PilatesConfigIsExperimentalFeatureEnabled(const PilatesConfigRef config,
+                                                     const PilatesExperimentalFeature feature);
 
 // Using the web defaults is the prefered configuration for new projects.
 // Usage of non web defaults should be considered as legacy.
-WIN_EXPORT void YGConfigSetUseWebDefaults(const YGConfigRef config, const bool enabled);
-WIN_EXPORT bool YGConfigGetUseWebDefaults(const YGConfigRef config);
+WIN_EXPORT void PilatesConfigSetUseWebDefaults(const PilatesConfigRef config, const bool enabled);
+WIN_EXPORT bool PilatesConfigGetUseWebDefaults(const PilatesConfigRef config);
 
-WIN_EXPORT void YGConfigSetNodeClonedFunc(const YGConfigRef config,
-                                          const YGNodeClonedFunc callback);
+WIN_EXPORT void PilatesConfigSetNodeClonedFunc(const PilatesConfigRef config,
+                                          const PilatesNodeClonedFunc callback);
 
 // Export only for C#
-WIN_EXPORT YGConfigRef YGConfigGetDefault(void);
+WIN_EXPORT PilatesConfigRef PilatesConfigGetDefault(void);
 
-WIN_EXPORT void YGConfigSetContext(const YGConfigRef config, void *context);
-WIN_EXPORT void *YGConfigGetContext(const YGConfigRef config);
+WIN_EXPORT void PilatesConfigSetContext(const PilatesConfigRef config, void *context);
+WIN_EXPORT void *PilatesConfigGetContext(const PilatesConfigRef config);
 
-WIN_EXPORT float YGRoundValueToPixelGrid(
+WIN_EXPORT float PilatesRoundValueToPixelGrid(
     const float value,
     const float pointScaleFactor,
     const bool forceCeil,
     const bool forceFloor);
 
-YG_EXTERN_C_END
+Pilates_EXTERN_C_END

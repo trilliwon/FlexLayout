@@ -8,29 +8,29 @@
  */
 #include "PilatesLayout.h"
 
-const std::array<float, 2> kYGDefaultDimensionValues = {
-    {YGUndefined, YGUndefined}};
+const std::array<float, 2> kPilatesDefaultDimensionValues = {
+    {PilatesUndefined, PilatesUndefined}};
 
-YGLayout::YGLayout()
+PilatesLayout::PilatesLayout()
     : position(),
-      dimensions(kYGDefaultDimensionValues),
+      dimensions(kPilatesDefaultDimensionValues),
       margin(),
       border(),
       padding(),
-      direction(YGDirectionInherit),
+      direction(PilatesDirectionInherit),
       computedFlexBasisGeneration(0),
-      computedFlexBasis(YGUndefined),
+      computedFlexBasis(PilatesUndefined),
       hadOverflow(false),
       generationCount(0),
-      lastParentDirection((YGDirection)-1),
+      lastParentDirection((PilatesDirection)-1),
       nextCachedMeasurementsIndex(0),
       cachedMeasurements(),
-      measuredDimensions(kYGDefaultDimensionValues),
-      cachedLayout(YGCachedMeasurement()),
+      measuredDimensions(kPilatesDefaultDimensionValues),
+      cachedLayout(PilatesCachedMeasurement()),
       didUseLegacyFlag(false),
       doesLegacyStretchFlagAffectsLayout(false) {}
 
-bool YGLayout::operator==(YGLayout layout) const {
+bool PilatesLayout::operator==(PilatesLayout layout) const {
   bool isEqual = position == layout.position &&
       dimensions == layout.dimensions && margin == layout.margin &&
       border == layout.border && padding == layout.padding &&
@@ -39,21 +39,21 @@ bool YGLayout::operator==(YGLayout layout) const {
       nextCachedMeasurementsIndex == layout.nextCachedMeasurementsIndex &&
       cachedLayout == layout.cachedLayout;
 
-  for (uint32_t i = 0; i < YG_MAX_CACHED_RESULT_COUNT && isEqual; ++i) {
+  for (uint32_t i = 0; i < Pilates_MAX_CACHED_RESULT_COUNT && isEqual; ++i) {
     isEqual = isEqual && cachedMeasurements[i] == layout.cachedMeasurements[i];
   }
 
-  if (!YGFloatIsUndefined(computedFlexBasis) ||
-      !YGFloatIsUndefined(layout.computedFlexBasis)) {
+  if (!PilatesFloatIsUndefined(computedFlexBasis) ||
+      !PilatesFloatIsUndefined(layout.computedFlexBasis)) {
     isEqual = isEqual && (computedFlexBasis == layout.computedFlexBasis);
   }
-  if (!YGFloatIsUndefined(measuredDimensions[0]) ||
-      !YGFloatIsUndefined(layout.measuredDimensions[0])) {
+  if (!PilatesFloatIsUndefined(measuredDimensions[0]) ||
+      !PilatesFloatIsUndefined(layout.measuredDimensions[0])) {
     isEqual =
         isEqual && (measuredDimensions[0] == layout.measuredDimensions[0]);
   }
-  if (!YGFloatIsUndefined(measuredDimensions[1]) ||
-      !YGFloatIsUndefined(layout.measuredDimensions[1])) {
+  if (!PilatesFloatIsUndefined(measuredDimensions[1]) ||
+      !PilatesFloatIsUndefined(layout.measuredDimensions[1])) {
     isEqual =
         isEqual && (measuredDimensions[1] == layout.measuredDimensions[1]);
   }
@@ -61,6 +61,6 @@ bool YGLayout::operator==(YGLayout layout) const {
   return isEqual;
 }
 
-bool YGLayout::operator!=(YGLayout layout) const {
+bool PilatesLayout::operator!=(PilatesLayout layout) const {
   return !(*this == layout);
 }

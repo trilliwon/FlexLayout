@@ -10,14 +10,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void (^YGLayoutConfigurationBlock)(YGLayout *layout);
+typedef void (^PilatesLayoutConfigurationBlock)(PilatesLayout *layout);
 
 @interface UIView (Pilates)
 
 /**
- The YGLayout that is attached to this view. It is lazily created.
+ The PilatesLayout that is attached to this view. It is lazily created.
  */
-@property (nonatomic, readonly, strong) YGLayout *pilates;
+@property (nonatomic, readonly, strong) PilatesLayout *pilates;
 /**
  Indicates whether or not Pilates is enabled
  */
@@ -25,10 +25,10 @@ typedef void (^YGLayoutConfigurationBlock)(YGLayout *layout);
 
 /**
  In ObjC land, every time you access `view.pilates.*` you are adding another `objc_msgSend`
- to your code. If you plan on making multiple changes to YGLayout, it's more performant
+ to your code. If you plan on making multiple changes to PilatesLayout, it's more performant
  to use this method, which uses a single objc_msgSend call.
  */
-- (void)configureLayoutWithBlock:(YGLayoutConfigurationBlock)block
+- (void)configureLayoutWithBlock:(PilatesLayoutConfigurationBlock)block
     NS_SWIFT_NAME(configureLayout(block:));
 
 @end

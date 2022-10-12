@@ -9,13 +9,13 @@
 #pragma once
 #include "Pilates-internal.h"
 
-struct YGLayout {
+struct PilatesLayout {
   std::array<float, 4> position;
   std::array<float, 2> dimensions;
   std::array<float, 6> margin;
   std::array<float, 6> border;
   std::array<float, 6> padding;
-  YGDirection direction;
+  PilatesDirection direction;
 
   uint32_t computedFlexBasisGeneration;
   float computedFlexBasis;
@@ -24,19 +24,19 @@ struct YGLayout {
   // Instead of recomputing the entire layout every single time, we
   // cache some information to break early when nothing changed
   uint32_t generationCount;
-  YGDirection lastParentDirection;
+  PilatesDirection lastParentDirection;
 
   uint32_t nextCachedMeasurementsIndex;
-  std::array<YGCachedMeasurement, YG_MAX_CACHED_RESULT_COUNT>
+  std::array<PilatesCachedMeasurement, Pilates_MAX_CACHED_RESULT_COUNT>
       cachedMeasurements;
   std::array<float, 2> measuredDimensions;
 
-  YGCachedMeasurement cachedLayout;
+  PilatesCachedMeasurement cachedLayout;
   bool didUseLegacyFlag;
   bool doesLegacyStretchFlagAffectsLayout;
 
-  YGLayout();
+  PilatesLayout();
 
-  bool operator==(YGLayout layout) const;
-  bool operator!=(YGLayout layout) const;
+  bool operator==(PilatesLayout layout) const;
+  bool operator!=(PilatesLayout layout) const;
 };

@@ -8,131 +8,131 @@
 #import "PilatesLayout+Private.h"
 #import "UIView+Pilates.h"
 
-#define YG_PROPERTY(type, lowercased_name, capitalized_name)    \
+#define Pilates_PROPERTY(type, lowercased_name, capitalized_name)    \
 - (type)lowercased_name                                         \
 {                                                               \
-  return YGNodeStyleGet##capitalized_name(self.node);           \
+  return PilatesNodeStyleGet##capitalized_name(self.node);           \
 }                                                               \
                                                                 \
 - (void)set##capitalized_name:(type)lowercased_name             \
 {                                                               \
-  YGNodeStyleSet##capitalized_name(self.node, lowercased_name); \
+  PilatesNodeStyleSet##capitalized_name(self.node, lowercased_name); \
 }
 
-#define YG_VALUE_PROPERTY(lowercased_name, capitalized_name)                       \
-- (YGValue)lowercased_name                                                         \
+#define Pilates_VALUE_PROPERTY(lowercased_name, capitalized_name)                       \
+- (PilatesValue)lowercased_name                                                         \
 {                                                                                  \
-  return YGNodeStyleGet##capitalized_name(self.node);                              \
+  return PilatesNodeStyleGet##capitalized_name(self.node);                              \
 }                                                                                  \
                                                                                    \
-- (void)set##capitalized_name:(YGValue)lowercased_name                             \
+- (void)set##capitalized_name:(PilatesValue)lowercased_name                             \
 {                                                                                  \
   switch (lowercased_name.unit) {                                                  \
-     case YGUnitUndefined:                                                         \
-      YGNodeStyleSet##capitalized_name(self.node, lowercased_name.value);          \
+     case PilatesUnitUndefined:                                                         \
+      PilatesNodeStyleSet##capitalized_name(self.node, lowercased_name.value);          \
       break;                                                                       \
-    case YGUnitPoint:                                                              \
-      YGNodeStyleSet##capitalized_name(self.node, lowercased_name.value);          \
+    case PilatesUnitPoint:                                                              \
+      PilatesNodeStyleSet##capitalized_name(self.node, lowercased_name.value);          \
       break;                                                                       \
-    case YGUnitPercent:                                                            \
-      YGNodeStyleSet##capitalized_name##Percent(self.node, lowercased_name.value); \
+    case PilatesUnitPercent:                                                            \
+      PilatesNodeStyleSet##capitalized_name##Percent(self.node, lowercased_name.value); \
       break;                                                                       \
     default:                                                                       \
       NSAssert(NO, @"Not implemented");                                            \
   }                                                                                \
 }
 
-#define YG_AUTO_VALUE_PROPERTY(lowercased_name, capitalized_name)                  \
-- (YGValue)lowercased_name                                                         \
+#define Pilates_AUTO_VALUE_PROPERTY(lowercased_name, capitalized_name)                  \
+- (PilatesValue)lowercased_name                                                         \
 {                                                                                  \
-  return YGNodeStyleGet##capitalized_name(self.node);                              \
+  return PilatesNodeStyleGet##capitalized_name(self.node);                              \
 }                                                                                  \
                                                                                    \
-- (void)set##capitalized_name:(YGValue)lowercased_name                             \
+- (void)set##capitalized_name:(PilatesValue)lowercased_name                             \
 {                                                                                  \
   switch (lowercased_name.unit) {                                                  \
-    case YGUnitPoint:                                                              \
-      YGNodeStyleSet##capitalized_name(self.node, lowercased_name.value);          \
+    case PilatesUnitPoint:                                                              \
+      PilatesNodeStyleSet##capitalized_name(self.node, lowercased_name.value);          \
       break;                                                                       \
-    case YGUnitPercent:                                                            \
-      YGNodeStyleSet##capitalized_name##Percent(self.node, lowercased_name.value); \
+    case PilatesUnitPercent:                                                            \
+      PilatesNodeStyleSet##capitalized_name##Percent(self.node, lowercased_name.value); \
       break;                                                                       \
-    case YGUnitAuto:                                                               \
-      YGNodeStyleSet##capitalized_name##Auto(self.node);                           \
+    case PilatesUnitAuto:                                                               \
+      PilatesNodeStyleSet##capitalized_name##Auto(self.node);                           \
       break;                                                                       \
     default:                                                                       \
       NSAssert(NO, @"Not implemented");                                            \
   }                                                                                \
 }
 
-#define YG_EDGE_PROPERTY_GETTER(type, lowercased_name, capitalized_name, property, edge) \
+#define Pilates_EDGE_PROPERTY_GETTER(type, lowercased_name, capitalized_name, property, edge) \
 - (type)lowercased_name                                                                  \
 {                                                                                        \
-  return YGNodeStyleGet##property(self.node, edge);                                      \
+  return PilatesNodeStyleGet##property(self.node, edge);                                      \
 }
 
-#define YG_EDGE_PROPERTY_SETTER(lowercased_name, capitalized_name, property, edge) \
+#define Pilates_EDGE_PROPERTY_SETTER(lowercased_name, capitalized_name, property, edge) \
 - (void)set##capitalized_name:(CGFloat)lowercased_name                             \
 {                                                                                  \
-  YGNodeStyleSet##property(self.node, edge, lowercased_name);                      \
+  PilatesNodeStyleSet##property(self.node, edge, lowercased_name);                      \
 }
 
-#define YG_EDGE_PROPERTY(lowercased_name, capitalized_name, property, edge)         \
-YG_EDGE_PROPERTY_GETTER(CGFloat, lowercased_name, capitalized_name, property, edge) \
-YG_EDGE_PROPERTY_SETTER(lowercased_name, capitalized_name, property, edge)
+#define Pilates_EDGE_PROPERTY(lowercased_name, capitalized_name, property, edge)         \
+Pilates_EDGE_PROPERTY_GETTER(CGFloat, lowercased_name, capitalized_name, property, edge) \
+Pilates_EDGE_PROPERTY_SETTER(lowercased_name, capitalized_name, property, edge)
 
-#define YG_VALUE_EDGE_PROPERTY_SETTER(objc_lowercased_name, objc_capitalized_name, c_name, edge) \
-- (void)set##objc_capitalized_name:(YGValue)objc_lowercased_name                                 \
+#define Pilates_VALUE_EDGE_PROPERTY_SETTER(objc_lowercased_name, objc_capitalized_name, c_name, edge) \
+- (void)set##objc_capitalized_name:(PilatesValue)objc_lowercased_name                                 \
 {                                                                                                \
   switch (objc_lowercased_name.unit) {                                                           \
-    case YGUnitUndefined:                                                                        \
-      YGNodeStyleSet##c_name(self.node, edge, objc_lowercased_name.value);                       \
+    case PilatesUnitUndefined:                                                                        \
+      PilatesNodeStyleSet##c_name(self.node, edge, objc_lowercased_name.value);                       \
       break;                                                                                     \
-    case YGUnitPoint:                                                                            \
-      YGNodeStyleSet##c_name(self.node, edge, objc_lowercased_name.value);                       \
+    case PilatesUnitPoint:                                                                            \
+      PilatesNodeStyleSet##c_name(self.node, edge, objc_lowercased_name.value);                       \
       break;                                                                                     \
-    case YGUnitPercent:                                                                          \
-      YGNodeStyleSet##c_name##Percent(self.node, edge, objc_lowercased_name.value);              \
+    case PilatesUnitPercent:                                                                          \
+      PilatesNodeStyleSet##c_name##Percent(self.node, edge, objc_lowercased_name.value);              \
       break;                                                                                     \
     default:                                                                                     \
       NSAssert(NO, @"Not implemented");                                                          \
   }                                                                                              \
 }
 
-#define YG_VALUE_EDGE_PROPERTY(lowercased_name, capitalized_name, property, edge)   \
-YG_EDGE_PROPERTY_GETTER(YGValue, lowercased_name, capitalized_name, property, edge) \
-YG_VALUE_EDGE_PROPERTY_SETTER(lowercased_name, capitalized_name, property, edge)
+#define Pilates_VALUE_EDGE_PROPERTY(lowercased_name, capitalized_name, property, edge)   \
+Pilates_EDGE_PROPERTY_GETTER(PilatesValue, lowercased_name, capitalized_name, property, edge) \
+Pilates_VALUE_EDGE_PROPERTY_SETTER(lowercased_name, capitalized_name, property, edge)
 
-#define YG_VALUE_EDGES_PROPERTIES(lowercased_name, capitalized_name)                                                  \
-YG_VALUE_EDGE_PROPERTY(lowercased_name##Left, capitalized_name##Left, capitalized_name, YGEdgeLeft)                   \
-YG_VALUE_EDGE_PROPERTY(lowercased_name##Top, capitalized_name##Top, capitalized_name, YGEdgeTop)                      \
-YG_VALUE_EDGE_PROPERTY(lowercased_name##Right, capitalized_name##Right, capitalized_name, YGEdgeRight)                \
-YG_VALUE_EDGE_PROPERTY(lowercased_name##Bottom, capitalized_name##Bottom, capitalized_name, YGEdgeBottom)             \
-YG_VALUE_EDGE_PROPERTY(lowercased_name##Start, capitalized_name##Start, capitalized_name, YGEdgeStart)                \
-YG_VALUE_EDGE_PROPERTY(lowercased_name##End, capitalized_name##End, capitalized_name, YGEdgeEnd)                      \
-YG_VALUE_EDGE_PROPERTY(lowercased_name##Horizontal, capitalized_name##Horizontal, capitalized_name, YGEdgeHorizontal) \
-YG_VALUE_EDGE_PROPERTY(lowercased_name##Vertical, capitalized_name##Vertical, capitalized_name, YGEdgeVertical)       \
-YG_VALUE_EDGE_PROPERTY(lowercased_name, capitalized_name, capitalized_name, YGEdgeAll)
+#define Pilates_VALUE_EDGES_PROPERTIES(lowercased_name, capitalized_name)                                                  \
+Pilates_VALUE_EDGE_PROPERTY(lowercased_name##Left, capitalized_name##Left, capitalized_name, PilatesEdgeLeft)                   \
+Pilates_VALUE_EDGE_PROPERTY(lowercased_name##Top, capitalized_name##Top, capitalized_name, PilatesEdgeTop)                      \
+Pilates_VALUE_EDGE_PROPERTY(lowercased_name##Right, capitalized_name##Right, capitalized_name, PilatesEdgeRight)                \
+Pilates_VALUE_EDGE_PROPERTY(lowercased_name##Bottom, capitalized_name##Bottom, capitalized_name, PilatesEdgeBottom)             \
+Pilates_VALUE_EDGE_PROPERTY(lowercased_name##Start, capitalized_name##Start, capitalized_name, PilatesEdgeStart)                \
+Pilates_VALUE_EDGE_PROPERTY(lowercased_name##End, capitalized_name##End, capitalized_name, PilatesEdgeEnd)                      \
+Pilates_VALUE_EDGE_PROPERTY(lowercased_name##Horizontal, capitalized_name##Horizontal, capitalized_name, PilatesEdgeHorizontal) \
+Pilates_VALUE_EDGE_PROPERTY(lowercased_name##Vertical, capitalized_name##Vertical, capitalized_name, PilatesEdgeVertical)       \
+Pilates_VALUE_EDGE_PROPERTY(lowercased_name, capitalized_name, capitalized_name, PilatesEdgeAll)
 
-YGValue YGPointValue(CGFloat value)
+PilatesValue PilatesPointValue(CGFloat value)
 {
-  return (YGValue) { .value = (float) value, .unit = (YGUnit) YGUnitPoint };
+  return (PilatesValue) { .value = (float) value, .unit = (PilatesUnit) PilatesUnitPoint };
 }
 
-YGValue YGPercentValue(CGFloat value)
+PilatesValue PilatesPercentValue(CGFloat value)
 {
-  return (YGValue) { .value = (float) value, .unit = YGUnitPercent };
+  return (PilatesValue) { .value = (float) value, .unit = PilatesUnitPercent };
 }
 
-static YGConfigRef globalConfig;
+static PilatesConfigRef globalConfig;
 
-@interface YGLayout ()
+@interface PilatesLayout ()
 
 @property (nonatomic, weak, readonly) UIView *view;
 
 @end
 
-@implementation YGLayout
+@implementation PilatesLayout
 
 @synthesize isEnabled=_isEnabled;
 @synthesize isIncludedInLayout=_isIncludedInLayout;
@@ -140,35 +140,35 @@ static YGConfigRef globalConfig;
 
 + (void)initialize
 {
-  globalConfig = YGConfigNew();
-  YGConfigSetExperimentalFeatureEnabled(globalConfig, YGExperimentalFeatureWebFlexBasis, true);
-  YGConfigSetPointScaleFactor(globalConfig, [UIScreen mainScreen].scale);
+  globalConfig = PilatesConfigNew();
+  PilatesConfigSetExperimentalFeatureEnabled(globalConfig, PilatesExperimentalFeatureWebFlexBasis, true);
+  PilatesConfigSetPointScaleFactor(globalConfig, [UIScreen mainScreen].scale);
 }
 
 - (instancetype)initWithView:(UIView*)view
 {
   if (self = [super init]) {
     _view = view;
-    _node = YGNodeNewWithConfig(globalConfig);
-    YGNodeSetContext(_node, (__bridge void *) view);
+    _node = PilatesNodeNewWithConfig(globalConfig);
+    PilatesNodeSetContext(_node, (__bridge void *) view);
     _isEnabled = NO;
     _isIncludedInLayout = YES;
 
     if ([view isKindOfClass:[UILabel class]]) {
-      if (YGNodeGetBaselineFunc(_node) == NULL) {
-        YGNodeSetBaselineFunc(_node, YGMeasureBaselineLabel);
+      if (PilatesNodeGetBaselineFunc(_node) == NULL) {
+        PilatesNodeSetBaselineFunc(_node, PilatesMeasureBaselineLabel);
       }
     }
 
     if ([view isKindOfClass:[UITextView class]]) {
-      if (YGNodeGetBaselineFunc(_node) == NULL) {
-        YGNodeSetBaselineFunc(_node, YGMeasureBaselineTextView);
+      if (PilatesNodeGetBaselineFunc(_node) == NULL) {
+        PilatesNodeSetBaselineFunc(_node, PilatesMeasureBaselineTextView);
       }
     }
 
     if ([view isKindOfClass:[UITextField class]]) {
-      if (YGNodeGetBaselineFunc(_node) == NULL) {
-        YGNodeSetBaselineFunc(_node, YGMeasureBaselineTextField);
+      if (PilatesNodeGetBaselineFunc(_node) == NULL) {
+        PilatesNodeSetBaselineFunc(_node, PilatesMeasureBaselineTextField);
       }
     }
   }
@@ -178,12 +178,12 @@ static YGConfigRef globalConfig;
 
 - (void)dealloc
 {
-  YGNodeFree(self.node);
+  PilatesNodeFree(self.node);
 }
 
 - (BOOL)isDirty
 {
-  return YGNodeIsDirty(self.node);
+  return PilatesNodeIsDirty(self.node);
 }
 
 - (void)markDirty
@@ -195,17 +195,17 @@ static YGConfigRef globalConfig;
   // Pilates is not happy if we try to mark a node as "dirty" before we have set
   // the measure function. Since we already know that this is a leaf,
   // this *should* be fine. Forgive me Hack Gods.
-  const YGNodeRef node = self.node;
-  if (YGNodeGetMeasureFunc(node) == NULL) {
-    YGNodeSetMeasureFunc(node, YGMeasureView);
+  const PilatesNodeRef node = self.node;
+  if (PilatesNodeGetMeasureFunc(node) == NULL) {
+    PilatesNodeSetMeasureFunc(node, PilatesMeasureView);
   }
 
-  YGNodeMarkDirty(node);
+  PilatesNodeMarkDirty(node);
 }
 
 - (NSUInteger)numberOfChildren
 {
-  return YGNodeGetChildCount(self.node);
+  return PilatesNodeGetChildCount(self.node);
 }
 
 - (BOOL)isLeaf
@@ -213,7 +213,7 @@ static YGConfigRef globalConfig;
   NSAssert([NSThread isMainThread], @"This method must be called on the main thread.");
   if (self.isEnabled) {
     for (UIView *subview in self.view.subviews) {
-      YGLayout *const pilates = subview.pilates;
+      PilatesLayout *const pilates = subview.pilates;
       if (pilates.isEnabled && pilates.isIncludedInLayout) {
         return NO;
       }
@@ -225,93 +225,93 @@ static YGConfigRef globalConfig;
 
 #pragma mark - Style
 
-- (YGPositionType)position
+- (PilatesPositionType)position
 {
-  return YGNodeStyleGetPositionType(self.node);
+  return PilatesNodeStyleGetPositionType(self.node);
 }
 
-- (void)setPosition:(YGPositionType)position
+- (void)setPosition:(PilatesPositionType)position
 {
-  YGNodeStyleSetPositionType(self.node, position);
+  PilatesNodeStyleSetPositionType(self.node, position);
 }
 
-YG_PROPERTY(YGDirection, direction, Direction)
-YG_PROPERTY(YGFlexDirection, flexDirection, FlexDirection)
-YG_PROPERTY(YGJustify, justifyContent, JustifyContent)
-YG_PROPERTY(YGAlign, alignContent, AlignContent)
-YG_PROPERTY(YGAlign, alignItems, AlignItems)
-YG_PROPERTY(YGAlign, alignSelf, AlignSelf)
-YG_PROPERTY(YGWrap, flexWrap, FlexWrap)
-YG_PROPERTY(YGOverflow, overflow, Overflow)
-YG_PROPERTY(YGDisplay, display, Display)
+Pilates_PROPERTY(PilatesDirection, direction, Direction)
+Pilates_PROPERTY(PilatesFlexDirection, flexDirection, FlexDirection)
+Pilates_PROPERTY(PilatesJustify, justifyContent, JustifyContent)
+Pilates_PROPERTY(PilatesAlign, alignContent, AlignContent)
+Pilates_PROPERTY(PilatesAlign, alignItems, AlignItems)
+Pilates_PROPERTY(PilatesAlign, alignSelf, AlignSelf)
+Pilates_PROPERTY(PilatesWrap, flexWrap, FlexWrap)
+Pilates_PROPERTY(PilatesOverflow, overflow, Overflow)
+Pilates_PROPERTY(PilatesDisplay, display, Display)
 
-YG_PROPERTY(CGFloat, flexGrow, FlexGrow)
-YG_PROPERTY(CGFloat, flexShrink, FlexShrink)
-YG_AUTO_VALUE_PROPERTY(flexBasis, FlexBasis)
+Pilates_PROPERTY(CGFloat, flexGrow, FlexGrow)
+Pilates_PROPERTY(CGFloat, flexShrink, FlexShrink)
+Pilates_AUTO_VALUE_PROPERTY(flexBasis, FlexBasis)
 
-YG_VALUE_EDGE_PROPERTY(left, Left, Position, YGEdgeLeft)
-YG_VALUE_EDGE_PROPERTY(top, Top, Position, YGEdgeTop)
-YG_VALUE_EDGE_PROPERTY(right, Right, Position, YGEdgeRight)
-YG_VALUE_EDGE_PROPERTY(bottom, Bottom, Position, YGEdgeBottom)
-YG_VALUE_EDGE_PROPERTY(start, Start, Position, YGEdgeStart)
-YG_VALUE_EDGE_PROPERTY(end, End, Position, YGEdgeEnd)
-YG_VALUE_EDGES_PROPERTIES(margin, Margin)
-YG_VALUE_EDGES_PROPERTIES(padding, Padding)
+Pilates_VALUE_EDGE_PROPERTY(left, Left, Position, PilatesEdgeLeft)
+Pilates_VALUE_EDGE_PROPERTY(top, Top, Position, PilatesEdgeTop)
+Pilates_VALUE_EDGE_PROPERTY(right, Right, Position, PilatesEdgeRight)
+Pilates_VALUE_EDGE_PROPERTY(bottom, Bottom, Position, PilatesEdgeBottom)
+Pilates_VALUE_EDGE_PROPERTY(start, Start, Position, PilatesEdgeStart)
+Pilates_VALUE_EDGE_PROPERTY(end, End, Position, PilatesEdgeEnd)
+Pilates_VALUE_EDGES_PROPERTIES(margin, Margin)
+Pilates_VALUE_EDGES_PROPERTIES(padding, Padding)
 
-YG_EDGE_PROPERTY(borderLeftWidth, BorderLeftWidth, Border, YGEdgeLeft)
-YG_EDGE_PROPERTY(borderTopWidth, BorderTopWidth, Border, YGEdgeTop)
-YG_EDGE_PROPERTY(borderRightWidth, BorderRightWidth, Border, YGEdgeRight)
-YG_EDGE_PROPERTY(borderBottomWidth, BorderBottomWidth, Border, YGEdgeBottom)
-YG_EDGE_PROPERTY(borderStartWidth, BorderStartWidth, Border, YGEdgeStart)
-YG_EDGE_PROPERTY(borderEndWidth, BorderEndWidth, Border, YGEdgeEnd)
-YG_EDGE_PROPERTY(borderWidth, BorderWidth, Border, YGEdgeAll)
+Pilates_EDGE_PROPERTY(borderLeftWidth, BorderLeftWidth, Border, PilatesEdgeLeft)
+Pilates_EDGE_PROPERTY(borderTopWidth, BorderTopWidth, Border, PilatesEdgeTop)
+Pilates_EDGE_PROPERTY(borderRightWidth, BorderRightWidth, Border, PilatesEdgeRight)
+Pilates_EDGE_PROPERTY(borderBottomWidth, BorderBottomWidth, Border, PilatesEdgeBottom)
+Pilates_EDGE_PROPERTY(borderStartWidth, BorderStartWidth, Border, PilatesEdgeStart)
+Pilates_EDGE_PROPERTY(borderEndWidth, BorderEndWidth, Border, PilatesEdgeEnd)
+Pilates_EDGE_PROPERTY(borderWidth, BorderWidth, Border, PilatesEdgeAll)
 
-YG_AUTO_VALUE_PROPERTY(width, Width)
-YG_AUTO_VALUE_PROPERTY(height, Height)
-YG_VALUE_PROPERTY(minWidth, MinWidth)
-YG_VALUE_PROPERTY(minHeight, MinHeight)
-YG_VALUE_PROPERTY(maxWidth, MaxWidth)
-YG_VALUE_PROPERTY(maxHeight, MaxHeight)
-YG_PROPERTY(CGFloat, aspectRatio, AspectRatio)
+Pilates_AUTO_VALUE_PROPERTY(width, Width)
+Pilates_AUTO_VALUE_PROPERTY(height, Height)
+Pilates_VALUE_PROPERTY(minWidth, MinWidth)
+Pilates_VALUE_PROPERTY(minHeight, MinHeight)
+Pilates_VALUE_PROPERTY(maxWidth, MaxWidth)
+Pilates_VALUE_PROPERTY(maxHeight, MaxHeight)
+Pilates_PROPERTY(CGFloat, aspectRatio, AspectRatio)
 
 #pragma mark - Layout and Sizing
 
-- (YGDirection)resolvedDirection
+- (PilatesDirection)resolvedDirection
 {
-  return YGNodeLayoutGetDirection(self.node);
+  return PilatesNodeLayoutGetDirection(self.node);
 }
 
 - (void)applyLayout
 {
   [self calculateLayoutWithSize:self.view.bounds.size];
-  YGApplyLayoutToViewHierarchy(self.view, NO);
+  PilatesApplyLayoutToViewHierarchy(self.view, NO);
 }
 
 - (void)applyLayoutPreservingOrigin:(BOOL)preserveOrigin
 {
   [self calculateLayoutWithSize:self.view.bounds.size];
-  YGApplyLayoutToViewHierarchy(self.view, preserveOrigin);
+  PilatesApplyLayoutToViewHierarchy(self.view, preserveOrigin);
 }
 
-- (void)applyLayoutPreservingOrigin:(BOOL)preserveOrigin dimensionFlexibility:(YGDimensionFlexibility)dimensionFlexibility
+- (void)applyLayoutPreservingOrigin:(BOOL)preserveOrigin dimensionFlexibility:(PilatesDimensionFlexibility)dimensionFlexibility
 {
   CGSize size = self.view.bounds.size;
-  if (dimensionFlexibility & YGDimensionFlexibilityFlexibleWidth) {
-    size.width = YGUndefined;
+  if (dimensionFlexibility & PilatesDimensionFlexibilityFlexibleWidth) {
+    size.width = PilatesUndefined;
   }
-  if (dimensionFlexibility & YGDimensionFlexibilityFlexibleHeight) {
-    size.height = YGUndefined;
+  if (dimensionFlexibility & PilatesDimensionFlexibilityFlexibleHeight) {
+    size.height = PilatesUndefined;
   }
   [self calculateLayoutWithSize:size];
-  YGApplyLayoutToViewHierarchy(self.view, preserveOrigin);
+  PilatesApplyLayoutToViewHierarchy(self.view, preserveOrigin);
 }
 
 
 - (CGSize)intrinsicSize
 {
   const CGSize constrainedSize = {
-    .width = YGUndefined,
-    .height = YGUndefined,
+    .width = PilatesUndefined,
+    .height = PilatesUndefined,
   };
   return [self calculateLayoutWithSize:constrainedSize];
 }
@@ -321,47 +321,47 @@ YG_PROPERTY(CGFloat, aspectRatio, AspectRatio)
   NSAssert([NSThread isMainThread], @"Pilates calculation must be done on main.");
   NSAssert(self.isEnabled, @"Pilates is not enabled for this view.");
 
-  YGAttachNodesFromViewHierachy(self.view);
+  PilatesAttachNodesFromViewHierachy(self.view);
 
-  const YGNodeRef node = self.node;
-  YGNodeCalculateLayout(
+  const PilatesNodeRef node = self.node;
+  PilatesNodeCalculateLayout(
     node,
     size.width,
     size.height,
-    YGNodeStyleGetDirection(node));
+    PilatesNodeStyleGetDirection(node));
 
   return (CGSize) {
-    .width = YGNodeLayoutGetWidth(node),
-    .height = YGNodeLayoutGetHeight(node),
+    .width = PilatesNodeLayoutGetWidth(node),
+    .height = PilatesNodeLayoutGetHeight(node),
   };
 }
 
 #pragma mark - Private
 
-static float YGMeasureBaselineLabel(
-  YGNodeRef node,
+static float PilatesMeasureBaselineLabel(
+  PilatesNodeRef node,
   const float width,
   const float height) {
 
-  UILabel* view = (__bridge UILabel*) YGNodeGetContext(node);
+  UILabel* view = (__bridge UILabel*) PilatesNodeGetContext(node);
   return view.font.ascender; // height + view.font.ascender for lastBaseline
 }
 
-static float YGMeasureBaselineTextView(
-  YGNodeRef node,
+static float PilatesMeasureBaselineTextView(
+  PilatesNodeRef node,
   const float width,
   const float height) {
 
-  UITextView* view = (__bridge UITextView*) YGNodeGetContext(node);
+  UITextView* view = (__bridge UITextView*) PilatesNodeGetContext(node);
   return view.font.ascender + view.contentInset.top + view.textContainerInset.top;
 }
 
-static float YGMeasureBaselineTextField(
-  YGNodeRef node,
+static float PilatesMeasureBaselineTextField(
+  PilatesNodeRef node,
   const float width,
   const float height) {
 
-  UITextField* view = (__bridge UITextField*) YGNodeGetContext(node);
+  UITextField* view = (__bridge UITextField*) PilatesNodeGetContext(node);
 
   switch (view.borderStyle) {
   case UITextBorderStyleNone:
@@ -374,37 +374,37 @@ static float YGMeasureBaselineTextField(
   }
 }
 
-static YGSize YGMeasureView(
-  YGNodeRef node,
+static PilatesSize PilatesMeasureView(
+  PilatesNodeRef node,
   float width,
-  YGMeasureMode widthMode,
+  PilatesMeasureMode widthMode,
   float height,
-  YGMeasureMode heightMode)
+  PilatesMeasureMode heightMode)
 {
-  const CGFloat constrainedWidth = (widthMode == YGMeasureModeUndefined) ? CGFLOAT_MAX : width;
-  const CGFloat constrainedHeight = (heightMode == YGMeasureModeUndefined) ? CGFLOAT_MAX: height;
+  const CGFloat constrainedWidth = (widthMode == PilatesMeasureModeUndefined) ? CGFLOAT_MAX : width;
+  const CGFloat constrainedHeight = (heightMode == PilatesMeasureModeUndefined) ? CGFLOAT_MAX: height;
 
-  UIView *view = (__bridge UIView*) YGNodeGetContext(node);
+  UIView *view = (__bridge UIView*) PilatesNodeGetContext(node);
   const CGSize sizeThatFits = [view sizeThatFits:(CGSize) {
     .width = constrainedWidth,
     .height = constrainedHeight,
   }];
 
-  return (YGSize) {
-    .width = (float) YGSanitizeMeasurement(constrainedWidth, sizeThatFits.width, widthMode),
-    .height = (float) YGSanitizeMeasurement(constrainedHeight, sizeThatFits.height, heightMode),
+  return (PilatesSize) {
+    .width = (float) PilatesSanitizeMeasurement(constrainedWidth, sizeThatFits.width, widthMode),
+    .height = (float) PilatesSanitizeMeasurement(constrainedHeight, sizeThatFits.height, heightMode),
   };
 }
 
-static CGFloat YGSanitizeMeasurement(
+static CGFloat PilatesSanitizeMeasurement(
   CGFloat constrainedSize,
   CGFloat measuredSize,
-  YGMeasureMode measureMode)
+  PilatesMeasureMode measureMode)
 {
   CGFloat result;
-  if (measureMode == YGMeasureModeExactly) {
+  if (measureMode == PilatesMeasureModeExactly) {
     result = constrainedSize;
-  } else if (measureMode == YGMeasureModeAtMost) {
+  } else if (measureMode == PilatesMeasureModeAtMost) {
     result = MIN(constrainedSize, measuredSize);
   } else {
     result = measuredSize;
@@ -413,14 +413,14 @@ static CGFloat YGSanitizeMeasurement(
   return result;
 }
 
-static BOOL YGNodeHasExactSameChildren(const YGNodeRef node, NSArray<UIView *> *subviews)
+static BOOL PilatesNodeHasExactSameChildren(const PilatesNodeRef node, NSArray<UIView *> *subviews)
 {
-  if (YGNodeGetChildCount(node) != subviews.count) {
+  if (PilatesNodeGetChildCount(node) != subviews.count) {
     return NO;
   }
 
   for (int i=0; i<subviews.count; i++) {
-    if (YGNodeGetChild(node, i) != subviews[i].pilates.node) {
+    if (PilatesNodeGetChild(node, i) != subviews[i].pilates.node) {
       return NO;
     }
   }
@@ -428,17 +428,17 @@ static BOOL YGNodeHasExactSameChildren(const YGNodeRef node, NSArray<UIView *> *
   return YES;
 }
 
-static void YGAttachNodesFromViewHierachy(UIView *const view)
+static void PilatesAttachNodesFromViewHierachy(UIView *const view)
 {
-  YGLayout *const pilates = view.pilates;
-  const YGNodeRef node = pilates.node;
+  PilatesLayout *const pilates = view.pilates;
+  const PilatesNodeRef node = pilates.node;
 
   // Only leaf nodes should have a measure function
   if (pilates.isLeaf) {
-    YGRemoveAllChildren(node);
-    YGNodeSetMeasureFunc(node, YGMeasureView);
+    PilatesRemoveAllChildren(node);
+    PilatesNodeSetMeasureFunc(node, PilatesMeasureView);
   } else {
-    YGNodeSetMeasureFunc(node, NULL);
+    PilatesNodeSetMeasureFunc(node, NULL);
 
     NSMutableArray<UIView *> *subviewsToInclude = [[NSMutableArray alloc] initWithCapacity:view.subviews.count];
     for (UIView *subview in view.subviews) {
@@ -447,36 +447,36 @@ static void YGAttachNodesFromViewHierachy(UIView *const view)
       }
     }
 
-    if (!YGNodeHasExactSameChildren(node, subviewsToInclude)) {
-      YGRemoveAllChildren(node);
+    if (!PilatesNodeHasExactSameChildren(node, subviewsToInclude)) {
+      PilatesRemoveAllChildren(node);
       for (int i=0; i<subviewsToInclude.count; i++) {
-        YGNodeRef child = subviewsToInclude[i].pilates.node;
-        YGNodeRef parent = YGNodeGetParent(child);
+        PilatesNodeRef child = subviewsToInclude[i].pilates.node;
+        PilatesNodeRef parent = PilatesNodeGetParent(child);
         if (parent != NULL) {
-          YGNodeRemoveChild(parent, child);
+          PilatesNodeRemoveChild(parent, child);
         }
-        YGNodeInsertChild(node, child, i);
+        PilatesNodeInsertChild(node, child, i);
       }
     }
 
     for (UIView *const subview in subviewsToInclude) {
-      YGAttachNodesFromViewHierachy(subview);
+      PilatesAttachNodesFromViewHierachy(subview);
     }
   }
 }
 
-static void YGRemoveAllChildren(const YGNodeRef node)
+static void PilatesRemoveAllChildren(const PilatesNodeRef node)
 {
   if (node == NULL) {
     return;
   }
 
-  while (YGNodeGetChildCount(node) > 0) {
-    YGNodeRemoveChild(node, YGNodeGetChild(node, YGNodeGetChildCount(node) - 1));
+  while (PilatesNodeGetChildCount(node) > 0) {
+    PilatesNodeRemoveChild(node, PilatesNodeGetChild(node, PilatesNodeGetChildCount(node) - 1));
   }
 }
 
-static CGFloat YGRoundPixelValue(CGFloat value)
+static CGFloat PilatesRoundPixelValue(CGFloat value)
 {
   static CGFloat scale;
   static dispatch_once_t onceToken;
@@ -487,42 +487,42 @@ static CGFloat YGRoundPixelValue(CGFloat value)
   return roundf(value * scale) / scale;
 }
 
-static void YGApplyLayoutToViewHierarchy(UIView *view, BOOL preserveOrigin)
+static void PilatesApplyLayoutToViewHierarchy(UIView *view, BOOL preserveOrigin)
 {
   NSCAssert([NSThread isMainThread], @"Framesetting should only be done on the main thread.");
 
-  const YGLayout *pilates = view.pilates;
+  const PilatesLayout *pilates = view.pilates;
 
   if (!pilates.isIncludedInLayout) {
      return;
   }
 
-  YGNodeRef node = pilates.node;
+  PilatesNodeRef node = pilates.node;
   const CGPoint topLeft = {
-    YGNodeLayoutGetLeft(node),
-    YGNodeLayoutGetTop(node),
+    PilatesNodeLayoutGetLeft(node),
+    PilatesNodeLayoutGetTop(node),
   };
 
   const CGPoint bottomRight = {
-    topLeft.x + YGNodeLayoutGetWidth(node),
-    topLeft.y + YGNodeLayoutGetHeight(node),
+    topLeft.x + PilatesNodeLayoutGetWidth(node),
+    topLeft.y + PilatesNodeLayoutGetHeight(node),
   };
 
   const CGPoint origin = preserveOrigin ? view.frame.origin : CGPointZero;
   view.frame = (CGRect) {
     .origin = {
-      .x = YGRoundPixelValue(topLeft.x + origin.x),
-      .y = YGRoundPixelValue(topLeft.y + origin.y),
+      .x = PilatesRoundPixelValue(topLeft.x + origin.x),
+      .y = PilatesRoundPixelValue(topLeft.y + origin.y),
     },
     .size = {
-      .width = YGRoundPixelValue(bottomRight.x) - YGRoundPixelValue(topLeft.x),
-      .height = YGRoundPixelValue(bottomRight.y) - YGRoundPixelValue(topLeft.y),
+      .width = PilatesRoundPixelValue(bottomRight.x) - PilatesRoundPixelValue(topLeft.x),
+      .height = PilatesRoundPixelValue(bottomRight.y) - PilatesRoundPixelValue(topLeft.y),
     },
   };
 
   if (!pilates.isLeaf) {
     for (NSUInteger i=0; i<view.subviews.count; i++) {
-      YGApplyLayoutToViewHierarchy(view.subviews[i], NO);
+      PilatesApplyLayoutToViewHierarchy(view.subviews[i], NO);
     }
   }
 }

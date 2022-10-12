@@ -12,9 +12,9 @@
 #import "Pilates.h"
 #endif
 
-@interface YGLayout ()
+@interface PilatesLayout ()
 
-@property (nonatomic, assign, readonly) YGNodeRef node;
+@property (nonatomic, assign, readonly) PilatesNodeRef node;
 
 - (instancetype)initWithView:(UIView *)view;
 

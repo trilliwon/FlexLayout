@@ -11,125 +11,125 @@
 #include "PilatesStyle.h"
 #include "Pilates-internal.h"
 
-struct YGNode {
+struct PilatesNode {
  private:
   void* context_;
-  YGPrintFunc print_;
+  PilatesPrintFunc print_;
   bool hasNewLayout_;
-  YGNodeType nodeType_;
-  YGMeasureFunc measure_;
-  YGBaselineFunc baseline_;
-  YGDirtiedFunc dirtied_;
-  YGStyle style_;
-  YGLayout layout_;
+  PilatesNodeType nodeType_;
+  PilatesMeasureFunc measure_;
+  PilatesBaselineFunc baseline_;
+  PilatesDirtiedFunc dirtied_;
+  PilatesStyle style_;
+  PilatesLayout layout_;
   uint32_t lineIndex_;
-  YGNodeRef parent_;
-  YGVector children_;
-  YGNodeRef nextChild_;
-  YGConfigRef config_;
+  PilatesNodeRef parent_;
+  PilatesVector children_;
+  PilatesNodeRef nextChild_;
+  PilatesConfigRef config_;
   bool isDirty_;
-  std::array<YGValue, 2> resolvedDimensions_;
+  std::array<PilatesValue, 2> resolvedDimensions_;
 
-  float relativePosition(const YGFlexDirection axis, const float axisSize);
+  float relativePosition(const PilatesFlexDirection axis, const float axisSize);
 
  public:
-  YGNode();
-  ~YGNode();
-  explicit YGNode(const YGConfigRef newConfig);
-  YGNode(const YGNode& node);
-  YGNode& operator=(const YGNode& node);
-  YGNode(
+  PilatesNode();
+  ~PilatesNode();
+  explicit PilatesNode(const PilatesConfigRef newConfig);
+  PilatesNode(const PilatesNode& node);
+  PilatesNode& operator=(const PilatesNode& node);
+  PilatesNode(
       void* context,
-      YGPrintFunc print,
+      PilatesPrintFunc print,
       bool hasNewLayout,
-      YGNodeType nodeType,
-      YGMeasureFunc measure,
-      YGBaselineFunc baseline,
-      YGDirtiedFunc dirtied,
-      YGStyle style,
-      YGLayout layout,
+      PilatesNodeType nodeType,
+      PilatesMeasureFunc measure,
+      PilatesBaselineFunc baseline,
+      PilatesDirtiedFunc dirtied,
+      PilatesStyle style,
+      PilatesLayout layout,
       uint32_t lineIndex,
-      YGNodeRef parent,
-      YGVector children,
-      YGNodeRef nextChild,
-      YGConfigRef config,
+      PilatesNodeRef parent,
+      PilatesVector children,
+      PilatesNodeRef nextChild,
+      PilatesConfigRef config,
       bool isDirty,
-      std::array<YGValue, 2> resolvedDimensions);
+      std::array<PilatesValue, 2> resolvedDimensions);
 
   // Getters
   void* getContext() const;
-  YGPrintFunc getPrintFunc() const;
+  PilatesPrintFunc getPrintFunc() const;
   bool getHasNewLayout() const;
-  YGNodeType getNodeType() const;
-  YGMeasureFunc getMeasure() const;
-  YGBaselineFunc getBaseline() const;
-  YGDirtiedFunc getDirtied() const;
+  PilatesNodeType getNodeType() const;
+  PilatesMeasureFunc getMeasure() const;
+  PilatesBaselineFunc getBaseline() const;
+  PilatesDirtiedFunc getDirtied() const;
   // For Performance reasons passing as reference.
-  YGStyle& getStyle();
+  PilatesStyle& getStyle();
   // For Performance reasons passing as reference.
-  YGLayout& getLayout();
+  PilatesLayout& getLayout();
   uint32_t getLineIndex() const;
-  YGNodeRef getParent() const;
-  YGVector getChildren() const;
+  PilatesNodeRef getParent() const;
+  PilatesVector getChildren() const;
   uint32_t getChildrenCount() const;
-  YGNodeRef getChild(uint32_t index) const;
-  YGNodeRef getNextChild() const;
-  YGConfigRef getConfig() const;
+  PilatesNodeRef getChild(uint32_t index) const;
+  PilatesNodeRef getNextChild() const;
+  PilatesConfigRef getConfig() const;
   bool isDirty() const;
-  std::array<YGValue, 2> getResolvedDimensions() const;
-  YGValue getResolvedDimension(int index);
+  std::array<PilatesValue, 2> getResolvedDimensions() const;
+  PilatesValue getResolvedDimension(int index);
 
   // Methods related to positions, margin, padding and border
-  float getLeadingPosition(const YGFlexDirection axis, const float axisSize);
-  bool isLeadingPositionDefined(const YGFlexDirection axis);
-  bool isTrailingPosDefined(const YGFlexDirection axis);
-  float getTrailingPosition(const YGFlexDirection axis, const float axisSize);
-  float getLeadingMargin(const YGFlexDirection axis, const float widthSize);
-  float getTrailingMargin(const YGFlexDirection axis, const float widthSize);
-  float getLeadingBorder(const YGFlexDirection flexDirection);
-  float getTrailingBorder(const YGFlexDirection flexDirection);
-  float getLeadingPadding(const YGFlexDirection axis, const float widthSize);
-  float getTrailingPadding(const YGFlexDirection axis, const float widthSize);
+  float getLeadingPosition(const PilatesFlexDirection axis, const float axisSize);
+  bool isLeadingPositionDefined(const PilatesFlexDirection axis);
+  bool isTrailingPosDefined(const PilatesFlexDirection axis);
+  float getTrailingPosition(const PilatesFlexDirection axis, const float axisSize);
+  float getLeadingMargin(const PilatesFlexDirection axis, const float widthSize);
+  float getTrailingMargin(const PilatesFlexDirection axis, const float widthSize);
+  float getLeadingBorder(const PilatesFlexDirection flexDirection);
+  float getTrailingBorder(const PilatesFlexDirection flexDirection);
+  float getLeadingPadding(const PilatesFlexDirection axis, const float widthSize);
+  float getTrailingPadding(const PilatesFlexDirection axis, const float widthSize);
   float getLeadingPaddingAndBorder(
-      const YGFlexDirection axis,
+      const PilatesFlexDirection axis,
       const float widthSize);
   float getTrailingPaddingAndBorder(
-      const YGFlexDirection axis,
+      const PilatesFlexDirection axis,
       const float widthSize);
-  float getMarginForAxis(const YGFlexDirection axis, const float widthSize);
+  float getMarginForAxis(const PilatesFlexDirection axis, const float widthSize);
   // Setters
 
   void setContext(void* context);
-  void setPrintFunc(YGPrintFunc printFunc);
+  void setPrintFunc(PilatesPrintFunc printFunc);
   void setHasNewLayout(bool hasNewLayout);
-  void setNodeType(YGNodeType nodeTye);
-  void setMeasureFunc(YGMeasureFunc measureFunc);
-  void setBaseLineFunc(YGBaselineFunc baseLineFunc);
-  void setDirtiedFunc(YGDirtiedFunc dirtiedFunc);
-  void setStyle(YGStyle style);
-  void setStyleFlexDirection(YGFlexDirection direction);
-  void setStyleAlignContent(YGAlign alignContent);
-  void setLayout(YGLayout layout);
+  void setNodeType(PilatesNodeType nodeTye);
+  void setMeasureFunc(PilatesMeasureFunc measureFunc);
+  void setBaseLineFunc(PilatesBaselineFunc baseLineFunc);
+  void setDirtiedFunc(PilatesDirtiedFunc dirtiedFunc);
+  void setStyle(PilatesStyle style);
+  void setStyleFlexDirection(PilatesFlexDirection direction);
+  void setStyleAlignContent(PilatesAlign alignContent);
+  void setLayout(PilatesLayout layout);
   void setLineIndex(uint32_t lineIndex);
-  void setParent(YGNodeRef parent);
-  void setChildren(YGVector children);
-  void setNextChild(YGNodeRef nextChild);
-  void setConfig(YGConfigRef config);
+  void setParent(PilatesNodeRef parent);
+  void setChildren(PilatesVector children);
+  void setNextChild(PilatesNodeRef nextChild);
+  void setConfig(PilatesConfigRef config);
   void setDirty(bool isDirty);
-  void setLayoutLastParentDirection(YGDirection direction);
+  void setLayoutLastParentDirection(PilatesDirection direction);
   void setLayoutComputedFlexBasis(float computedFlexBasis);
   void setLayoutComputedFlexBasisGeneration(
       uint32_t computedFlexBasisGeneration);
   void setLayoutMeasuredDimension(float measuredDimension, int index);
   void setLayoutHadOverflow(bool hadOverflow);
   void setLayoutDimension(float dimension, int index);
-  void setLayoutDirection(YGDirection direction);
+  void setLayoutDirection(PilatesDirection direction);
   void setLayoutMargin(float margin, int index);
   void setLayoutBorder(float border, int index);
   void setLayoutPadding(float padding, int index);
   void setLayoutPosition(float position, int index);
   void setPosition(
-      const YGDirection direction,
+      const PilatesDirection direction,
       const float mainSize,
       const float crossSize,
       const float parentWidth);
@@ -139,18 +139,18 @@ struct YGNode {
   void markDirtyAndPropogateDownwards();
 
   // Other methods
-  YGValue marginLeadingValue(const YGFlexDirection axis) const;
-  YGValue marginTrailingValue(const YGFlexDirection axis) const;
-  YGValue resolveFlexBasisPtr() const;
+  PilatesValue marginLeadingValue(const PilatesFlexDirection axis) const;
+  PilatesValue marginTrailingValue(const PilatesFlexDirection axis) const;
+  PilatesValue resolveFlexBasisPtr() const;
   void resolveDimension();
-  YGDirection resolveDirection(const YGDirection parentDirection);
+  PilatesDirection resolveDirection(const PilatesDirection parentDirection);
   void clearChildren();
   /// Replaces the occurrences of oldChild with newChild
-  void replaceChild(YGNodeRef oldChild, YGNodeRef newChild);
-  void replaceChild(YGNodeRef child, uint32_t index);
-  void insertChild(YGNodeRef child, uint32_t index);
+  void replaceChild(PilatesNodeRef oldChild, PilatesNodeRef newChild);
+  void replaceChild(PilatesNodeRef child, uint32_t index);
+  void insertChild(PilatesNodeRef child, uint32_t index);
   /// Removes the first occurrence of child
-  bool removeChild(YGNodeRef child);
+  bool removeChild(PilatesNodeRef child);
   void removeChild(uint32_t index);
 
   void cloneChildrenIfNeeded();
@@ -159,5 +159,5 @@ struct YGNode {
   float resolveFlexShrink();
   bool isNodeFlexible();
   bool didUseLegacyFlag();
-  bool isLayoutTreeEqualToNode(const YGNode& node) const;
+  bool isLayoutTreeEqualToNode(const PilatesNode& node) const;
 };

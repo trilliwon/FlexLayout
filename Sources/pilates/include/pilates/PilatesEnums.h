@@ -9,147 +9,147 @@
 
 #include "PilatesMacros.h"
 
-YG_EXTERN_C_BEGIN
+Pilates_EXTERN_C_BEGIN
 
-#define YGAlignCount 8
-typedef YG_ENUM_BEGIN(YGAlign) {
-  YGAlignAuto,
-  YGAlignFlexStart,
-  YGAlignCenter,
-  YGAlignFlexEnd,
-  YGAlignStretch,
-  YGAlignBaseline,
-  YGAlignSpaceBetween,
-  YGAlignSpaceAround,
-} YG_ENUM_END(YGAlign);
-WIN_EXPORT const char *YGAlignToString(const YGAlign value);
+#define PilatesAlignCount 8
+typedef Pilates_ENUM_BEGIN(PilatesAlign) {
+  PilatesAlignAuto,
+  PilatesAlignFlexStart,
+  PilatesAlignCenter,
+  PilatesAlignFlexEnd,
+  PilatesAlignStretch,
+  PilatesAlignBaseline,
+  PilatesAlignSpaceBetween,
+  PilatesAlignSpaceAround,
+} Pilates_ENUM_END(PilatesAlign);
+WIN_EXPORT const char *PilatesAlignToString(const PilatesAlign value);
 
-#define YGDimensionCount 2
-typedef YG_ENUM_BEGIN(YGDimension) {
-  YGDimensionWidth,
-  YGDimensionHeight,
-} YG_ENUM_END(YGDimension);
-WIN_EXPORT const char *YGDimensionToString(const YGDimension value);
+#define PilatesDimensionCount 2
+typedef Pilates_ENUM_BEGIN(PilatesDimension) {
+  PilatesDimensionWidth,
+  PilatesDimensionHeight,
+} Pilates_ENUM_END(PilatesDimension);
+WIN_EXPORT const char *PilatesDimensionToString(const PilatesDimension value);
 
-#define YGDirectionCount 3
-typedef YG_ENUM_BEGIN(YGDirection) {
-  YGDirectionInherit,
-  YGDirectionLTR,
-  YGDirectionRTL,
-} YG_ENUM_END(YGDirection);
-WIN_EXPORT const char *YGDirectionToString(const YGDirection value);
+#define PilatesDirectionCount 3
+typedef Pilates_ENUM_BEGIN(PilatesDirection) {
+  PilatesDirectionInherit,
+  PilatesDirectionLTR,
+  PilatesDirectionRTL,
+} Pilates_ENUM_END(PilatesDirection);
+WIN_EXPORT const char *PilatesDirectionToString(const PilatesDirection value);
 
-#define YGDisplayCount 2
-typedef YG_ENUM_BEGIN(YGDisplay) {
-  YGDisplayFlex,
-  YGDisplayNone,
-} YG_ENUM_END(YGDisplay);
-WIN_EXPORT const char *YGDisplayToString(const YGDisplay value);
+#define PilatesDisplayCount 2
+typedef Pilates_ENUM_BEGIN(PilatesDisplay) {
+  PilatesDisplayFlex,
+  PilatesDisplayNone,
+} Pilates_ENUM_END(PilatesDisplay);
+WIN_EXPORT const char *PilatesDisplayToString(const PilatesDisplay value);
 
-#define YGEdgeCount 9
-typedef YG_ENUM_BEGIN(YGEdge) {
-  YGEdgeLeft,
-  YGEdgeTop,
-  YGEdgeRight,
-  YGEdgeBottom,
-  YGEdgeStart,
-  YGEdgeEnd,
-  YGEdgeHorizontal,
-  YGEdgeVertical,
-  YGEdgeAll,
-} YG_ENUM_END(YGEdge);
-WIN_EXPORT const char *YGEdgeToString(const YGEdge value);
+#define PilatesEdgeCount 9
+typedef Pilates_ENUM_BEGIN(PilatesEdge) {
+  PilatesEdgeLeft,
+  PilatesEdgeTop,
+  PilatesEdgeRight,
+  PilatesEdgeBottom,
+  PilatesEdgeStart,
+  PilatesEdgeEnd,
+  PilatesEdgeHorizontal,
+  PilatesEdgeVertical,
+  PilatesEdgeAll,
+} Pilates_ENUM_END(PilatesEdge);
+WIN_EXPORT const char *PilatesEdgeToString(const PilatesEdge value);
 
-#define YGExperimentalFeatureCount 1
-typedef YG_ENUM_BEGIN(YGExperimentalFeature) {
-  YGExperimentalFeatureWebFlexBasis,
-} YG_ENUM_END(YGExperimentalFeature);
-WIN_EXPORT const char *YGExperimentalFeatureToString(const YGExperimentalFeature value);
+#define PilatesExperimentalFeatureCount 1
+typedef Pilates_ENUM_BEGIN(PilatesExperimentalFeature) {
+  PilatesExperimentalFeatureWebFlexBasis,
+} Pilates_ENUM_END(PilatesExperimentalFeature);
+WIN_EXPORT const char *PilatesExperimentalFeatureToString(const PilatesExperimentalFeature value);
 
-#define YGFlexDirectionCount 4
-typedef YG_ENUM_BEGIN(YGFlexDirection) {
-  YGFlexDirectionColumn,
-  YGFlexDirectionColumnReverse,
-  YGFlexDirectionRow,
-  YGFlexDirectionRowReverse,
-} YG_ENUM_END(YGFlexDirection);
-WIN_EXPORT const char *YGFlexDirectionToString(const YGFlexDirection value);
+#define PilatesFlexDirectionCount 4
+typedef Pilates_ENUM_BEGIN(PilatesFlexDirection) {
+  PilatesFlexDirectionColumn,
+  PilatesFlexDirectionColumnReverse,
+  PilatesFlexDirectionRow,
+  PilatesFlexDirectionRowReverse,
+} Pilates_ENUM_END(PilatesFlexDirection);
+WIN_EXPORT const char *PilatesFlexDirectionToString(const PilatesFlexDirection value);
 
-#define YGJustifyCount 6
-typedef YG_ENUM_BEGIN(YGJustify){
-    YGJustifyFlexStart,
-    YGJustifyCenter,
-    YGJustifyFlexEnd,
-    YGJustifySpaceBetween,
-    YGJustifySpaceAround,
-    YGJustifySpaceEvenly,
-} YG_ENUM_END(YGJustify);
-WIN_EXPORT const char *YGJustifyToString(const YGJustify value);
+#define PilatesJustifyCount 6
+typedef Pilates_ENUM_BEGIN(PilatesJustify){
+    PilatesJustifyFlexStart,
+    PilatesJustifyCenter,
+    PilatesJustifyFlexEnd,
+    PilatesJustifySpaceBetween,
+    PilatesJustifySpaceAround,
+    PilatesJustifySpaceEvenly,
+} Pilates_ENUM_END(PilatesJustify);
+WIN_EXPORT const char *PilatesJustifyToString(const PilatesJustify value);
 
-#define YGLogLevelCount 6
-typedef YG_ENUM_BEGIN(YGLogLevel) {
-  YGLogLevelError,
-  YGLogLevelWarn,
-  YGLogLevelInfo,
-  YGLogLevelDebug,
-  YGLogLevelVerbose,
-  YGLogLevelFatal,
-} YG_ENUM_END(YGLogLevel);
-WIN_EXPORT const char *YGLogLevelToString(const YGLogLevel value);
+#define PilatesLogLevelCount 6
+typedef Pilates_ENUM_BEGIN(PilatesLogLevel) {
+  PilatesLogLevelError,
+  PilatesLogLevelWarn,
+  PilatesLogLevelInfo,
+  PilatesLogLevelDebug,
+  PilatesLogLevelVerbose,
+  PilatesLogLevelFatal,
+} Pilates_ENUM_END(PilatesLogLevel);
+WIN_EXPORT const char *PilatesLogLevelToString(const PilatesLogLevel value);
 
-#define YGMeasureModeCount 3
-typedef YG_ENUM_BEGIN(YGMeasureMode) {
-  YGMeasureModeUndefined,
-  YGMeasureModeExactly,
-  YGMeasureModeAtMost,
-} YG_ENUM_END(YGMeasureMode);
-WIN_EXPORT const char *YGMeasureModeToString(const YGMeasureMode value);
+#define PilatesMeasureModeCount 3
+typedef Pilates_ENUM_BEGIN(PilatesMeasureMode) {
+  PilatesMeasureModeUndefined,
+  PilatesMeasureModeExactly,
+  PilatesMeasureModeAtMost,
+} Pilates_ENUM_END(PilatesMeasureMode);
+WIN_EXPORT const char *PilatesMeasureModeToString(const PilatesMeasureMode value);
 
-#define YGNodeTypeCount 2
-typedef YG_ENUM_BEGIN(YGNodeType) {
-  YGNodeTypeDefault,
-  YGNodeTypeText,
-} YG_ENUM_END(YGNodeType);
-WIN_EXPORT const char *YGNodeTypeToString(const YGNodeType value);
+#define PilatesNodeTypeCount 2
+typedef Pilates_ENUM_BEGIN(PilatesNodeType) {
+  PilatesNodeTypeDefault,
+  PilatesNodeTypeText,
+} Pilates_ENUM_END(PilatesNodeType);
+WIN_EXPORT const char *PilatesNodeTypeToString(const PilatesNodeType value);
 
-#define YGOverflowCount 3
-typedef YG_ENUM_BEGIN(YGOverflow) {
-  YGOverflowVisible,
-  YGOverflowHidden,
-  YGOverflowScroll,
-} YG_ENUM_END(YGOverflow);
-WIN_EXPORT const char *YGOverflowToString(const YGOverflow value);
+#define PilatesOverflowCount 3
+typedef Pilates_ENUM_BEGIN(PilatesOverflow) {
+  PilatesOverflowVisible,
+  PilatesOverflowHidden,
+  PilatesOverflowScroll,
+} Pilates_ENUM_END(PilatesOverflow);
+WIN_EXPORT const char *PilatesOverflowToString(const PilatesOverflow value);
 
-#define YGPositionTypeCount 2
-typedef YG_ENUM_BEGIN(YGPositionType) {
-  YGPositionTypeRelative,
-  YGPositionTypeAbsolute,
-} YG_ENUM_END(YGPositionType);
-WIN_EXPORT const char *YGPositionTypeToString(const YGPositionType value);
+#define PilatesPositionTypeCount 2
+typedef Pilates_ENUM_BEGIN(PilatesPositionType) {
+  PilatesPositionTypeRelative,
+  PilatesPositionTypeAbsolute,
+} Pilates_ENUM_END(PilatesPositionType);
+WIN_EXPORT const char *PilatesPositionTypeToString(const PilatesPositionType value);
 
-#define YGPrintOptionsCount 3
-typedef YG_ENUM_BEGIN(YGPrintOptions) {
-  YGPrintOptionsLayout = 1,
-  YGPrintOptionsStyle = 2,
-  YGPrintOptionsChildren = 4,
-} YG_ENUM_END(YGPrintOptions);
-WIN_EXPORT const char *YGPrintOptionsToString(const YGPrintOptions value);
+#define PilatesPrintOptionsCount 3
+typedef Pilates_ENUM_BEGIN(PilatesPrintOptions) {
+  PilatesPrintOptionsLayout = 1,
+  PilatesPrintOptionsStyle = 2,
+  PilatesPrintOptionsChildren = 4,
+} Pilates_ENUM_END(PilatesPrintOptions);
+WIN_EXPORT const char *PilatesPrintOptionsToString(const PilatesPrintOptions value);
 
-#define YGUnitCount 4
-typedef YG_ENUM_BEGIN(YGUnit) {
-  YGUnitUndefined,
-  YGUnitPoint,
-  YGUnitPercent,
-  YGUnitAuto,
-} YG_ENUM_END(YGUnit);
-WIN_EXPORT const char *YGUnitToString(const YGUnit value);
+#define PilatesUnitCount 4
+typedef Pilates_ENUM_BEGIN(PilatesUnit) {
+  PilatesUnitUndefined,
+  PilatesUnitPoint,
+  PilatesUnitPercent,
+  PilatesUnitAuto,
+} Pilates_ENUM_END(PilatesUnit);
+WIN_EXPORT const char *PilatesUnitToString(const PilatesUnit value);
 
-#define YGWrapCount 3
-typedef YG_ENUM_BEGIN(YGWrap) {
-  YGWrapNoWrap,
-  YGWrapWrap,
-  YGWrapWrapReverse,
-} YG_ENUM_END(YGWrap);
-WIN_EXPORT const char *YGWrapToString(const YGWrap value);
+#define PilatesWrapCount 3
+typedef Pilates_ENUM_BEGIN(PilatesWrap) {
+  PilatesWrapNoWrap,
+  PilatesWrapWrap,
+  PilatesWrapWrapReverse,
+} Pilates_ENUM_END(PilatesWrap);
+WIN_EXPORT const char *PilatesWrapToString(const PilatesWrap value);
 
-YG_EXTERN_C_END
+Pilates_EXTERN_C_END

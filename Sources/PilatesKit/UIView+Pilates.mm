@@ -9,16 +9,16 @@
 #import "PilatesLayout+Private.h"
 #import <objc/runtime.h>
 
-static const void *kYGPilatesAssociatedKey = &kYGPilatesAssociatedKey;
+static const void *kPilatesPilatesAssociatedKey = &kPilatesPilatesAssociatedKey;
 
 @implementation UIView (PilatesKit)
 
-- (YGLayout *)pilates
+- (PilatesLayout *)pilates
 {
-  YGLayout *pilates = objc_getAssociatedObject(self, kYGPilatesAssociatedKey);
+  PilatesLayout *pilates = objc_getAssociatedObject(self, kPilatesPilatesAssociatedKey);
   if (!pilates) {
-    pilates = [[YGLayout alloc] initWithView:self];
-    objc_setAssociatedObject(self, kYGPilatesAssociatedKey, pilates, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    pilates = [[PilatesLayout alloc] initWithView:self];
+    objc_setAssociatedObject(self, kPilatesPilatesAssociatedKey, pilates, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
   }
 
   return pilates;
@@ -26,10 +26,10 @@ static const void *kYGPilatesAssociatedKey = &kYGPilatesAssociatedKey;
 
 - (BOOL)isPilatesEnabled
 {
-  return objc_getAssociatedObject(self, kYGPilatesAssociatedKey) != nil;
+  return objc_getAssociatedObject(self, kPilatesPilatesAssociatedKey) != nil;
 }
 
-- (void)configureLayoutWithBlock:(YGLayoutConfigurationBlock)block
+- (void)configureLayoutWithBlock:(PilatesLayoutConfigurationBlock)block
 {
   if (block != nil) {
     block(self.pilates);

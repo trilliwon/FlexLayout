@@ -35,13 +35,13 @@
 // - relativeChildren: Maintain a vector of the child nodes that can shrink
 // and/or grow.
 
-struct YGCollectFlexItemsRowValues {
+struct PilatesCollectFlexItemsRowValues {
   uint32_t itemsOnLine;
   float sizeConsumedOnCurrentLine;
   float totalFlexGrowFactors;
   float totalFlexShrinkScaledFactors;
   float endOfLineIndex;
-  std::vector<YGNodeRef> relativeChildren;
+  std::vector<PilatesNodeRef> relativeChildren;
   float remainingFreeSpace;
   // The size of the mainDim for the row after considering size, padding, margin
   // and border of flex items. This is used to calculate maxLineDim after going
@@ -52,51 +52,51 @@ struct YGCollectFlexItemsRowValues {
   float crossDim;
 };
 
-bool YGValueEqual(const YGValue a, const YGValue b);
+bool PilatesValueEqual(const PilatesValue a, const PilatesValue b);
 
-YGFlexDirection YGFlexDirectionCross(
-    const YGFlexDirection flexDirection,
-    const YGDirection direction);
+PilatesFlexDirection PilatesFlexDirectionCross(
+    const PilatesFlexDirection flexDirection,
+    const PilatesDirection direction);
 
-inline bool YGFlexDirectionIsRow(const YGFlexDirection flexDirection) {
-  return flexDirection == YGFlexDirectionRow ||
-      flexDirection == YGFlexDirectionRowReverse;
+inline bool PilatesFlexDirectionIsRow(const PilatesFlexDirection flexDirection) {
+  return flexDirection == PilatesFlexDirectionRow ||
+      flexDirection == PilatesFlexDirectionRowReverse;
 }
 
-inline float YGResolveValue(const YGValue value, const float parentSize) {
+inline float PilatesResolveValue(const PilatesValue value, const float parentSize) {
   switch (value.unit) {
-    case YGUnitUndefined:
-    case YGUnitAuto:
-      return YGUndefined;
-    case YGUnitPoint:
+    case PilatesUnitUndefined:
+    case PilatesUnitAuto:
+      return PilatesUndefined;
+    case PilatesUnitPoint:
       return value.value;
-    case YGUnitPercent:
+    case PilatesUnitPercent:
       return value.value * parentSize / 100.0f;
   }
-  return YGUndefined;
+  return PilatesUndefined;
 }
 
-inline bool YGFlexDirectionIsColumn(const YGFlexDirection flexDirection) {
-  return flexDirection == YGFlexDirectionColumn ||
-      flexDirection == YGFlexDirectionColumnReverse;
+inline bool PilatesFlexDirectionIsColumn(const PilatesFlexDirection flexDirection) {
+  return flexDirection == PilatesFlexDirectionColumn ||
+      flexDirection == PilatesFlexDirectionColumnReverse;
 }
 
-inline YGFlexDirection YGResolveFlexDirection(
-    const YGFlexDirection flexDirection,
-    const YGDirection direction) {
-  if (direction == YGDirectionRTL) {
-    if (flexDirection == YGFlexDirectionRow) {
-      return YGFlexDirectionRowReverse;
-    } else if (flexDirection == YGFlexDirectionRowReverse) {
-      return YGFlexDirectionRow;
+inline PilatesFlexDirection PilatesResolveFlexDirection(
+    const PilatesFlexDirection flexDirection,
+    const PilatesDirection direction) {
+  if (direction == PilatesDirectionRTL) {
+    if (flexDirection == PilatesFlexDirectionRow) {
+      return PilatesFlexDirectionRowReverse;
+    } else if (flexDirection == PilatesFlexDirectionRowReverse) {
+      return PilatesFlexDirectionRow;
     }
   }
 
   return flexDirection;
 }
 
-static inline float YGResolveValueMargin(
-    const YGValue value,
+static inline float PilatesResolveValueMargin(
+    const PilatesValue value,
     const float parentSize) {
-  return value.unit == YGUnitAuto ? 0 : YGResolveValue(value, parentSize);
+  return value.unit == PilatesUnitAuto ? 0 : PilatesResolveValue(value, parentSize);
 }

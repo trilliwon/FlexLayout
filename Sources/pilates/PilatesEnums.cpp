@@ -7,219 +7,219 @@
 
 #include "PilatesEnums.h"
 
-const char *YGAlignToString(const YGAlign value){
+const char *PilatesAlignToString(const PilatesAlign value){
   switch(value){
-    case YGAlignAuto:
+    case PilatesAlignAuto:
       return "auto";
-    case YGAlignFlexStart:
+    case PilatesAlignFlexStart:
       return "flex-start";
-    case YGAlignCenter:
+    case PilatesAlignCenter:
       return "center";
-    case YGAlignFlexEnd:
+    case PilatesAlignFlexEnd:
       return "flex-end";
-    case YGAlignStretch:
+    case PilatesAlignStretch:
       return "stretch";
-    case YGAlignBaseline:
+    case PilatesAlignBaseline:
       return "baseline";
-    case YGAlignSpaceBetween:
+    case PilatesAlignSpaceBetween:
       return "space-between";
-    case YGAlignSpaceAround:
+    case PilatesAlignSpaceAround:
       return "space-around";
   }
   return "unknown";
 }
 
-const char *YGDimensionToString(const YGDimension value){
+const char *PilatesDimensionToString(const PilatesDimension value){
   switch(value){
-    case YGDimensionWidth:
+    case PilatesDimensionWidth:
       return "width";
-    case YGDimensionHeight:
+    case PilatesDimensionHeight:
       return "height";
   }
   return "unknown";
 }
 
-const char *YGDirectionToString(const YGDirection value){
+const char *PilatesDirectionToString(const PilatesDirection value){
   switch(value){
-    case YGDirectionInherit:
+    case PilatesDirectionInherit:
       return "inherit";
-    case YGDirectionLTR:
+    case PilatesDirectionLTR:
       return "ltr";
-    case YGDirectionRTL:
+    case PilatesDirectionRTL:
       return "rtl";
   }
   return "unknown";
 }
 
-const char *YGDisplayToString(const YGDisplay value){
+const char *PilatesDisplayToString(const PilatesDisplay value){
   switch(value){
-    case YGDisplayFlex:
+    case PilatesDisplayFlex:
       return "flex";
-    case YGDisplayNone:
+    case PilatesDisplayNone:
       return "none";
   }
   return "unknown";
 }
 
-const char *YGEdgeToString(const YGEdge value){
+const char *PilatesEdgeToString(const PilatesEdge value){
   switch(value){
-    case YGEdgeLeft:
+    case PilatesEdgeLeft:
       return "left";
-    case YGEdgeTop:
+    case PilatesEdgeTop:
       return "top";
-    case YGEdgeRight:
+    case PilatesEdgeRight:
       return "right";
-    case YGEdgeBottom:
+    case PilatesEdgeBottom:
       return "bottom";
-    case YGEdgeStart:
+    case PilatesEdgeStart:
       return "start";
-    case YGEdgeEnd:
+    case PilatesEdgeEnd:
       return "end";
-    case YGEdgeHorizontal:
+    case PilatesEdgeHorizontal:
       return "horizontal";
-    case YGEdgeVertical:
+    case PilatesEdgeVertical:
       return "vertical";
-    case YGEdgeAll:
+    case PilatesEdgeAll:
       return "all";
   }
   return "unknown";
 }
 
-const char *YGExperimentalFeatureToString(const YGExperimentalFeature value){
+const char *PilatesExperimentalFeatureToString(const PilatesExperimentalFeature value){
   switch(value){
-    case YGExperimentalFeatureWebFlexBasis:
+    case PilatesExperimentalFeatureWebFlexBasis:
       return "web-flex-basis";
   }
   return "unknown";
 }
 
-const char *YGFlexDirectionToString(const YGFlexDirection value){
+const char *PilatesFlexDirectionToString(const PilatesFlexDirection value){
   switch(value){
-    case YGFlexDirectionColumn:
+    case PilatesFlexDirectionColumn:
       return "column";
-    case YGFlexDirectionColumnReverse:
+    case PilatesFlexDirectionColumnReverse:
       return "column-reverse";
-    case YGFlexDirectionRow:
+    case PilatesFlexDirectionRow:
       return "row";
-    case YGFlexDirectionRowReverse:
+    case PilatesFlexDirectionRowReverse:
       return "row-reverse";
   }
   return "unknown";
 }
 
-const char *YGJustifyToString(const YGJustify value){
+const char *PilatesJustifyToString(const PilatesJustify value){
   switch(value){
-    case YGJustifyFlexStart:
+    case PilatesJustifyFlexStart:
       return "flex-start";
-    case YGJustifyCenter:
+    case PilatesJustifyCenter:
       return "center";
-    case YGJustifyFlexEnd:
+    case PilatesJustifyFlexEnd:
       return "flex-end";
-    case YGJustifySpaceBetween:
+    case PilatesJustifySpaceBetween:
       return "space-between";
-    case YGJustifySpaceAround:
+    case PilatesJustifySpaceAround:
       return "space-around";
-    case YGJustifySpaceEvenly:
+    case PilatesJustifySpaceEvenly:
       return "space-evenly";
   }
   return "unknown";
 }
 
-const char *YGLogLevelToString(const YGLogLevel value){
+const char *PilatesLogLevelToString(const PilatesLogLevel value){
   switch(value){
-    case YGLogLevelError:
+    case PilatesLogLevelError:
       return "error";
-    case YGLogLevelWarn:
+    case PilatesLogLevelWarn:
       return "warn";
-    case YGLogLevelInfo:
+    case PilatesLogLevelInfo:
       return "info";
-    case YGLogLevelDebug:
+    case PilatesLogLevelDebug:
       return "debug";
-    case YGLogLevelVerbose:
+    case PilatesLogLevelVerbose:
       return "verbose";
-    case YGLogLevelFatal:
+    case PilatesLogLevelFatal:
       return "fatal";
   }
   return "unknown";
 }
 
-const char *YGMeasureModeToString(const YGMeasureMode value){
+const char *PilatesMeasureModeToString(const PilatesMeasureMode value){
   switch(value){
-    case YGMeasureModeUndefined:
+    case PilatesMeasureModeUndefined:
       return "undefined";
-    case YGMeasureModeExactly:
+    case PilatesMeasureModeExactly:
       return "exactly";
-    case YGMeasureModeAtMost:
+    case PilatesMeasureModeAtMost:
       return "at-most";
   }
   return "unknown";
 }
 
-const char *YGNodeTypeToString(const YGNodeType value){
+const char *PilatesNodeTypeToString(const PilatesNodeType value){
   switch(value){
-    case YGNodeTypeDefault:
+    case PilatesNodeTypeDefault:
       return "default";
-    case YGNodeTypeText:
+    case PilatesNodeTypeText:
       return "text";
   }
   return "unknown";
 }
 
-const char *YGOverflowToString(const YGOverflow value){
+const char *PilatesOverflowToString(const PilatesOverflow value){
   switch(value){
-    case YGOverflowVisible:
+    case PilatesOverflowVisible:
       return "visible";
-    case YGOverflowHidden:
+    case PilatesOverflowHidden:
       return "hidden";
-    case YGOverflowScroll:
+    case PilatesOverflowScroll:
       return "scroll";
   }
   return "unknown";
 }
 
-const char *YGPositionTypeToString(const YGPositionType value){
+const char *PilatesPositionTypeToString(const PilatesPositionType value){
   switch(value){
-    case YGPositionTypeRelative:
+    case PilatesPositionTypeRelative:
       return "relative";
-    case YGPositionTypeAbsolute:
+    case PilatesPositionTypeAbsolute:
       return "absolute";
   }
   return "unknown";
 }
 
-const char *YGPrintOptionsToString(const YGPrintOptions value){
+const char *PilatesPrintOptionsToString(const PilatesPrintOptions value){
   switch(value){
-    case YGPrintOptionsLayout:
+    case PilatesPrintOptionsLayout:
       return "layout";
-    case YGPrintOptionsStyle:
+    case PilatesPrintOptionsStyle:
       return "style";
-    case YGPrintOptionsChildren:
+    case PilatesPrintOptionsChildren:
       return "children";
   }
   return "unknown";
 }
 
-const char *YGUnitToString(const YGUnit value){
+const char *PilatesUnitToString(const PilatesUnit value){
   switch(value){
-    case YGUnitUndefined:
+    case PilatesUnitUndefined:
       return "undefined";
-    case YGUnitPoint:
+    case PilatesUnitPoint:
       return "point";
-    case YGUnitPercent:
+    case PilatesUnitPercent:
       return "percent";
-    case YGUnitAuto:
+    case PilatesUnitAuto:
       return "auto";
   }
   return "unknown";
 }
 
-const char *YGWrapToString(const YGWrap value){
+const char *PilatesWrapToString(const PilatesWrap value){
   switch(value){
-    case YGWrapNoWrap:
+    case PilatesWrapNoWrap:
       return "no-wrap";
-    case YGWrapWrap:
+    case PilatesWrapWrap:
       return "wrap";
-    case YGWrapWrapReverse:
+    case PilatesWrapWrapReverse:
       return "wrap-reverse";
   }
   return "unknown";

@@ -25,66 +25,66 @@ __forceinline const float fmaxf(const float a, const float b) {
 #endif
 
 #ifdef ANDROID
-static int YGAndroidLog(const YGConfigRef config,
-                        const YGNodeRef node,
-                        YGLogLevel level,
+static int PilatesAndroidLog(const PilatesConfigRef config,
+                        const PilatesNodeRef node,
+                        PilatesLogLevel level,
                         const char *format,
                         va_list args);
 #else
-static int YGDefaultLog(const YGConfigRef config,
-                        const YGNodeRef node,
-                        YGLogLevel level,
+static int PilatesDefaultLog(const PilatesConfigRef config,
+                        const PilatesNodeRef node,
+                        PilatesLogLevel level,
                         const char *format,
                         va_list args);
 #endif
 
-static YGConfig gYGConfigDefaults = {
+static PilatesConfig gPilatesConfigDefaults = {
     .experimentalFeatures =
         {
-            [YGExperimentalFeatureWebFlexBasis] = false,
+            [PilatesExperimentalFeatureWebFlexBasis] = false,
         },
     .useWebDefaults = false,
     .useLegacyStretchBehaviour = false,
     .shouldDiffLayoutWithoutLegacyStretchBehaviour = false,
     .pointScaleFactor = 1.0f,
 #ifdef ANDROID
-    .logger = &YGAndroidLog,
+    .logger = &PilatesAndroidLog,
 #else
-    .logger = &YGDefaultLog,
+    .logger = &PilatesDefaultLog,
 #endif
     .cloneNodeCallback = nullptr,
     .context = nullptr,
 };
 
-const YGValue YGValueZero = {.value = 0, .unit = YGUnitPoint};
-const YGValue YGValueUndefined = {YGUndefined, YGUnitUndefined};
-const YGValue YGValueAuto = {YGUndefined, YGUnitAuto};
+const PilatesValue PilatesValueZero = {.value = 0, .unit = PilatesUnitPoint};
+const PilatesValue PilatesValueUndefined = {PilatesUndefined, PilatesUnitUndefined};
+const PilatesValue PilatesValueAuto = {PilatesUndefined, PilatesUnitAuto};
 
 #ifdef ANDROID
 #include <android/log.h>
-static int YGAndroidLog(const YGConfigRef config,
-                        const YGNodeRef node,
-                        YGLogLevel level,
+static int PilatesAndroidLog(const PilatesConfigRef config,
+                        const PilatesNodeRef node,
+                        PilatesLogLevel level,
                         const char *format,
                         va_list args) {
-  int androidLevel = YGLogLevelDebug;
+  int androidLevel = PilatesLogLevelDebug;
   switch (level) {
-    case YGLogLevelFatal:
+    case PilatesLogLevelFatal:
       androidLevel = ANDROID_LOG_FATAL;
       break;
-    case YGLogLevelError:
+    case PilatesLogLevelError:
       androidLevel = ANDROID_LOG_ERROR;
       break;
-    case YGLogLevelWarn:
+    case PilatesLogLevelWarn:
       androidLevel = ANDROID_LOG_WARN;
       break;
-    case YGLogLevelInfo:
+    case PilatesLogLevelInfo:
       androidLevel = ANDROID_LOG_INFO;
       break;
-    case YGLogLevelDebug:
+    case PilatesLogLevelDebug:
       androidLevel = ANDROID_LOG_DEBUG;
       break;
-    case YGLogLevelVerbose:
+    case PilatesLogLevelVerbose:
       androidLevel = ANDROID_LOG_VERBOSE;
       break;
   }
@@ -92,156 +92,156 @@ static int YGAndroidLog(const YGConfigRef config,
   return result;
 }
 #else
-#define YG_UNUSED(x) (void)(x);
+#define Pilates_UNUSED(x) (void)(x);
 
-static int YGDefaultLog(const YGConfigRef config,
-                        const YGNodeRef node,
-                        YGLogLevel level,
+static int PilatesDefaultLog(const PilatesConfigRef config,
+                        const PilatesNodeRef node,
+                        PilatesLogLevel level,
                         const char *format,
                         va_list args) {
-  YG_UNUSED(config);
-  YG_UNUSED(node);
+  Pilates_UNUSED(config);
+  Pilates_UNUSED(node);
   switch (level) {
-    case YGLogLevelError:
-    case YGLogLevelFatal:
+    case PilatesLogLevelError:
+    case PilatesLogLevelFatal:
       return vfprintf(stderr, format, args);
-    case YGLogLevelWarn:
-    case YGLogLevelInfo:
-    case YGLogLevelDebug:
-    case YGLogLevelVerbose:
+    case PilatesLogLevelWarn:
+    case PilatesLogLevelInfo:
+    case PilatesLogLevelDebug:
+    case PilatesLogLevelVerbose:
     default:
       return vprintf(format, args);
   }
 }
 
-#undef YG_UNUSED
+#undef Pilates_UNUSED
 #endif
 
-bool YGFloatIsUndefined(const float value) {
+bool PilatesFloatIsUndefined(const float value) {
   return std::isnan(value);
 }
 
-const YGValue* YGComputedEdgeValue(
-    const std::array<YGValue, YGEdgeCount>& edges,
-    const YGEdge edge,
-    const YGValue* const defaultValue) {
-  if (edges[edge].unit != YGUnitUndefined) {
+const PilatesValue* PilatesComputedEdgeValue(
+    const std::array<PilatesValue, PilatesEdgeCount>& edges,
+    const PilatesEdge edge,
+    const PilatesValue* const defaultValue) {
+  if (edges[edge].unit != PilatesUnitUndefined) {
     return &edges[edge];
   }
 
-  if ((edge == YGEdgeTop || edge == YGEdgeBottom) &&
-      edges[YGEdgeVertical].unit != YGUnitUndefined) {
-    return &edges[YGEdgeVertical];
+  if ((edge == PilatesEdgeTop || edge == PilatesEdgeBottom) &&
+      edges[PilatesEdgeVertical].unit != PilatesUnitUndefined) {
+    return &edges[PilatesEdgeVertical];
   }
 
-  if ((edge == YGEdgeLeft || edge == YGEdgeRight || edge == YGEdgeStart || edge == YGEdgeEnd) &&
-      edges[YGEdgeHorizontal].unit != YGUnitUndefined) {
-    return &edges[YGEdgeHorizontal];
+  if ((edge == PilatesEdgeLeft || edge == PilatesEdgeRight || edge == PilatesEdgeStart || edge == PilatesEdgeEnd) &&
+      edges[PilatesEdgeHorizontal].unit != PilatesUnitUndefined) {
+    return &edges[PilatesEdgeHorizontal];
   }
 
-  if (edges[YGEdgeAll].unit != YGUnitUndefined) {
-    return &edges[YGEdgeAll];
+  if (edges[PilatesEdgeAll].unit != PilatesUnitUndefined) {
+    return &edges[PilatesEdgeAll];
   }
 
-  if (edge == YGEdgeStart || edge == YGEdgeEnd) {
-    return &YGValueUndefined;
+  if (edge == PilatesEdgeStart || edge == PilatesEdgeEnd) {
+    return &PilatesValueUndefined;
   }
 
   return defaultValue;
 }
 
-void* YGNodeGetContext(YGNodeRef node) {
+void* PilatesNodeGetContext(PilatesNodeRef node) {
   return node->getContext();
 }
 
-void YGNodeSetContext(YGNodeRef node, void* context) {
+void PilatesNodeSetContext(PilatesNodeRef node, void* context) {
   return node->setContext(context);
 }
 
-YGMeasureFunc YGNodeGetMeasureFunc(YGNodeRef node) {
+PilatesMeasureFunc PilatesNodeGetMeasureFunc(PilatesNodeRef node) {
   return node->getMeasure();
 }
 
-void YGNodeSetMeasureFunc(YGNodeRef node, YGMeasureFunc measureFunc) {
+void PilatesNodeSetMeasureFunc(PilatesNodeRef node, PilatesMeasureFunc measureFunc) {
   node->setMeasureFunc(measureFunc);
 }
 
-YGBaselineFunc YGNodeGetBaselineFunc(YGNodeRef node) {
+PilatesBaselineFunc PilatesNodeGetBaselineFunc(PilatesNodeRef node) {
   return node->getBaseline();
 }
 
-void YGNodeSetBaselineFunc(YGNodeRef node, YGBaselineFunc baselineFunc) {
+void PilatesNodeSetBaselineFunc(PilatesNodeRef node, PilatesBaselineFunc baselineFunc) {
   node->setBaseLineFunc(baselineFunc);
 }
 
-YGDirtiedFunc YGNodeGetDirtiedFunc(YGNodeRef node) {
+PilatesDirtiedFunc PilatesNodeGetDirtiedFunc(PilatesNodeRef node) {
   return node->getDirtied();
 }
 
-void YGNodeSetDirtiedFunc(YGNodeRef node, YGDirtiedFunc dirtiedFunc) {
+void PilatesNodeSetDirtiedFunc(PilatesNodeRef node, PilatesDirtiedFunc dirtiedFunc) {
   node->setDirtiedFunc(dirtiedFunc);
 }
 
-YGPrintFunc YGNodeGetPrintFunc(YGNodeRef node) {
+PilatesPrintFunc PilatesNodeGetPrintFunc(PilatesNodeRef node) {
   return node->getPrintFunc();
 }
 
-void YGNodeSetPrintFunc(YGNodeRef node, YGPrintFunc printFunc) {
+void PilatesNodeSetPrintFunc(PilatesNodeRef node, PilatesPrintFunc printFunc) {
   node->setPrintFunc(printFunc);
 }
 
-bool YGNodeGetHasNewLayout(YGNodeRef node) {
+bool PilatesNodeGetHasNewLayout(PilatesNodeRef node) {
   return node->getHasNewLayout();
 }
 
-void YGNodeSetHasNewLayout(YGNodeRef node, bool hasNewLayout) {
+void PilatesNodeSetHasNewLayout(PilatesNodeRef node, bool hasNewLayout) {
   node->setHasNewLayout(hasNewLayout);
 }
 
-YGNodeType YGNodeGetNodeType(YGNodeRef node) {
+PilatesNodeType PilatesNodeGetNodeType(PilatesNodeRef node) {
   return node->getNodeType();
 }
 
-void YGNodeSetNodeType(YGNodeRef node, YGNodeType nodeType) {
+void PilatesNodeSetNodeType(PilatesNodeRef node, PilatesNodeType nodeType) {
   return node->setNodeType(nodeType);
 }
 
-bool YGNodeIsDirty(YGNodeRef node) {
+bool PilatesNodeIsDirty(PilatesNodeRef node) {
   return node->isDirty();
 }
 
-bool YGNodeLayoutGetDidUseLegacyFlag(const YGNodeRef node) {
+bool PilatesNodeLayoutGetDidUseLegacyFlag(const PilatesNodeRef node) {
   return node->didUseLegacyFlag();
 }
 
-void YGNodeMarkDirtyAndPropogateToDescendants(const YGNodeRef node) {
+void PilatesNodeMarkDirtyAndPropogateToDescendants(const PilatesNodeRef node) {
   return node->markDirtyAndPropogateDownwards();
 }
 
 int32_t gNodeInstanceCount = 0;
 int32_t gConfigInstanceCount = 0;
 
-WIN_EXPORT YGNodeRef YGNodeNewWithConfig(const YGConfigRef config) {
-  const YGNodeRef node = new YGNode();
-  YGAssertWithConfig(
+WIN_EXPORT PilatesNodeRef PilatesNodeNewWithConfig(const PilatesConfigRef config) {
+  const PilatesNodeRef node = new PilatesNode();
+  PilatesAssertWithConfig(
       config, node != nullptr, "Could not allocate memory for node");
   gNodeInstanceCount++;
 
   if (config->useWebDefaults) {
-    node->setStyleFlexDirection(YGFlexDirectionRow);
-    node->setStyleAlignContent(YGAlignStretch);
+    node->setStyleFlexDirection(PilatesFlexDirectionRow);
+    node->setStyleAlignContent(PilatesAlignStretch);
   }
   node->setConfig(config);
   return node;
 }
 
-YGNodeRef YGNodeNew(void) {
-  return YGNodeNewWithConfig(&gYGConfigDefaults);
+PilatesNodeRef PilatesNodeNew(void) {
+  return PilatesNodeNewWithConfig(&gPilatesConfigDefaults);
 }
 
-YGNodeRef YGNodeClone(YGNodeRef oldNode) {
-  YGNodeRef node = new YGNode(*oldNode);
-  YGAssertWithConfig(
+PilatesNodeRef PilatesNodeClone(PilatesNodeRef oldNode) {
+  PilatesNodeRef node = new PilatesNode(*oldNode);
+  PilatesAssertWithConfig(
       oldNode->getConfig(),
       node != nullptr,
       "Could not allocate memory for node");
@@ -250,9 +250,9 @@ YGNodeRef YGNodeClone(YGNodeRef oldNode) {
   return node;
 }
 
-static YGConfigRef YGConfigClone(const YGConfig& oldConfig) {
-  const YGConfigRef config = new YGConfig(oldConfig);
-  YGAssert(config != nullptr, "Could not allocate memory for config");
+static PilatesConfigRef PilatesConfigClone(const PilatesConfig& oldConfig) {
+  const PilatesConfigRef config = new PilatesConfig(oldConfig);
+  PilatesAssert(config != nullptr, "Could not allocate memory for config");
   if (config == nullptr) {
     abort();
   }
@@ -260,38 +260,38 @@ static YGConfigRef YGConfigClone(const YGConfig& oldConfig) {
   return config;
 }
 
-static YGNodeRef YGNodeDeepClone(YGNodeRef oldNode) {
-  YGNodeRef node = YGNodeClone(oldNode);
-  YGVector vec = YGVector();
+static PilatesNodeRef PilatesNodeDeepClone(PilatesNodeRef oldNode) {
+  PilatesNodeRef node = PilatesNodeClone(oldNode);
+  PilatesVector vec = PilatesVector();
   vec.reserve(oldNode->getChildren().size());
-  YGNodeRef childNode = nullptr;
+  PilatesNodeRef childNode = nullptr;
   for (auto& item : oldNode->getChildren()) {
-    childNode = YGNodeDeepClone(item);
+    childNode = PilatesNodeDeepClone(item);
     childNode->setParent(node);
     vec.push_back(childNode);
   }
   node->setChildren(vec);
 
   if (oldNode->getConfig() != nullptr) {
-    node->setConfig(YGConfigClone(*(oldNode->getConfig())));
+    node->setConfig(PilatesConfigClone(*(oldNode->getConfig())));
   }
 
   if (oldNode->getNextChild() != nullptr) {
-    node->setNextChild(YGNodeDeepClone(oldNode->getNextChild()));
+    node->setNextChild(PilatesNodeDeepClone(oldNode->getNextChild()));
   }
 
   return node;
 }
 
-void YGNodeFree(const YGNodeRef node) {
+void PilatesNodeFree(const PilatesNodeRef node) {
   if (node->getParent()) {
     node->getParent()->removeChild(node);
     node->setParent(nullptr);
   }
 
-  const uint32_t childCount = YGNodeGetChildCount(node);
+  const uint32_t childCount = PilatesNodeGetChildCount(node);
   for (uint32_t i = 0; i < childCount; i++) {
-    const YGNodeRef child = YGNodeGetChild(node, i);
+    const PilatesNodeRef child = PilatesNodeGetChild(node, i);
     child->setParent(nullptr);
   }
 
@@ -300,89 +300,89 @@ void YGNodeFree(const YGNodeRef node) {
   gNodeInstanceCount--;
 }
 
-static void YGConfigFreeRecursive(const YGNodeRef root) {
+static void PilatesConfigFreeRecursive(const PilatesNodeRef root) {
   if (root->getConfig() != nullptr) {
     gConfigInstanceCount--;
     delete root->getConfig();
   }
   // Delete configs recursively for childrens
   for (uint32_t i = 0; i < root->getChildrenCount(); ++i) {
-    YGConfigFreeRecursive(root->getChild(i));
+    PilatesConfigFreeRecursive(root->getChild(i));
   }
 }
 
-void YGNodeFreeRecursive(const YGNodeRef root) {
-  while (YGNodeGetChildCount(root) > 0) {
-    const YGNodeRef child = YGNodeGetChild(root, 0);
+void PilatesNodeFreeRecursive(const PilatesNodeRef root) {
+  while (PilatesNodeGetChildCount(root) > 0) {
+    const PilatesNodeRef child = PilatesNodeGetChild(root, 0);
     if (child->getParent() != root) {
       // Don't free shared nodes that we don't own.
       break;
     }
-    YGNodeRemoveChild(root, child);
-    YGNodeFreeRecursive(child);
+    PilatesNodeRemoveChild(root, child);
+    PilatesNodeFreeRecursive(child);
   }
-  YGNodeFree(root);
+  PilatesNodeFree(root);
 }
 
-void YGNodeReset(const YGNodeRef node) {
-  YGAssertWithNode(node,
-                   YGNodeGetChildCount(node) == 0,
+void PilatesNodeReset(const PilatesNodeRef node) {
+  PilatesAssertWithNode(node,
+                   PilatesNodeGetChildCount(node) == 0,
                    "Cannot reset a node which still has children attached");
-  YGAssertWithNode(
+  PilatesAssertWithNode(
       node,
       node->getParent() == nullptr,
       "Cannot reset a node still attached to a parent");
 
   node->clearChildren();
 
-  const YGConfigRef config = node->getConfig();
-  *node = YGNode();
+  const PilatesConfigRef config = node->getConfig();
+  *node = PilatesNode();
   if (config->useWebDefaults) {
-    node->setStyleFlexDirection(YGFlexDirectionRow);
-    node->setStyleAlignContent(YGAlignStretch);
+    node->setStyleFlexDirection(PilatesFlexDirectionRow);
+    node->setStyleAlignContent(PilatesAlignStretch);
   }
   node->setConfig(config);
 }
 
-int32_t YGNodeGetInstanceCount(void) {
+int32_t PilatesNodeGetInstanceCount(void) {
   return gNodeInstanceCount;
 }
 
-int32_t YGConfigGetInstanceCount(void) {
+int32_t PilatesConfigGetInstanceCount(void) {
   return gConfigInstanceCount;
 }
 
 // Export only for C#
-YGConfigRef YGConfigGetDefault() {
-  return &gYGConfigDefaults;
+PilatesConfigRef PilatesConfigGetDefault() {
+  return &gPilatesConfigDefaults;
 }
 
-YGConfigRef YGConfigNew(void) {
-  const YGConfigRef config = (const YGConfigRef)malloc(sizeof(YGConfig));
-  YGAssert(config != nullptr, "Could not allocate memory for config");
+PilatesConfigRef PilatesConfigNew(void) {
+  const PilatesConfigRef config = (const PilatesConfigRef)malloc(sizeof(PilatesConfig));
+  PilatesAssert(config != nullptr, "Could not allocate memory for config");
   if (config == nullptr) {
     abort();
   }
   gConfigInstanceCount++;
-  memcpy(config, &gYGConfigDefaults, sizeof(YGConfig));
+  memcpy(config, &gPilatesConfigDefaults, sizeof(PilatesConfig));
   return config;
 }
 
-void YGConfigFree(const YGConfigRef config) {
+void PilatesConfigFree(const PilatesConfigRef config) {
   free(config);
   gConfigInstanceCount--;
 }
 
-void YGConfigCopy(const YGConfigRef dest, const YGConfigRef src) {
-  memcpy(dest, src, sizeof(YGConfig));
+void PilatesConfigCopy(const PilatesConfigRef dest, const PilatesConfigRef src) {
+  memcpy(dest, src, sizeof(PilatesConfig));
 }
 
-void YGNodeInsertChild(const YGNodeRef node, const YGNodeRef child, const uint32_t index) {
-  YGAssertWithNode(
+void PilatesNodeInsertChild(const PilatesNodeRef node, const PilatesNodeRef child, const uint32_t index) {
+  PilatesAssertWithNode(
       node,
       child->getParent() == nullptr,
       "Child already has a parent, it must be removed first.");
-  YGAssertWithNode(
+  PilatesAssertWithNode(
       node,
       node->getMeasure() == nullptr,
       "Cannot add child: Nodes with measure functions cannot have children.");
@@ -393,22 +393,22 @@ void YGNodeInsertChild(const YGNodeRef node, const YGNodeRef child, const uint32
   node->markDirtyAndPropogate();
 }
 
-void YGNodeRemoveChild(const YGNodeRef parent, const YGNodeRef excludedChild) {
-  // This algorithm is a forked variant from cloneChildrenIfNeeded in YGNode
+void PilatesNodeRemoveChild(const PilatesNodeRef parent, const PilatesNodeRef excludedChild) {
+  // This algorithm is a forked variant from cloneChildrenIfNeeded in PilatesNode
   // that excludes a child.
-  const uint32_t childCount = YGNodeGetChildCount(parent);
+  const uint32_t childCount = PilatesNodeGetChildCount(parent);
 
   if (childCount == 0) {
     // This is an empty set. Nothing to remove.
     return;
   }
-  const YGNodeRef firstChild = YGNodeGetChild(parent, 0);
+  const PilatesNodeRef firstChild = PilatesNodeGetChild(parent, 0);
   if (firstChild->getParent() == parent) {
     // If the first child has this node as its parent, we assume that it is already unique.
     // We can now try to delete a child in this list.
     if (parent->removeChild(excludedChild)) {
       excludedChild->setLayout(
-          YGNode().getLayout()); // layout is no longer valid
+          PilatesNode().getLayout()); // layout is no longer valid
       excludedChild->setParent(nullptr);
       parent->markDirtyAndPropogate();
     }
@@ -417,11 +417,11 @@ void YGNodeRemoveChild(const YGNodeRef parent, const YGNodeRef excludedChild) {
   // Otherwise we have to clone the node list except for the child we're trying to delete.
   // We don't want to simply clone all children, because then the host will need to free
   // the clone of the child that was just deleted.
-  const YGNodeClonedFunc cloneNodeCallback =
+  const PilatesNodeClonedFunc cloneNodeCallback =
       parent->getConfig()->cloneNodeCallback;
   uint32_t nextInsertIndex = 0;
   for (uint32_t i = 0; i < childCount; i++) {
-    const YGNodeRef oldChild = parent->getChild(i);
+    const PilatesNodeRef oldChild = parent->getChild(i);
     if (excludedChild == oldChild) {
       // Ignore the deleted child. Don't reset its layout or parent since it is still valid
       // in the other parent. However, since this parent has now changed, we need to mark it
@@ -429,7 +429,7 @@ void YGNodeRemoveChild(const YGNodeRef parent, const YGNodeRef excludedChild) {
       parent->markDirtyAndPropogate();
       continue;
     }
-    const YGNodeRef newChild = YGNodeClone(oldChild);
+    const PilatesNodeRef newChild = PilatesNodeClone(oldChild);
     parent->replaceChild(newChild, nextInsertIndex);
     newChild->setParent(parent);
     if (cloneNodeCallback) {
@@ -443,18 +443,18 @@ void YGNodeRemoveChild(const YGNodeRef parent, const YGNodeRef excludedChild) {
   }
 }
 
-void YGNodeRemoveAllChildren(const YGNodeRef parent) {
-  const uint32_t childCount = YGNodeGetChildCount(parent);
+void PilatesNodeRemoveAllChildren(const PilatesNodeRef parent) {
+  const uint32_t childCount = PilatesNodeGetChildCount(parent);
   if (childCount == 0) {
     // This is an empty set already. Nothing to do.
     return;
   }
-  const YGNodeRef firstChild = YGNodeGetChild(parent, 0);
+  const PilatesNodeRef firstChild = PilatesNodeGetChild(parent, 0);
   if (firstChild->getParent() == parent) {
     // If the first child has this node as its parent, we assume that this child set is unique.
     for (uint32_t i = 0; i < childCount; i++) {
-      const YGNodeRef oldChild = YGNodeGetChild(parent, i);
-      oldChild->setLayout(YGNode().getLayout()); // layout is no longer valid
+      const PilatesNodeRef oldChild = PilatesNodeGetChild(parent, i);
+      oldChild->setLayout(PilatesNode().getLayout()); // layout is no longer valid
       oldChild->setParent(nullptr);
     }
     parent->clearChildren();
@@ -462,27 +462,27 @@ void YGNodeRemoveAllChildren(const YGNodeRef parent) {
     return;
   }
   // Otherwise, we are not the owner of the child set. We don't have to do anything to clear it.
-  parent->setChildren(YGVector());
+  parent->setChildren(PilatesVector());
   parent->markDirtyAndPropogate();
 }
 
-YGNodeRef YGNodeGetChild(const YGNodeRef node, const uint32_t index) {
+PilatesNodeRef PilatesNodeGetChild(const PilatesNodeRef node, const uint32_t index) {
   if (index < node->getChildren().size()) {
     return node->getChild(index);
   }
   return nullptr;
 }
 
-uint32_t YGNodeGetChildCount(const YGNodeRef node) {
+uint32_t PilatesNodeGetChildCount(const PilatesNodeRef node) {
   return static_cast<uint32_t>(node->getChildren().size());
 }
 
-YGNodeRef YGNodeGetParent(const YGNodeRef node) {
+PilatesNodeRef PilatesNodeGetParent(const PilatesNodeRef node) {
   return node->getParent();
 }
 
-void YGNodeMarkDirty(const YGNodeRef node) {
-  YGAssertWithNode(
+void PilatesNodeMarkDirty(const PilatesNodeRef node) {
+  PilatesAssertWithNode(
       node,
       node->getMeasure() != nullptr,
       "Only leaf nodes with custom measure functions"
@@ -491,65 +491,65 @@ void YGNodeMarkDirty(const YGNodeRef node) {
   node->markDirtyAndPropogate();
 }
 
-void YGNodeCopyStyle(const YGNodeRef dstNode, const YGNodeRef srcNode) {
+void PilatesNodeCopyStyle(const PilatesNodeRef dstNode, const PilatesNodeRef srcNode) {
   if (!(dstNode->getStyle() == srcNode->getStyle())) {
     dstNode->setStyle(srcNode->getStyle());
     dstNode->markDirtyAndPropogate();
   }
 }
 
-float YGNodeStyleGetFlexGrow(const YGNodeRef node) {
-  return YGFloatIsUndefined(node->getStyle().flexGrow)
+float PilatesNodeStyleGetFlexGrow(const PilatesNodeRef node) {
+  return PilatesFloatIsUndefined(node->getStyle().flexGrow)
       ? kDefaultFlexGrow
       : node->getStyle().flexGrow;
 }
 
-float YGNodeStyleGetFlexShrink(const YGNodeRef node) {
-  return YGFloatIsUndefined(node->getStyle().flexShrink)
+float PilatesNodeStyleGetFlexShrink(const PilatesNodeRef node) {
+  return PilatesFloatIsUndefined(node->getStyle().flexShrink)
       ? (node->getConfig()->useWebDefaults ? kWebDefaultFlexShrink
                                            : kDefaultFlexShrink)
       : node->getStyle().flexShrink;
 }
 
-#define YG_NODE_STYLE_PROPERTY_SETTER_IMPL(                               \
+#define Pilates_NODE_STYLE_PROPERTY_SETTER_IMPL(                               \
     type, name, paramName, instanceName)                                  \
-  void YGNodeStyleSet##name(const YGNodeRef node, const type paramName) { \
+  void PilatesNodeStyleSet##name(const PilatesNodeRef node, const type paramName) { \
     if (node->getStyle().instanceName != paramName) {                     \
-      YGStyle style = node->getStyle();                                   \
+      PilatesStyle style = node->getStyle();                                   \
       style.instanceName = paramName;                                     \
       node->setStyle(style);                                              \
       node->markDirtyAndPropogate();                                      \
     }                                                                     \
   }
 
-#define YG_NODE_STYLE_PROPERTY_SETTER_UNIT_IMPL(                               \
+#define Pilates_NODE_STYLE_PROPERTY_SETTER_UNIT_IMPL(                               \
     type, name, paramName, instanceName)                                       \
-  void YGNodeStyleSet##name(const YGNodeRef node, const type paramName) {      \
-    YGValue value = {                                                          \
+  void PilatesNodeStyleSet##name(const PilatesNodeRef node, const type paramName) {      \
+    PilatesValue value = {                                                          \
         .value = paramName,                                                    \
-        .unit = YGFloatIsUndefined(paramName) ? YGUnitUndefined : YGUnitPoint, \
+        .unit = PilatesFloatIsUndefined(paramName) ? PilatesUnitUndefined : PilatesUnitPoint, \
     };                                                                         \
     if ((node->getStyle().instanceName.value != value.value &&                 \
-         value.unit != YGUnitUndefined) ||                                     \
+         value.unit != PilatesUnitUndefined) ||                                     \
         node->getStyle().instanceName.unit != value.unit) {                    \
-      YGStyle style = node->getStyle();                                        \
+      PilatesStyle style = node->getStyle();                                        \
       style.instanceName = value;                                              \
       node->setStyle(style);                                                   \
       node->markDirtyAndPropogate();                                           \
     }                                                                          \
   }                                                                            \
                                                                                \
-  void YGNodeStyleSet##name##Percent(                                          \
-      const YGNodeRef node, const type paramName) {                            \
-    YGValue value = {                                                          \
+  void PilatesNodeStyleSet##name##Percent(                                          \
+      const PilatesNodeRef node, const type paramName) {                            \
+    PilatesValue value = {                                                          \
         .value = paramName,                                                    \
         .unit =                                                                \
-            YGFloatIsUndefined(paramName) ? YGUnitUndefined : YGUnitPercent,   \
+            PilatesFloatIsUndefined(paramName) ? PilatesUnitUndefined : PilatesUnitPercent,   \
     };                                                                         \
     if ((node->getStyle().instanceName.value != value.value &&                 \
-         value.unit != YGUnitUndefined) ||                                     \
+         value.unit != PilatesUnitUndefined) ||                                     \
         node->getStyle().instanceName.unit != value.unit) {                    \
-      YGStyle style = node->getStyle();                                        \
+      PilatesStyle style = node->getStyle();                                        \
                                                                                \
       style.instanceName = value;                                              \
       node->setStyle(style);                                                   \
@@ -557,110 +557,110 @@ float YGNodeStyleGetFlexShrink(const YGNodeRef node) {
     }                                                                          \
   }
 
-#define YG_NODE_STYLE_PROPERTY_SETTER_UNIT_AUTO_IMPL(                          \
+#define Pilates_NODE_STYLE_PROPERTY_SETTER_UNIT_AUTO_IMPL(                          \
     type, name, paramName, instanceName)                                       \
-  void YGNodeStyleSet##name(const YGNodeRef node, const type paramName) {      \
-    YGValue value = {                                                          \
+  void PilatesNodeStyleSet##name(const PilatesNodeRef node, const type paramName) {      \
+    PilatesValue value = {                                                          \
         .value = paramName,                                                    \
-        .unit = YGFloatIsUndefined(paramName) ? YGUnitUndefined : YGUnitPoint, \
+        .unit = PilatesFloatIsUndefined(paramName) ? PilatesUnitUndefined : PilatesUnitPoint, \
     };                                                                         \
     if ((node->getStyle().instanceName.value != value.value &&                 \
-         value.unit != YGUnitUndefined) ||                                     \
+         value.unit != PilatesUnitUndefined) ||                                     \
         node->getStyle().instanceName.unit != value.unit) {                    \
-      YGStyle style = node->getStyle();                                        \
+      PilatesStyle style = node->getStyle();                                        \
       style.instanceName = value;                                              \
       node->setStyle(style);                                                   \
       node->markDirtyAndPropogate();                                           \
     }                                                                          \
   }                                                                            \
                                                                                \
-  void YGNodeStyleSet##name##Percent(                                          \
-      const YGNodeRef node, const type paramName) {                            \
+  void PilatesNodeStyleSet##name##Percent(                                          \
+      const PilatesNodeRef node, const type paramName) {                            \
     if (node->getStyle().instanceName.value != paramName ||                    \
-        node->getStyle().instanceName.unit != YGUnitPercent) {                 \
-      YGStyle style = node->getStyle();                                        \
+        node->getStyle().instanceName.unit != PilatesUnitPercent) {                 \
+      PilatesStyle style = node->getStyle();                                        \
       style.instanceName.value = paramName;                                    \
       style.instanceName.unit =                                                \
-          YGFloatIsUndefined(paramName) ? YGUnitAuto : YGUnitPercent;          \
+          PilatesFloatIsUndefined(paramName) ? PilatesUnitAuto : PilatesUnitPercent;          \
       node->setStyle(style);                                                   \
       node->markDirtyAndPropogate();                                           \
     }                                                                          \
   }                                                                            \
                                                                                \
-  void YGNodeStyleSet##name##Auto(const YGNodeRef node) {                      \
-    if (node->getStyle().instanceName.unit != YGUnitAuto) {                    \
-      YGStyle style = node->getStyle();                                        \
-      style.instanceName.value = YGUndefined;                                  \
-      style.instanceName.unit = YGUnitAuto;                                    \
+  void PilatesNodeStyleSet##name##Auto(const PilatesNodeRef node) {                      \
+    if (node->getStyle().instanceName.unit != PilatesUnitAuto) {                    \
+      PilatesStyle style = node->getStyle();                                        \
+      style.instanceName.value = PilatesUndefined;                                  \
+      style.instanceName.unit = PilatesUnitAuto;                                    \
       node->setStyle(style);                                                   \
       node->markDirtyAndPropogate();                                           \
     }                                                                          \
   }
 
-#define YG_NODE_STYLE_PROPERTY_IMPL(type, name, paramName, instanceName)  \
-  YG_NODE_STYLE_PROPERTY_SETTER_IMPL(type, name, paramName, instanceName) \
+#define Pilates_NODE_STYLE_PROPERTY_IMPL(type, name, paramName, instanceName)  \
+  Pilates_NODE_STYLE_PROPERTY_SETTER_IMPL(type, name, paramName, instanceName) \
                                                                           \
-  type YGNodeStyleGet##name(const YGNodeRef node) {                       \
+  type PilatesNodeStyleGet##name(const PilatesNodeRef node) {                       \
     return node->getStyle().instanceName;                                 \
   }
 
-#define YG_NODE_STYLE_PROPERTY_UNIT_IMPL(type, name, paramName, instanceName) \
-  YG_NODE_STYLE_PROPERTY_SETTER_UNIT_IMPL(                                    \
+#define Pilates_NODE_STYLE_PROPERTY_UNIT_IMPL(type, name, paramName, instanceName) \
+  Pilates_NODE_STYLE_PROPERTY_SETTER_UNIT_IMPL(                                    \
       float, name, paramName, instanceName)                                   \
                                                                               \
-  type YGNodeStyleGet##name(const YGNodeRef node) {                           \
+  type PilatesNodeStyleGet##name(const PilatesNodeRef node) {                           \
     return node->getStyle().instanceName;                                     \
   }
 
-#define YG_NODE_STYLE_PROPERTY_UNIT_AUTO_IMPL(      \
+#define Pilates_NODE_STYLE_PROPERTY_UNIT_AUTO_IMPL(      \
     type, name, paramName, instanceName)            \
-  YG_NODE_STYLE_PROPERTY_SETTER_UNIT_AUTO_IMPL(     \
+  Pilates_NODE_STYLE_PROPERTY_SETTER_UNIT_AUTO_IMPL(     \
       float, name, paramName, instanceName)         \
                                                     \
-  type YGNodeStyleGet##name(const YGNodeRef node) { \
+  type PilatesNodeStyleGet##name(const PilatesNodeRef node) { \
     return node->getStyle().instanceName;           \
   }
 
-#define YG_NODE_STYLE_EDGE_PROPERTY_UNIT_AUTO_IMPL(type, name, instanceName) \
-  void YGNodeStyleSet##name##Auto(const YGNodeRef node, const YGEdge edge) { \
-    if (node->getStyle().instanceName[edge].unit != YGUnitAuto) {            \
-      YGStyle style = node->getStyle();                                      \
-      style.instanceName[edge].value = YGUndefined;                          \
-      style.instanceName[edge].unit = YGUnitAuto;                            \
+#define Pilates_NODE_STYLE_EDGE_PROPERTY_UNIT_AUTO_IMPL(type, name, instanceName) \
+  void PilatesNodeStyleSet##name##Auto(const PilatesNodeRef node, const PilatesEdge edge) { \
+    if (node->getStyle().instanceName[edge].unit != PilatesUnitAuto) {            \
+      PilatesStyle style = node->getStyle();                                      \
+      style.instanceName[edge].value = PilatesUndefined;                          \
+      style.instanceName[edge].unit = PilatesUnitAuto;                            \
       node->setStyle(style);                                                 \
       node->markDirtyAndPropogate();                                         \
     }                                                                        \
   }
 
-#define YG_NODE_STYLE_EDGE_PROPERTY_UNIT_IMPL(                                 \
+#define Pilates_NODE_STYLE_EDGE_PROPERTY_UNIT_IMPL(                                 \
     type, name, paramName, instanceName)                                       \
-  void YGNodeStyleSet##name(                                                   \
-      const YGNodeRef node, const YGEdge edge, const float paramName) {        \
-    YGValue value = {                                                          \
+  void PilatesNodeStyleSet##name(                                                   \
+      const PilatesNodeRef node, const PilatesEdge edge, const float paramName) {        \
+    PilatesValue value = {                                                          \
         .value = paramName,                                                    \
-        .unit = YGFloatIsUndefined(paramName) ? YGUnitUndefined : YGUnitPoint, \
+        .unit = PilatesFloatIsUndefined(paramName) ? PilatesUnitUndefined : PilatesUnitPoint, \
     };                                                                         \
     if ((node->getStyle().instanceName[edge].value != value.value &&           \
-         value.unit != YGUnitUndefined) ||                                     \
+         value.unit != PilatesUnitUndefined) ||                                     \
         node->getStyle().instanceName[edge].unit != value.unit) {              \
-      YGStyle style = node->getStyle();                                        \
+      PilatesStyle style = node->getStyle();                                        \
       style.instanceName[edge] = value;                                        \
       node->setStyle(style);                                                   \
       node->markDirtyAndPropogate();                                           \
     }                                                                          \
   }                                                                            \
                                                                                \
-  void YGNodeStyleSet##name##Percent(                                          \
-      const YGNodeRef node, const YGEdge edge, const float paramName) {        \
-    YGValue value = {                                                          \
+  void PilatesNodeStyleSet##name##Percent(                                          \
+      const PilatesNodeRef node, const PilatesEdge edge, const float paramName) {        \
+    PilatesValue value = {                                                          \
         .value = paramName,                                                    \
         .unit =                                                                \
-            YGFloatIsUndefined(paramName) ? YGUnitUndefined : YGUnitPercent,   \
+            PilatesFloatIsUndefined(paramName) ? PilatesUnitUndefined : PilatesUnitPercent,   \
     };                                                                         \
     if ((node->getStyle().instanceName[edge].value != value.value &&           \
-         value.unit != YGUnitUndefined) ||                                     \
+         value.unit != PilatesUnitUndefined) ||                                     \
         node->getStyle().instanceName[edge].unit != value.unit) {              \
-      YGStyle style = node->getStyle();                                        \
+      PilatesStyle style = node->getStyle();                                        \
       style.instanceName[edge] = value;                                        \
       node->setStyle(style);                                                   \
       node->markDirtyAndPropogate();                                           \
@@ -668,206 +668,206 @@ float YGNodeStyleGetFlexShrink(const YGNodeRef node) {
   }                                                                            \
                                                                                \
   WIN_STRUCT(type)                                                             \
-  YGNodeStyleGet##name(const YGNodeRef node, const YGEdge edge) {              \
+  PilatesNodeStyleGet##name(const PilatesNodeRef node, const PilatesEdge edge) {              \
     return WIN_STRUCT_REF(node->getStyle().instanceName[edge]);                \
   }
 
-#define YG_NODE_STYLE_EDGE_PROPERTY_IMPL(type, name, paramName, instanceName)  \
-  void YGNodeStyleSet##name(                                                   \
-      const YGNodeRef node, const YGEdge edge, const float paramName) {        \
-    YGValue value = {                                                          \
+#define Pilates_NODE_STYLE_EDGE_PROPERTY_IMPL(type, name, paramName, instanceName)  \
+  void PilatesNodeStyleSet##name(                                                   \
+      const PilatesNodeRef node, const PilatesEdge edge, const float paramName) {        \
+    PilatesValue value = {                                                          \
         .value = paramName,                                                    \
-        .unit = YGFloatIsUndefined(paramName) ? YGUnitUndefined : YGUnitPoint, \
+        .unit = PilatesFloatIsUndefined(paramName) ? PilatesUnitUndefined : PilatesUnitPoint, \
     };                                                                         \
     if ((node->getStyle().instanceName[edge].value != value.value &&           \
-         value.unit != YGUnitUndefined) ||                                     \
+         value.unit != PilatesUnitUndefined) ||                                     \
         node->getStyle().instanceName[edge].unit != value.unit) {              \
-      YGStyle style = node->getStyle();                                        \
+      PilatesStyle style = node->getStyle();                                        \
       style.instanceName[edge] = value;                                        \
       node->setStyle(style);                                                   \
       node->markDirtyAndPropogate();                                           \
     }                                                                          \
   }                                                                            \
                                                                                \
-  float YGNodeStyleGet##name(const YGNodeRef node, const YGEdge edge) {        \
+  float PilatesNodeStyleGet##name(const PilatesNodeRef node, const PilatesEdge edge) {        \
     return node->getStyle().instanceName[edge].value;                          \
   }
 
-#define YG_NODE_LAYOUT_PROPERTY_IMPL(type, name, instanceName) \
-  type YGNodeLayoutGet##name(const YGNodeRef node) {           \
+#define Pilates_NODE_LAYOUT_PROPERTY_IMPL(type, name, instanceName) \
+  type PilatesNodeLayoutGet##name(const PilatesNodeRef node) {           \
     return node->getLayout().instanceName;                     \
   }
 
-#define YG_NODE_LAYOUT_RESOLVED_PROPERTY_IMPL(type, name, instanceName) \
-  type YGNodeLayoutGet##name(const YGNodeRef node, const YGEdge edge) { \
-    YGAssertWithNode(                                                   \
+#define Pilates_NODE_LAYOUT_RESOLVED_PROPERTY_IMPL(type, name, instanceName) \
+  type PilatesNodeLayoutGet##name(const PilatesNodeRef node, const PilatesEdge edge) { \
+    PilatesAssertWithNode(                                                   \
         node,                                                           \
-        edge <= YGEdgeEnd,                                              \
+        edge <= PilatesEdgeEnd,                                              \
         "Cannot get layout properties of multi-edge shorthands");       \
                                                                         \
-    if (edge == YGEdgeLeft) {                                           \
-      if (node->getLayout().direction == YGDirectionRTL) {              \
-        return node->getLayout().instanceName[YGEdgeEnd];               \
+    if (edge == PilatesEdgeLeft) {                                           \
+      if (node->getLayout().direction == PilatesDirectionRTL) {              \
+        return node->getLayout().instanceName[PilatesEdgeEnd];               \
       } else {                                                          \
-        return node->getLayout().instanceName[YGEdgeStart];             \
+        return node->getLayout().instanceName[PilatesEdgeStart];             \
       }                                                                 \
     }                                                                   \
                                                                         \
-    if (edge == YGEdgeRight) {                                          \
-      if (node->getLayout().direction == YGDirectionRTL) {              \
-        return node->getLayout().instanceName[YGEdgeStart];             \
+    if (edge == PilatesEdgeRight) {                                          \
+      if (node->getLayout().direction == PilatesDirectionRTL) {              \
+        return node->getLayout().instanceName[PilatesEdgeStart];             \
       } else {                                                          \
-        return node->getLayout().instanceName[YGEdgeEnd];               \
+        return node->getLayout().instanceName[PilatesEdgeEnd];               \
       }                                                                 \
     }                                                                   \
                                                                         \
     return node->getLayout().instanceName[edge];                        \
   }
 
-// YG_NODE_PROPERTY_IMPL(void *, Context, context, context);
-// YG_NODE_PROPERTY_IMPL(YGPrintFunc, PrintFunc, printFunc, print);
-// YG_NODE_PROPERTY_IMPL(bool, HasNewLayout, hasNewLayout, hasNewLayout);
-// YG_NODE_PROPERTY_IMPL(YGNodeType, NodeType, nodeType, nodeType);
+// Pilates_NODE_PROPERTY_IMPL(void *, Context, context, context);
+// Pilates_NODE_PROPERTY_IMPL(PilatesPrintFunc, PrintFunc, printFunc, print);
+// Pilates_NODE_PROPERTY_IMPL(bool, HasNewLayout, hasNewLayout, hasNewLayout);
+// Pilates_NODE_PROPERTY_IMPL(PilatesNodeType, NodeType, nodeType, nodeType);
 
-YG_NODE_STYLE_PROPERTY_IMPL(YGDirection, Direction, direction, direction);
-YG_NODE_STYLE_PROPERTY_IMPL(YGFlexDirection, FlexDirection, flexDirection, flexDirection);
-YG_NODE_STYLE_PROPERTY_IMPL(YGJustify, JustifyContent, justifyContent, justifyContent);
-YG_NODE_STYLE_PROPERTY_IMPL(YGAlign, AlignContent, alignContent, alignContent);
-YG_NODE_STYLE_PROPERTY_IMPL(YGAlign, AlignItems, alignItems, alignItems);
-YG_NODE_STYLE_PROPERTY_IMPL(YGAlign, AlignSelf, alignSelf, alignSelf);
-YG_NODE_STYLE_PROPERTY_IMPL(YGPositionType, PositionType, positionType, positionType);
-YG_NODE_STYLE_PROPERTY_IMPL(YGWrap, FlexWrap, flexWrap, flexWrap);
-YG_NODE_STYLE_PROPERTY_IMPL(YGOverflow, Overflow, overflow, overflow);
-YG_NODE_STYLE_PROPERTY_IMPL(YGDisplay, Display, display, display);
+Pilates_NODE_STYLE_PROPERTY_IMPL(PilatesDirection, Direction, direction, direction);
+Pilates_NODE_STYLE_PROPERTY_IMPL(PilatesFlexDirection, FlexDirection, flexDirection, flexDirection);
+Pilates_NODE_STYLE_PROPERTY_IMPL(PilatesJustify, JustifyContent, justifyContent, justifyContent);
+Pilates_NODE_STYLE_PROPERTY_IMPL(PilatesAlign, AlignContent, alignContent, alignContent);
+Pilates_NODE_STYLE_PROPERTY_IMPL(PilatesAlign, AlignItems, alignItems, alignItems);
+Pilates_NODE_STYLE_PROPERTY_IMPL(PilatesAlign, AlignSelf, alignSelf, alignSelf);
+Pilates_NODE_STYLE_PROPERTY_IMPL(PilatesPositionType, PositionType, positionType, positionType);
+Pilates_NODE_STYLE_PROPERTY_IMPL(PilatesWrap, FlexWrap, flexWrap, flexWrap);
+Pilates_NODE_STYLE_PROPERTY_IMPL(PilatesOverflow, Overflow, overflow, overflow);
+Pilates_NODE_STYLE_PROPERTY_IMPL(PilatesDisplay, Display, display, display);
 
-YG_NODE_STYLE_PROPERTY_IMPL(float, Flex, flex, flex);
-YG_NODE_STYLE_PROPERTY_SETTER_IMPL(float, FlexGrow, flexGrow, flexGrow);
-YG_NODE_STYLE_PROPERTY_SETTER_IMPL(float, FlexShrink, flexShrink, flexShrink);
-YG_NODE_STYLE_PROPERTY_UNIT_AUTO_IMPL(YGValue, FlexBasis, flexBasis, flexBasis);
+Pilates_NODE_STYLE_PROPERTY_IMPL(float, Flex, flex, flex);
+Pilates_NODE_STYLE_PROPERTY_SETTER_IMPL(float, FlexGrow, flexGrow, flexGrow);
+Pilates_NODE_STYLE_PROPERTY_SETTER_IMPL(float, FlexShrink, flexShrink, flexShrink);
+Pilates_NODE_STYLE_PROPERTY_UNIT_AUTO_IMPL(PilatesValue, FlexBasis, flexBasis, flexBasis);
 
-YG_NODE_STYLE_EDGE_PROPERTY_UNIT_IMPL(YGValue, Position, position, position);
-YG_NODE_STYLE_EDGE_PROPERTY_UNIT_IMPL(YGValue, Margin, margin, margin);
-YG_NODE_STYLE_EDGE_PROPERTY_UNIT_AUTO_IMPL(YGValue, Margin, margin);
-YG_NODE_STYLE_EDGE_PROPERTY_UNIT_IMPL(YGValue, Padding, padding, padding);
-YG_NODE_STYLE_EDGE_PROPERTY_IMPL(float, Border, border, border);
+Pilates_NODE_STYLE_EDGE_PROPERTY_UNIT_IMPL(PilatesValue, Position, position, position);
+Pilates_NODE_STYLE_EDGE_PROPERTY_UNIT_IMPL(PilatesValue, Margin, margin, margin);
+Pilates_NODE_STYLE_EDGE_PROPERTY_UNIT_AUTO_IMPL(PilatesValue, Margin, margin);
+Pilates_NODE_STYLE_EDGE_PROPERTY_UNIT_IMPL(PilatesValue, Padding, padding, padding);
+Pilates_NODE_STYLE_EDGE_PROPERTY_IMPL(float, Border, border, border);
 
-YG_NODE_STYLE_PROPERTY_UNIT_AUTO_IMPL(YGValue, Width, width, dimensions[YGDimensionWidth]);
-YG_NODE_STYLE_PROPERTY_UNIT_AUTO_IMPL(YGValue, Height, height, dimensions[YGDimensionHeight]);
-YG_NODE_STYLE_PROPERTY_UNIT_IMPL(YGValue, MinWidth, minWidth, minDimensions[YGDimensionWidth]);
-YG_NODE_STYLE_PROPERTY_UNIT_IMPL(YGValue, MinHeight, minHeight, minDimensions[YGDimensionHeight]);
-YG_NODE_STYLE_PROPERTY_UNIT_IMPL(YGValue, MaxWidth, maxWidth, maxDimensions[YGDimensionWidth]);
-YG_NODE_STYLE_PROPERTY_UNIT_IMPL(YGValue, MaxHeight, maxHeight, maxDimensions[YGDimensionHeight]);
+Pilates_NODE_STYLE_PROPERTY_UNIT_AUTO_IMPL(PilatesValue, Width, width, dimensions[PilatesDimensionWidth]);
+Pilates_NODE_STYLE_PROPERTY_UNIT_AUTO_IMPL(PilatesValue, Height, height, dimensions[PilatesDimensionHeight]);
+Pilates_NODE_STYLE_PROPERTY_UNIT_IMPL(PilatesValue, MinWidth, minWidth, minDimensions[PilatesDimensionWidth]);
+Pilates_NODE_STYLE_PROPERTY_UNIT_IMPL(PilatesValue, MinHeight, minHeight, minDimensions[PilatesDimensionHeight]);
+Pilates_NODE_STYLE_PROPERTY_UNIT_IMPL(PilatesValue, MaxWidth, maxWidth, maxDimensions[PilatesDimensionWidth]);
+Pilates_NODE_STYLE_PROPERTY_UNIT_IMPL(PilatesValue, MaxHeight, maxHeight, maxDimensions[PilatesDimensionHeight]);
 
 // Pilates specific properties, not compatible with flexbox specification
-YG_NODE_STYLE_PROPERTY_IMPL(float, AspectRatio, aspectRatio, aspectRatio);
+Pilates_NODE_STYLE_PROPERTY_IMPL(float, AspectRatio, aspectRatio, aspectRatio);
 
-YG_NODE_LAYOUT_PROPERTY_IMPL(float, Left, position[YGEdgeLeft]);
-YG_NODE_LAYOUT_PROPERTY_IMPL(float, Top, position[YGEdgeTop]);
-YG_NODE_LAYOUT_PROPERTY_IMPL(float, Right, position[YGEdgeRight]);
-YG_NODE_LAYOUT_PROPERTY_IMPL(float, Bottom, position[YGEdgeBottom]);
-YG_NODE_LAYOUT_PROPERTY_IMPL(float, Width, dimensions[YGDimensionWidth]);
-YG_NODE_LAYOUT_PROPERTY_IMPL(float, Height, dimensions[YGDimensionHeight]);
-YG_NODE_LAYOUT_PROPERTY_IMPL(YGDirection, Direction, direction);
-YG_NODE_LAYOUT_PROPERTY_IMPL(bool, HadOverflow, hadOverflow);
+Pilates_NODE_LAYOUT_PROPERTY_IMPL(float, Left, position[PilatesEdgeLeft]);
+Pilates_NODE_LAYOUT_PROPERTY_IMPL(float, Top, position[PilatesEdgeTop]);
+Pilates_NODE_LAYOUT_PROPERTY_IMPL(float, Right, position[PilatesEdgeRight]);
+Pilates_NODE_LAYOUT_PROPERTY_IMPL(float, Bottom, position[PilatesEdgeBottom]);
+Pilates_NODE_LAYOUT_PROPERTY_IMPL(float, Width, dimensions[PilatesDimensionWidth]);
+Pilates_NODE_LAYOUT_PROPERTY_IMPL(float, Height, dimensions[PilatesDimensionHeight]);
+Pilates_NODE_LAYOUT_PROPERTY_IMPL(PilatesDirection, Direction, direction);
+Pilates_NODE_LAYOUT_PROPERTY_IMPL(bool, HadOverflow, hadOverflow);
 
-YG_NODE_LAYOUT_RESOLVED_PROPERTY_IMPL(float, Margin, margin);
-YG_NODE_LAYOUT_RESOLVED_PROPERTY_IMPL(float, Border, border);
-YG_NODE_LAYOUT_RESOLVED_PROPERTY_IMPL(float, Padding, padding);
+Pilates_NODE_LAYOUT_RESOLVED_PROPERTY_IMPL(float, Margin, margin);
+Pilates_NODE_LAYOUT_RESOLVED_PROPERTY_IMPL(float, Border, border);
+Pilates_NODE_LAYOUT_RESOLVED_PROPERTY_IMPL(float, Padding, padding);
 
 uint32_t gCurrentGenerationCount = 0;
 
-bool YGLayoutNodeInternal(const YGNodeRef node,
+bool PilatesLayoutNodeInternal(const PilatesNodeRef node,
                           const float availableWidth,
                           const float availableHeight,
-                          const YGDirection parentDirection,
-                          const YGMeasureMode widthMeasureMode,
-                          const YGMeasureMode heightMeasureMode,
+                          const PilatesDirection parentDirection,
+                          const PilatesMeasureMode widthMeasureMode,
+                          const PilatesMeasureMode heightMeasureMode,
                           const float parentWidth,
                           const float parentHeight,
                           const bool performLayout,
                           const char *reason,
-                          const YGConfigRef config);
+                          const PilatesConfigRef config);
 
-bool YGFloatsEqualWithPrecision(const float a, const float b, const float precision) {
+bool PilatesFloatsEqualWithPrecision(const float a, const float b, const float precision) {
   assert(precision > 0);
 
-  if (YGFloatIsUndefined(a)) {
-    return YGFloatIsUndefined(b);
+  if (PilatesFloatIsUndefined(a)) {
+    return PilatesFloatIsUndefined(b);
   }
   return fabs(a - b) < precision;
 }
 
-bool YGFloatsEqual(const float a, const float b) {
-  return YGFloatsEqualWithPrecision(a, b, 0.0001f);
+bool PilatesFloatsEqual(const float a, const float b) {
+  return PilatesFloatsEqualWithPrecision(a, b, 0.0001f);
 }
 
-static void YGNodePrintInternal(const YGNodeRef node,
-                                const YGPrintOptions options) {
+static void PilatesNodePrintInternal(const PilatesNodeRef node,
+                                const PilatesPrintOptions options) {
   std::string str;
-  facebook::pilates::YGNodeToString(&str, node, options, 0);
-  YGLog(node, YGLogLevelDebug, str.c_str());
+  facebook::pilates::PilatesNodeToString(&str, node, options, 0);
+  PilatesLog(node, PilatesLogLevelDebug, str.c_str());
 }
 
-void YGNodePrint(const YGNodeRef node, const YGPrintOptions options) {
-  YGNodePrintInternal(node, options);
+void PilatesNodePrint(const PilatesNodeRef node, const PilatesPrintOptions options) {
+  PilatesNodePrintInternal(node, options);
 }
 
-const std::array<YGEdge, 4> leading = {
-    {YGEdgeTop, YGEdgeBottom, YGEdgeLeft, YGEdgeRight}};
+const std::array<PilatesEdge, 4> leading = {
+    {PilatesEdgeTop, PilatesEdgeBottom, PilatesEdgeLeft, PilatesEdgeRight}};
 
-const std::array<YGEdge, 4> trailing = {
-    {YGEdgeBottom, YGEdgeTop, YGEdgeRight, YGEdgeLeft}};
-static const std::array<YGEdge, 4> pos = {{
-    YGEdgeTop,
-    YGEdgeBottom,
-    YGEdgeLeft,
-    YGEdgeRight,
+const std::array<PilatesEdge, 4> trailing = {
+    {PilatesEdgeBottom, PilatesEdgeTop, PilatesEdgeRight, PilatesEdgeLeft}};
+static const std::array<PilatesEdge, 4> pos = {{
+    PilatesEdgeTop,
+    PilatesEdgeBottom,
+    PilatesEdgeLeft,
+    PilatesEdgeRight,
 }};
 
-static const std::array<YGDimension, 4> dim = {
-    {YGDimensionHeight, YGDimensionHeight, YGDimensionWidth, YGDimensionWidth}};
+static const std::array<PilatesDimension, 4> dim = {
+    {PilatesDimensionHeight, PilatesDimensionHeight, PilatesDimensionWidth, PilatesDimensionWidth}};
 
-static inline float YGNodePaddingAndBorderForAxis(const YGNodeRef node,
-                                                  const YGFlexDirection axis,
+static inline float PilatesNodePaddingAndBorderForAxis(const PilatesNodeRef node,
+                                                  const PilatesFlexDirection axis,
                                                   const float widthSize) {
   return node->getLeadingPaddingAndBorder(axis, widthSize) +
       node->getTrailingPaddingAndBorder(axis, widthSize);
 }
 
-static inline YGAlign YGNodeAlignItem(const YGNodeRef node, const YGNodeRef child) {
-  const YGAlign align = child->getStyle().alignSelf == YGAlignAuto
+static inline PilatesAlign PilatesNodeAlignItem(const PilatesNodeRef node, const PilatesNodeRef child) {
+  const PilatesAlign align = child->getStyle().alignSelf == PilatesAlignAuto
       ? node->getStyle().alignItems
       : child->getStyle().alignSelf;
-  if (align == YGAlignBaseline &&
-      YGFlexDirectionIsColumn(node->getStyle().flexDirection)) {
-    return YGAlignFlexStart;
+  if (align == PilatesAlignBaseline &&
+      PilatesFlexDirectionIsColumn(node->getStyle().flexDirection)) {
+    return PilatesAlignFlexStart;
   }
   return align;
 }
 
-static float YGBaseline(const YGNodeRef node) {
+static float PilatesBaseline(const PilatesNodeRef node) {
   if (node->getBaseline() != nullptr) {
     const float baseline = node->getBaseline()(
         node,
-        node->getLayout().measuredDimensions[YGDimensionWidth],
-        node->getLayout().measuredDimensions[YGDimensionHeight]);
-    YGAssertWithNode(node,
-                     !YGFloatIsUndefined(baseline),
+        node->getLayout().measuredDimensions[PilatesDimensionWidth],
+        node->getLayout().measuredDimensions[PilatesDimensionHeight]);
+    PilatesAssertWithNode(node,
+                     !PilatesFloatIsUndefined(baseline),
                      "Expect custom baseline function to not return NaN");
     return baseline;
   }
 
-  YGNodeRef baselineChild = nullptr;
-  const uint32_t childCount = YGNodeGetChildCount(node);
+  PilatesNodeRef baselineChild = nullptr;
+  const uint32_t childCount = PilatesNodeGetChildCount(node);
   for (uint32_t i = 0; i < childCount; i++) {
-    const YGNodeRef child = YGNodeGetChild(node, i);
+    const PilatesNodeRef child = PilatesNodeGetChild(node, i);
     if (child->getLineIndex() > 0) {
       break;
     }
-    if (child->getStyle().positionType == YGPositionTypeAbsolute) {
+    if (child->getStyle().positionType == PilatesPositionTypeAbsolute) {
       continue;
     }
-    if (YGNodeAlignItem(node, child) == YGAlignBaseline) {
+    if (PilatesNodeAlignItem(node, child) == PilatesAlignBaseline) {
       baselineChild = child;
       break;
     }
@@ -878,25 +878,25 @@ static float YGBaseline(const YGNodeRef node) {
   }
 
   if (baselineChild == nullptr) {
-    return node->getLayout().measuredDimensions[YGDimensionHeight];
+    return node->getLayout().measuredDimensions[PilatesDimensionHeight];
   }
 
-  const float baseline = YGBaseline(baselineChild);
-  return baseline + baselineChild->getLayout().position[YGEdgeTop];
+  const float baseline = PilatesBaseline(baselineChild);
+  return baseline + baselineChild->getLayout().position[PilatesEdgeTop];
 }
 
-static bool YGIsBaselineLayout(const YGNodeRef node) {
-  if (YGFlexDirectionIsColumn(node->getStyle().flexDirection)) {
+static bool PilatesIsBaselineLayout(const PilatesNodeRef node) {
+  if (PilatesFlexDirectionIsColumn(node->getStyle().flexDirection)) {
     return false;
   }
-  if (node->getStyle().alignItems == YGAlignBaseline) {
+  if (node->getStyle().alignItems == PilatesAlignBaseline) {
     return true;
   }
-  const uint32_t childCount = YGNodeGetChildCount(node);
+  const uint32_t childCount = PilatesNodeGetChildCount(node);
   for (uint32_t i = 0; i < childCount; i++) {
-    const YGNodeRef child = YGNodeGetChild(node, i);
-    if (child->getStyle().positionType == YGPositionTypeRelative &&
-        child->getStyle().alignSelf == YGAlignBaseline) {
+    const PilatesNodeRef child = PilatesNodeGetChild(node, i);
+    if (child->getStyle().positionType == PilatesPositionTypeRelative &&
+        child->getStyle().alignSelf == PilatesAlignBaseline) {
       return true;
     }
   }
@@ -904,79 +904,79 @@ static bool YGIsBaselineLayout(const YGNodeRef node) {
   return false;
 }
 
-static inline float YGNodeDimWithMargin(const YGNodeRef node,
-                                        const YGFlexDirection axis,
+static inline float PilatesNodeDimWithMargin(const PilatesNodeRef node,
+                                        const PilatesFlexDirection axis,
                                         const float widthSize) {
   return node->getLayout().measuredDimensions[dim[axis]] +
       node->getLeadingMargin(axis, widthSize) +
       node->getTrailingMargin(axis, widthSize);
 }
 
-static inline bool YGNodeIsStyleDimDefined(const YGNodeRef node,
-                                           const YGFlexDirection axis,
+static inline bool PilatesNodeIsStyleDimDefined(const PilatesNodeRef node,
+                                           const PilatesFlexDirection axis,
                                            const float parentSize) {
   return !(
-      node->getResolvedDimension(dim[axis]).unit == YGUnitAuto ||
-      node->getResolvedDimension(dim[axis]).unit == YGUnitUndefined ||
-      (node->getResolvedDimension(dim[axis]).unit == YGUnitPoint &&
+      node->getResolvedDimension(dim[axis]).unit == PilatesUnitAuto ||
+      node->getResolvedDimension(dim[axis]).unit == PilatesUnitUndefined ||
+      (node->getResolvedDimension(dim[axis]).unit == PilatesUnitPoint &&
        node->getResolvedDimension(dim[axis]).value < 0.0f) ||
-      (node->getResolvedDimension(dim[axis]).unit == YGUnitPercent &&
+      (node->getResolvedDimension(dim[axis]).unit == PilatesUnitPercent &&
        (node->getResolvedDimension(dim[axis]).value < 0.0f ||
-        YGFloatIsUndefined(parentSize))));
+        PilatesFloatIsUndefined(parentSize))));
 }
 
-static inline bool YGNodeIsLayoutDimDefined(const YGNodeRef node, const YGFlexDirection axis) {
+static inline bool PilatesNodeIsLayoutDimDefined(const PilatesNodeRef node, const PilatesFlexDirection axis) {
   const float value = node->getLayout().measuredDimensions[dim[axis]];
-  return !YGFloatIsUndefined(value) && value >= 0.0f;
+  return !PilatesFloatIsUndefined(value) && value >= 0.0f;
 }
 
-static float YGNodeBoundAxisWithinMinAndMax(const YGNodeRef node,
-                                            const YGFlexDirection axis,
+static float PilatesNodeBoundAxisWithinMinAndMax(const PilatesNodeRef node,
+                                            const PilatesFlexDirection axis,
                                             const float value,
                                             const float axisSize) {
-  float min = YGUndefined;
-  float max = YGUndefined;
+  float min = PilatesUndefined;
+  float max = PilatesUndefined;
 
-  if (YGFlexDirectionIsColumn(axis)) {
-    min = YGResolveValue(
-        node->getStyle().minDimensions[YGDimensionHeight], axisSize);
-    max = YGResolveValue(
-        node->getStyle().maxDimensions[YGDimensionHeight], axisSize);
-  } else if (YGFlexDirectionIsRow(axis)) {
-    min = YGResolveValue(
-        node->getStyle().minDimensions[YGDimensionWidth], axisSize);
-    max = YGResolveValue(
-        node->getStyle().maxDimensions[YGDimensionWidth], axisSize);
+  if (PilatesFlexDirectionIsColumn(axis)) {
+    min = PilatesResolveValue(
+        node->getStyle().minDimensions[PilatesDimensionHeight], axisSize);
+    max = PilatesResolveValue(
+        node->getStyle().maxDimensions[PilatesDimensionHeight], axisSize);
+  } else if (PilatesFlexDirectionIsRow(axis)) {
+    min = PilatesResolveValue(
+        node->getStyle().minDimensions[PilatesDimensionWidth], axisSize);
+    max = PilatesResolveValue(
+        node->getStyle().maxDimensions[PilatesDimensionWidth], axisSize);
   }
 
   float boundValue = value;
 
-  if (!YGFloatIsUndefined(max) && max >= 0.0f && boundValue > max) {
+  if (!PilatesFloatIsUndefined(max) && max >= 0.0f && boundValue > max) {
     boundValue = max;
   }
 
-  if (!YGFloatIsUndefined(min) && min >= 0.0f && boundValue < min) {
+  if (!PilatesFloatIsUndefined(min) && min >= 0.0f && boundValue < min) {
     boundValue = min;
   }
 
   return boundValue;
 }
 
-// Like YGNodeBoundAxisWithinMinAndMax but also ensures that the value doesn't go
+// Like PilatesNodeBoundAxisWithinMinAndMax but also ensures that the value doesn't go
 // below the
 // padding and border amount.
-static inline float YGNodeBoundAxis(const YGNodeRef node,
-                                    const YGFlexDirection axis,
+static inline float PilatesNodeBoundAxis(const PilatesNodeRef node,
+                                    const PilatesFlexDirection axis,
                                     const float value,
                                     const float axisSize,
                                     const float widthSize) {
-  return fmaxf(YGNodeBoundAxisWithinMinAndMax(node, axis, value, axisSize),
-               YGNodePaddingAndBorderForAxis(node, axis, widthSize));
+  return fmaxf(PilatesNodeBoundAxisWithinMinAndMax(node, axis, value, axisSize),
+               PilatesNodePaddingAndBorderForAxis(node, axis, widthSize));
 }
 
-static void YGNodeSetChildTrailingPosition(const YGNodeRef node,
-                                           const YGNodeRef child,
-                                           const YGFlexDirection axis) {
+static void PilatesNodeSetChildTrailingPosition(const PilatesNodeRef node,
+                                           const PilatesNodeRef child,
+                                           const PilatesFlexDirection axis) {
   const float size = child->getLayout().measuredDimensions[dim[axis]];
   child->setLayoutPosition(
       node->getLayout().measuredDimensions[dim[axis]] - size -
@@ -984,135 +984,135 @@ static void YGNodeSetChildTrailingPosition(const YGNodeRef node,
       trailing[axis]);
 }
 
-static void YGConstrainMaxSizeForMode(const YGNodeRef node,
-                                      const enum YGFlexDirection axis,
+static void PilatesConstrainMaxSizeForMode(const PilatesNodeRef node,
+                                      const enum PilatesFlexDirection axis,
                                       const float parentAxisSize,
                                       const float parentWidth,
-                                      YGMeasureMode *mode,
+                                      PilatesMeasureMode *mode,
                                       float *size) {
   const float maxSize =
-      YGResolveValue(
+      PilatesResolveValue(
           node->getStyle().maxDimensions[dim[axis]], parentAxisSize) +
       node->getMarginForAxis(axis, parentWidth);
   switch (*mode) {
-    case YGMeasureModeExactly:
-    case YGMeasureModeAtMost:
-      *size = (YGFloatIsUndefined(maxSize) || *size < maxSize) ? *size : maxSize;
+    case PilatesMeasureModeExactly:
+    case PilatesMeasureModeAtMost:
+      *size = (PilatesFloatIsUndefined(maxSize) || *size < maxSize) ? *size : maxSize;
       break;
-    case YGMeasureModeUndefined:
-      if (!YGFloatIsUndefined(maxSize)) {
-        *mode = YGMeasureModeAtMost;
+    case PilatesMeasureModeUndefined:
+      if (!PilatesFloatIsUndefined(maxSize)) {
+        *mode = PilatesMeasureModeAtMost;
         *size = maxSize;
       }
       break;
   }
 }
 
-static void YGNodeComputeFlexBasisForChild(const YGNodeRef node,
-                                           const YGNodeRef child,
+static void PilatesNodeComputeFlexBasisForChild(const PilatesNodeRef node,
+                                           const PilatesNodeRef child,
                                            const float width,
-                                           const YGMeasureMode widthMode,
+                                           const PilatesMeasureMode widthMode,
                                            const float height,
                                            const float parentWidth,
                                            const float parentHeight,
-                                           const YGMeasureMode heightMode,
-                                           const YGDirection direction,
-                                           const YGConfigRef config) {
-  const YGFlexDirection mainAxis =
-      YGResolveFlexDirection(node->getStyle().flexDirection, direction);
-  const bool isMainAxisRow = YGFlexDirectionIsRow(mainAxis);
+                                           const PilatesMeasureMode heightMode,
+                                           const PilatesDirection direction,
+                                           const PilatesConfigRef config) {
+  const PilatesFlexDirection mainAxis =
+      PilatesResolveFlexDirection(node->getStyle().flexDirection, direction);
+  const bool isMainAxisRow = PilatesFlexDirectionIsRow(mainAxis);
   const float mainAxisSize = isMainAxisRow ? width : height;
   const float mainAxisParentSize = isMainAxisRow ? parentWidth : parentHeight;
 
   float childWidth;
   float childHeight;
-  YGMeasureMode childWidthMeasureMode;
-  YGMeasureMode childHeightMeasureMode;
+  PilatesMeasureMode childWidthMeasureMode;
+  PilatesMeasureMode childHeightMeasureMode;
 
   const float resolvedFlexBasis =
-      YGResolveValue(child->resolveFlexBasisPtr(), mainAxisParentSize);
-  const bool isRowStyleDimDefined = YGNodeIsStyleDimDefined(child, YGFlexDirectionRow, parentWidth);
+      PilatesResolveValue(child->resolveFlexBasisPtr(), mainAxisParentSize);
+  const bool isRowStyleDimDefined = PilatesNodeIsStyleDimDefined(child, PilatesFlexDirectionRow, parentWidth);
   const bool isColumnStyleDimDefined =
-      YGNodeIsStyleDimDefined(child, YGFlexDirectionColumn, parentHeight);
+      PilatesNodeIsStyleDimDefined(child, PilatesFlexDirectionColumn, parentHeight);
 
-  if (!YGFloatIsUndefined(resolvedFlexBasis) && !YGFloatIsUndefined(mainAxisSize)) {
-    if (YGFloatIsUndefined(child->getLayout().computedFlexBasis) ||
-        (YGConfigIsExperimentalFeatureEnabled(
-             child->getConfig(), YGExperimentalFeatureWebFlexBasis) &&
+  if (!PilatesFloatIsUndefined(resolvedFlexBasis) && !PilatesFloatIsUndefined(mainAxisSize)) {
+    if (PilatesFloatIsUndefined(child->getLayout().computedFlexBasis) ||
+        (PilatesConfigIsExperimentalFeatureEnabled(
+             child->getConfig(), PilatesExperimentalFeatureWebFlexBasis) &&
          child->getLayout().computedFlexBasisGeneration !=
              gCurrentGenerationCount)) {
       child->setLayoutComputedFlexBasis(fmaxf(
           resolvedFlexBasis,
-          YGNodePaddingAndBorderForAxis(child, mainAxis, parentWidth)));
+          PilatesNodePaddingAndBorderForAxis(child, mainAxis, parentWidth)));
     }
   } else if (isMainAxisRow && isRowStyleDimDefined) {
     // The width is definite, so use that as the flex basis.
     child->setLayoutComputedFlexBasis(fmaxf(
-        YGResolveValue(
-            child->getResolvedDimension(YGDimensionWidth), parentWidth),
-        YGNodePaddingAndBorderForAxis(child, YGFlexDirectionRow, parentWidth)));
+        PilatesResolveValue(
+            child->getResolvedDimension(PilatesDimensionWidth), parentWidth),
+        PilatesNodePaddingAndBorderForAxis(child, PilatesFlexDirectionRow, parentWidth)));
   } else if (!isMainAxisRow && isColumnStyleDimDefined) {
     // The height is definite, so use that as the flex basis.
     child->setLayoutComputedFlexBasis(fmaxf(
-        YGResolveValue(
-            child->getResolvedDimension(YGDimensionHeight), parentHeight),
-        YGNodePaddingAndBorderForAxis(
-            child, YGFlexDirectionColumn, parentWidth)));
+        PilatesResolveValue(
+            child->getResolvedDimension(PilatesDimensionHeight), parentHeight),
+        PilatesNodePaddingAndBorderForAxis(
+            child, PilatesFlexDirectionColumn, parentWidth)));
   } else {
     // Compute the flex basis and hypothetical main size (i.e. the clamped
     // flex basis).
-    childWidth = YGUndefined;
-    childHeight = YGUndefined;
-    childWidthMeasureMode = YGMeasureModeUndefined;
-    childHeightMeasureMode = YGMeasureModeUndefined;
+    childWidth = PilatesUndefined;
+    childHeight = PilatesUndefined;
+    childWidthMeasureMode = PilatesMeasureModeUndefined;
+    childHeightMeasureMode = PilatesMeasureModeUndefined;
 
     const float marginRow =
-        child->getMarginForAxis(YGFlexDirectionRow, parentWidth);
+        child->getMarginForAxis(PilatesFlexDirectionRow, parentWidth);
     const float marginColumn =
-        child->getMarginForAxis(YGFlexDirectionColumn, parentWidth);
+        child->getMarginForAxis(PilatesFlexDirectionColumn, parentWidth);
 
     if (isRowStyleDimDefined) {
       childWidth =
-          YGResolveValue(
-              child->getResolvedDimension(YGDimensionWidth), parentWidth) +
+          PilatesResolveValue(
+              child->getResolvedDimension(PilatesDimensionWidth), parentWidth) +
           marginRow;
-      childWidthMeasureMode = YGMeasureModeExactly;
+      childWidthMeasureMode = PilatesMeasureModeExactly;
     }
     if (isColumnStyleDimDefined) {
       childHeight =
-          YGResolveValue(
-              child->getResolvedDimension(YGDimensionHeight), parentHeight) +
+          PilatesResolveValue(
+              child->getResolvedDimension(PilatesDimensionHeight), parentHeight) +
           marginColumn;
-      childHeightMeasureMode = YGMeasureModeExactly;
+      childHeightMeasureMode = PilatesMeasureModeExactly;
     }
 
     // The W3C spec doesn't say anything about the 'overflow' property,
     // but all major browsers appear to implement the following logic.
-    if ((!isMainAxisRow && node->getStyle().overflow == YGOverflowScroll) ||
-        node->getStyle().overflow != YGOverflowScroll) {
-      if (YGFloatIsUndefined(childWidth) && !YGFloatIsUndefined(width)) {
+    if ((!isMainAxisRow && node->getStyle().overflow == PilatesOverflowScroll) ||
+        node->getStyle().overflow != PilatesOverflowScroll) {
+      if (PilatesFloatIsUndefined(childWidth) && !PilatesFloatIsUndefined(width)) {
         childWidth = width;
-        childWidthMeasureMode = YGMeasureModeAtMost;
+        childWidthMeasureMode = PilatesMeasureModeAtMost;
       }
     }
 
-    if ((isMainAxisRow && node->getStyle().overflow == YGOverflowScroll) ||
-        node->getStyle().overflow != YGOverflowScroll) {
-      if (YGFloatIsUndefined(childHeight) && !YGFloatIsUndefined(height)) {
+    if ((isMainAxisRow && node->getStyle().overflow == PilatesOverflowScroll) ||
+        node->getStyle().overflow != PilatesOverflowScroll) {
+      if (PilatesFloatIsUndefined(childHeight) && !PilatesFloatIsUndefined(height)) {
         childHeight = height;
-        childHeightMeasureMode = YGMeasureModeAtMost;
+        childHeightMeasureMode = PilatesMeasureModeAtMost;
       }
     }
 
-    if (!YGFloatIsUndefined(child->getStyle().aspectRatio)) {
-      if (!isMainAxisRow && childWidthMeasureMode == YGMeasureModeExactly) {
+    if (!PilatesFloatIsUndefined(child->getStyle().aspectRatio)) {
+      if (!isMainAxisRow && childWidthMeasureMode == PilatesMeasureModeExactly) {
         childHeight = marginColumn +
             (childWidth - marginRow) / child->getStyle().aspectRatio;
-        childHeightMeasureMode = YGMeasureModeExactly;
-      } else if (isMainAxisRow && childHeightMeasureMode == YGMeasureModeExactly) {
+        childHeightMeasureMode = PilatesMeasureModeExactly;
+      } else if (isMainAxisRow && childHeightMeasureMode == PilatesMeasureModeExactly) {
         childWidth = marginRow +
             (childHeight - marginColumn) * child->getStyle().aspectRatio;
-        childWidthMeasureMode = YGMeasureModeExactly;
+        childWidthMeasureMode = PilatesMeasureModeExactly;
       }
     }
 
@@ -1120,43 +1120,43 @@ static void YGNodeComputeFlexBasisForChild(const YGNodeRef node,
     // set the cross
     // axis to be measured exactly with the available inner width
 
-    const bool hasExactWidth = !YGFloatIsUndefined(width) && widthMode == YGMeasureModeExactly;
-    const bool childWidthStretch = YGNodeAlignItem(node, child) == YGAlignStretch &&
-                                   childWidthMeasureMode != YGMeasureModeExactly;
+    const bool hasExactWidth = !PilatesFloatIsUndefined(width) && widthMode == PilatesMeasureModeExactly;
+    const bool childWidthStretch = PilatesNodeAlignItem(node, child) == PilatesAlignStretch &&
+                                   childWidthMeasureMode != PilatesMeasureModeExactly;
     if (!isMainAxisRow && !isRowStyleDimDefined && hasExactWidth && childWidthStretch) {
       childWidth = width;
-      childWidthMeasureMode = YGMeasureModeExactly;
-      if (!YGFloatIsUndefined(child->getStyle().aspectRatio)) {
+      childWidthMeasureMode = PilatesMeasureModeExactly;
+      if (!PilatesFloatIsUndefined(child->getStyle().aspectRatio)) {
         childHeight = (childWidth - marginRow) / child->getStyle().aspectRatio;
-        childHeightMeasureMode = YGMeasureModeExactly;
+        childHeightMeasureMode = PilatesMeasureModeExactly;
       }
     }
 
-    const bool hasExactHeight = !YGFloatIsUndefined(height) && heightMode == YGMeasureModeExactly;
-    const bool childHeightStretch = YGNodeAlignItem(node, child) == YGAlignStretch &&
-                                    childHeightMeasureMode != YGMeasureModeExactly;
+    const bool hasExactHeight = !PilatesFloatIsUndefined(height) && heightMode == PilatesMeasureModeExactly;
+    const bool childHeightStretch = PilatesNodeAlignItem(node, child) == PilatesAlignStretch &&
+                                    childHeightMeasureMode != PilatesMeasureModeExactly;
     if (isMainAxisRow && !isColumnStyleDimDefined && hasExactHeight && childHeightStretch) {
       childHeight = height;
-      childHeightMeasureMode = YGMeasureModeExactly;
+      childHeightMeasureMode = PilatesMeasureModeExactly;
 
-      if (!YGFloatIsUndefined(child->getStyle().aspectRatio)) {
+      if (!PilatesFloatIsUndefined(child->getStyle().aspectRatio)) {
         childWidth =
             (childHeight - marginColumn) * child->getStyle().aspectRatio;
-        childWidthMeasureMode = YGMeasureModeExactly;
+        childWidthMeasureMode = PilatesMeasureModeExactly;
       }
     }
 
-    YGConstrainMaxSizeForMode(
-        child, YGFlexDirectionRow, parentWidth, parentWidth, &childWidthMeasureMode, &childWidth);
-    YGConstrainMaxSizeForMode(child,
-                              YGFlexDirectionColumn,
+    PilatesConstrainMaxSizeForMode(
+        child, PilatesFlexDirectionRow, parentWidth, parentWidth, &childWidthMeasureMode, &childWidth);
+    PilatesConstrainMaxSizeForMode(child,
+                              PilatesFlexDirectionColumn,
                               parentHeight,
                               parentWidth,
                               &childHeightMeasureMode,
                               &childHeight);
 
     // Measure the child
-    YGLayoutNodeInternal(child,
+    PilatesLayoutNodeInternal(child,
                          childWidth,
                          childHeight,
                          direction,
@@ -1170,78 +1170,78 @@ static void YGNodeComputeFlexBasisForChild(const YGNodeRef node,
 
     child->setLayoutComputedFlexBasis(fmaxf(
         child->getLayout().measuredDimensions[dim[mainAxis]],
-        YGNodePaddingAndBorderForAxis(child, mainAxis, parentWidth)));
+        PilatesNodePaddingAndBorderForAxis(child, mainAxis, parentWidth)));
   }
   child->setLayoutComputedFlexBasisGeneration(gCurrentGenerationCount);
 }
 
-static void YGNodeAbsoluteLayoutChild(const YGNodeRef node,
-                                      const YGNodeRef child,
+static void PilatesNodeAbsoluteLayoutChild(const PilatesNodeRef node,
+                                      const PilatesNodeRef child,
                                       const float width,
-                                      const YGMeasureMode widthMode,
+                                      const PilatesMeasureMode widthMode,
                                       const float height,
-                                      const YGDirection direction,
-                                      const YGConfigRef config) {
-  const YGFlexDirection mainAxis =
-      YGResolveFlexDirection(node->getStyle().flexDirection, direction);
-  const YGFlexDirection crossAxis = YGFlexDirectionCross(mainAxis, direction);
-  const bool isMainAxisRow = YGFlexDirectionIsRow(mainAxis);
+                                      const PilatesDirection direction,
+                                      const PilatesConfigRef config) {
+  const PilatesFlexDirection mainAxis =
+      PilatesResolveFlexDirection(node->getStyle().flexDirection, direction);
+  const PilatesFlexDirection crossAxis = PilatesFlexDirectionCross(mainAxis, direction);
+  const bool isMainAxisRow = PilatesFlexDirectionIsRow(mainAxis);
 
-  float childWidth = YGUndefined;
-  float childHeight = YGUndefined;
-  YGMeasureMode childWidthMeasureMode = YGMeasureModeUndefined;
-  YGMeasureMode childHeightMeasureMode = YGMeasureModeUndefined;
+  float childWidth = PilatesUndefined;
+  float childHeight = PilatesUndefined;
+  PilatesMeasureMode childWidthMeasureMode = PilatesMeasureModeUndefined;
+  PilatesMeasureMode childHeightMeasureMode = PilatesMeasureModeUndefined;
 
-  const float marginRow = child->getMarginForAxis(YGFlexDirectionRow, width);
+  const float marginRow = child->getMarginForAxis(PilatesFlexDirectionRow, width);
   const float marginColumn =
-      child->getMarginForAxis(YGFlexDirectionColumn, width);
+      child->getMarginForAxis(PilatesFlexDirectionColumn, width);
 
-  if (YGNodeIsStyleDimDefined(child, YGFlexDirectionRow, width)) {
+  if (PilatesNodeIsStyleDimDefined(child, PilatesFlexDirectionRow, width)) {
     childWidth =
-        YGResolveValue(child->getResolvedDimension(YGDimensionWidth), width) +
+        PilatesResolveValue(child->getResolvedDimension(PilatesDimensionWidth), width) +
         marginRow;
   } else {
     // If the child doesn't have a specified width, compute the width based
     // on the left/right
     // offsets if they're defined.
-    if (child->isLeadingPositionDefined(YGFlexDirectionRow) &&
-        child->isTrailingPosDefined(YGFlexDirectionRow)) {
-      childWidth = node->getLayout().measuredDimensions[YGDimensionWidth] -
-          (node->getLeadingBorder(YGFlexDirectionRow) +
-           node->getTrailingBorder(YGFlexDirectionRow)) -
-          (child->getLeadingPosition(YGFlexDirectionRow, width) +
-           child->getTrailingPosition(YGFlexDirectionRow, width));
-      childWidth = YGNodeBoundAxis(child, YGFlexDirectionRow, childWidth, width, width);
+    if (child->isLeadingPositionDefined(PilatesFlexDirectionRow) &&
+        child->isTrailingPosDefined(PilatesFlexDirectionRow)) {
+      childWidth = node->getLayout().measuredDimensions[PilatesDimensionWidth] -
+          (node->getLeadingBorder(PilatesFlexDirectionRow) +
+           node->getTrailingBorder(PilatesFlexDirectionRow)) -
+          (child->getLeadingPosition(PilatesFlexDirectionRow, width) +
+           child->getTrailingPosition(PilatesFlexDirectionRow, width));
+      childWidth = PilatesNodeBoundAxis(child, PilatesFlexDirectionRow, childWidth, width, width);
     }
   }
 
-  if (YGNodeIsStyleDimDefined(child, YGFlexDirectionColumn, height)) {
+  if (PilatesNodeIsStyleDimDefined(child, PilatesFlexDirectionColumn, height)) {
     childHeight =
-        YGResolveValue(child->getResolvedDimension(YGDimensionHeight), height) +
+        PilatesResolveValue(child->getResolvedDimension(PilatesDimensionHeight), height) +
         marginColumn;
   } else {
     // If the child doesn't have a specified height, compute the height
     // based on the top/bottom
     // offsets if they're defined.
-    if (child->isLeadingPositionDefined(YGFlexDirectionColumn) &&
-        child->isTrailingPosDefined(YGFlexDirectionColumn)) {
-      childHeight = node->getLayout().measuredDimensions[YGDimensionHeight] -
-          (node->getLeadingBorder(YGFlexDirectionColumn) +
-           node->getTrailingBorder(YGFlexDirectionColumn)) -
-          (child->getLeadingPosition(YGFlexDirectionColumn, height) +
-           child->getTrailingPosition(YGFlexDirectionColumn, height));
-      childHeight = YGNodeBoundAxis(child, YGFlexDirectionColumn, childHeight, height, width);
+    if (child->isLeadingPositionDefined(PilatesFlexDirectionColumn) &&
+        child->isTrailingPosDefined(PilatesFlexDirectionColumn)) {
+      childHeight = node->getLayout().measuredDimensions[PilatesDimensionHeight] -
+          (node->getLeadingBorder(PilatesFlexDirectionColumn) +
+           node->getTrailingBorder(PilatesFlexDirectionColumn)) -
+          (child->getLeadingPosition(PilatesFlexDirectionColumn, height) +
+           child->getTrailingPosition(PilatesFlexDirectionColumn, height));
+      childHeight = PilatesNodeBoundAxis(child, PilatesFlexDirectionColumn, childHeight, height, width);
     }
   }
 
   // Exactly one dimension needs to be defined for us to be able to do aspect ratio
   // calculation. One dimension being the anchor and the other being flexible.
-  if (YGFloatIsUndefined(childWidth) ^ YGFloatIsUndefined(childHeight)) {
-    if (!YGFloatIsUndefined(child->getStyle().aspectRatio)) {
-      if (YGFloatIsUndefined(childWidth)) {
+  if (PilatesFloatIsUndefined(childWidth) ^ PilatesFloatIsUndefined(childHeight)) {
+    if (!PilatesFloatIsUndefined(child->getStyle().aspectRatio)) {
+      if (PilatesFloatIsUndefined(childWidth)) {
         childWidth = marginRow +
             (childHeight - marginColumn) * child->getStyle().aspectRatio;
-      } else if (YGFloatIsUndefined(childHeight)) {
+      } else if (PilatesFloatIsUndefined(childHeight)) {
         childHeight = marginColumn +
             (childWidth - marginRow) / child->getStyle().aspectRatio;
       }
@@ -1249,22 +1249,22 @@ static void YGNodeAbsoluteLayoutChild(const YGNodeRef node,
   }
 
   // If we're still missing one or the other dimension, measure the content.
-  if (YGFloatIsUndefined(childWidth) || YGFloatIsUndefined(childHeight)) {
+  if (PilatesFloatIsUndefined(childWidth) || PilatesFloatIsUndefined(childHeight)) {
     childWidthMeasureMode =
-        YGFloatIsUndefined(childWidth) ? YGMeasureModeUndefined : YGMeasureModeExactly;
+        PilatesFloatIsUndefined(childWidth) ? PilatesMeasureModeUndefined : PilatesMeasureModeExactly;
     childHeightMeasureMode =
-        YGFloatIsUndefined(childHeight) ? YGMeasureModeUndefined : YGMeasureModeExactly;
+        PilatesFloatIsUndefined(childHeight) ? PilatesMeasureModeUndefined : PilatesMeasureModeExactly;
 
     // If the size of the parent is defined then try to constrain the absolute child to that size
     // as well. This allows text within the absolute child to wrap to the size of its parent.
     // This is the same behavior as many browsers implement.
-    if (!isMainAxisRow && YGFloatIsUndefined(childWidth) && widthMode != YGMeasureModeUndefined &&
+    if (!isMainAxisRow && PilatesFloatIsUndefined(childWidth) && widthMode != PilatesMeasureModeUndefined &&
         width > 0) {
       childWidth = width;
-      childWidthMeasureMode = YGMeasureModeAtMost;
+      childWidthMeasureMode = PilatesMeasureModeAtMost;
     }
 
-    YGLayoutNodeInternal(child,
+    PilatesLayoutNodeInternal(child,
                          childWidth,
                          childHeight,
                          direction,
@@ -1275,18 +1275,18 @@ static void YGNodeAbsoluteLayoutChild(const YGNodeRef node,
                          false,
                          "abs-measure",
                          config);
-    childWidth = child->getLayout().measuredDimensions[YGDimensionWidth] +
-        child->getMarginForAxis(YGFlexDirectionRow, width);
-    childHeight = child->getLayout().measuredDimensions[YGDimensionHeight] +
-        child->getMarginForAxis(YGFlexDirectionColumn, width);
+    childWidth = child->getLayout().measuredDimensions[PilatesDimensionWidth] +
+        child->getMarginForAxis(PilatesFlexDirectionRow, width);
+    childHeight = child->getLayout().measuredDimensions[PilatesDimensionHeight] +
+        child->getMarginForAxis(PilatesFlexDirectionColumn, width);
   }
 
-  YGLayoutNodeInternal(child,
+  PilatesLayoutNodeInternal(child,
                        childWidth,
                        childHeight,
                        direction,
-                       YGMeasureModeExactly,
-                       YGMeasureModeExactly,
+                       PilatesMeasureModeExactly,
+                       PilatesMeasureModeExactly,
                        childWidth,
                        childHeight,
                        true,
@@ -1305,7 +1305,7 @@ static void YGNodeAbsoluteLayoutChild(const YGNodeRef node,
         leading[mainAxis]);
   } else if (
       !child->isLeadingPositionDefined(mainAxis) &&
-      node->getStyle().justifyContent == YGJustifyCenter) {
+      node->getStyle().justifyContent == PilatesJustifyCenter) {
     child->setLayoutPosition(
         (node->getLayout().measuredDimensions[dim[mainAxis]] -
          child->getLayout().measuredDimensions[dim[mainAxis]]) /
@@ -1313,7 +1313,7 @@ static void YGNodeAbsoluteLayoutChild(const YGNodeRef node,
         leading[mainAxis]);
   } else if (
       !child->isLeadingPositionDefined(mainAxis) &&
-      node->getStyle().justifyContent == YGJustifyFlexEnd) {
+      node->getStyle().justifyContent == PilatesJustifyFlexEnd) {
     child->setLayoutPosition(
         (node->getLayout().measuredDimensions[dim[mainAxis]] -
          child->getLayout().measuredDimensions[dim[mainAxis]]),
@@ -1333,7 +1333,7 @@ static void YGNodeAbsoluteLayoutChild(const YGNodeRef node,
 
   } else if (
       !child->isLeadingPositionDefined(crossAxis) &&
-      YGNodeAlignItem(node, child) == YGAlignCenter) {
+      PilatesNodeAlignItem(node, child) == PilatesAlignCenter) {
     child->setLayoutPosition(
         (node->getLayout().measuredDimensions[dim[crossAxis]] -
          child->getLayout().measuredDimensions[dim[crossAxis]]) /
@@ -1341,8 +1341,8 @@ static void YGNodeAbsoluteLayoutChild(const YGNodeRef node,
         leading[crossAxis]);
   } else if (
       !child->isLeadingPositionDefined(crossAxis) &&
-      ((YGNodeAlignItem(node, child) == YGAlignFlexEnd) ^
-       (node->getStyle().flexWrap == YGWrapWrapReverse))) {
+      ((PilatesNodeAlignItem(node, child) == PilatesAlignFlexEnd) ^
+       (node->getStyle().flexWrap == PilatesWrapWrapReverse))) {
     child->setLayoutPosition(
         (node->getLayout().measuredDimensions[dim[crossAxis]] -
          child->getLayout().measuredDimensions[dim[crossAxis]]),
@@ -1350,211 +1350,211 @@ static void YGNodeAbsoluteLayoutChild(const YGNodeRef node,
   }
 }
 
-static void YGNodeWithMeasureFuncSetMeasuredDimensions(const YGNodeRef node,
+static void PilatesNodeWithMeasureFuncSetMeasuredDimensions(const PilatesNodeRef node,
                                                        const float availableWidth,
                                                        const float availableHeight,
-                                                       const YGMeasureMode widthMeasureMode,
-                                                       const YGMeasureMode heightMeasureMode,
+                                                       const PilatesMeasureMode widthMeasureMode,
+                                                       const PilatesMeasureMode heightMeasureMode,
                                                        const float parentWidth,
                                                        const float parentHeight) {
-  YGAssertWithNode(
+  PilatesAssertWithNode(
       node,
       node->getMeasure() != nullptr,
       "Expected node to have custom measure function");
 
   const float paddingAndBorderAxisRow =
-      YGNodePaddingAndBorderForAxis(node, YGFlexDirectionRow, availableWidth);
+      PilatesNodePaddingAndBorderForAxis(node, PilatesFlexDirectionRow, availableWidth);
   const float paddingAndBorderAxisColumn =
-      YGNodePaddingAndBorderForAxis(node, YGFlexDirectionColumn, availableWidth);
+      PilatesNodePaddingAndBorderForAxis(node, PilatesFlexDirectionColumn, availableWidth);
   const float marginAxisRow =
-      node->getMarginForAxis(YGFlexDirectionRow, availableWidth);
+      node->getMarginForAxis(PilatesFlexDirectionRow, availableWidth);
   const float marginAxisColumn =
-      node->getMarginForAxis(YGFlexDirectionColumn, availableWidth);
+      node->getMarginForAxis(PilatesFlexDirectionColumn, availableWidth);
 
   // We want to make sure we don't call measure with negative size
-  const float innerWidth = YGFloatIsUndefined(availableWidth)
+  const float innerWidth = PilatesFloatIsUndefined(availableWidth)
       ? availableWidth
       : fmaxf(0, availableWidth - marginAxisRow - paddingAndBorderAxisRow);
-  const float innerHeight = YGFloatIsUndefined(availableHeight)
+  const float innerHeight = PilatesFloatIsUndefined(availableHeight)
       ? availableHeight
       : fmaxf(
             0, availableHeight - marginAxisColumn - paddingAndBorderAxisColumn);
 
-  if (widthMeasureMode == YGMeasureModeExactly &&
-      heightMeasureMode == YGMeasureModeExactly) {
+  if (widthMeasureMode == PilatesMeasureModeExactly &&
+      heightMeasureMode == PilatesMeasureModeExactly) {
     // Don't bother sizing the text if both dimensions are already defined.
     node->setLayoutMeasuredDimension(
-        YGNodeBoundAxis(
+        PilatesNodeBoundAxis(
             node,
-            YGFlexDirectionRow,
+            PilatesFlexDirectionRow,
             availableWidth - marginAxisRow,
             parentWidth,
             parentWidth),
-        YGDimensionWidth);
+        PilatesDimensionWidth);
     node->setLayoutMeasuredDimension(
-        YGNodeBoundAxis(
+        PilatesNodeBoundAxis(
             node,
-            YGFlexDirectionColumn,
+            PilatesFlexDirectionColumn,
             availableHeight - marginAxisColumn,
             parentHeight,
             parentWidth),
-        YGDimensionHeight);
+        PilatesDimensionHeight);
   } else {
     // Measure the text under the current constraints.
-    const YGSize measuredSize = node->getMeasure()(
+    const PilatesSize measuredSize = node->getMeasure()(
         node, innerWidth, widthMeasureMode, innerHeight, heightMeasureMode);
 
     node->setLayoutMeasuredDimension(
-        YGNodeBoundAxis(
+        PilatesNodeBoundAxis(
             node,
-            YGFlexDirectionRow,
-            (widthMeasureMode == YGMeasureModeUndefined ||
-             widthMeasureMode == YGMeasureModeAtMost)
+            PilatesFlexDirectionRow,
+            (widthMeasureMode == PilatesMeasureModeUndefined ||
+             widthMeasureMode == PilatesMeasureModeAtMost)
                 ? measuredSize.width + paddingAndBorderAxisRow
                 : availableWidth - marginAxisRow,
             parentWidth,
             parentWidth),
-        YGDimensionWidth);
+        PilatesDimensionWidth);
 
     node->setLayoutMeasuredDimension(
-        YGNodeBoundAxis(
+        PilatesNodeBoundAxis(
             node,
-            YGFlexDirectionColumn,
-            (heightMeasureMode == YGMeasureModeUndefined ||
-             heightMeasureMode == YGMeasureModeAtMost)
+            PilatesFlexDirectionColumn,
+            (heightMeasureMode == PilatesMeasureModeUndefined ||
+             heightMeasureMode == PilatesMeasureModeAtMost)
                 ? measuredSize.height + paddingAndBorderAxisColumn
                 : availableHeight - marginAxisColumn,
             parentHeight,
             parentWidth),
-        YGDimensionHeight);
+        PilatesDimensionHeight);
   }
 }
 
 // For nodes with no children, use the available values if they were provided,
 // or the minimum size as indicated by the padding and border sizes.
-static void YGNodeEmptyContainerSetMeasuredDimensions(const YGNodeRef node,
+static void PilatesNodeEmptyContainerSetMeasuredDimensions(const PilatesNodeRef node,
                                                       const float availableWidth,
                                                       const float availableHeight,
-                                                      const YGMeasureMode widthMeasureMode,
-                                                      const YGMeasureMode heightMeasureMode,
+                                                      const PilatesMeasureMode widthMeasureMode,
+                                                      const PilatesMeasureMode heightMeasureMode,
                                                       const float parentWidth,
                                                       const float parentHeight) {
   const float paddingAndBorderAxisRow =
-      YGNodePaddingAndBorderForAxis(node, YGFlexDirectionRow, parentWidth);
+      PilatesNodePaddingAndBorderForAxis(node, PilatesFlexDirectionRow, parentWidth);
   const float paddingAndBorderAxisColumn =
-      YGNodePaddingAndBorderForAxis(node, YGFlexDirectionColumn, parentWidth);
+      PilatesNodePaddingAndBorderForAxis(node, PilatesFlexDirectionColumn, parentWidth);
   const float marginAxisRow =
-      node->getMarginForAxis(YGFlexDirectionRow, parentWidth);
+      node->getMarginForAxis(PilatesFlexDirectionRow, parentWidth);
   const float marginAxisColumn =
-      node->getMarginForAxis(YGFlexDirectionColumn, parentWidth);
+      node->getMarginForAxis(PilatesFlexDirectionColumn, parentWidth);
 
   node->setLayoutMeasuredDimension(
-      YGNodeBoundAxis(
+      PilatesNodeBoundAxis(
           node,
-          YGFlexDirectionRow,
-          (widthMeasureMode == YGMeasureModeUndefined ||
-           widthMeasureMode == YGMeasureModeAtMost)
+          PilatesFlexDirectionRow,
+          (widthMeasureMode == PilatesMeasureModeUndefined ||
+           widthMeasureMode == PilatesMeasureModeAtMost)
               ? paddingAndBorderAxisRow
               : availableWidth - marginAxisRow,
           parentWidth,
           parentWidth),
-      YGDimensionWidth);
+      PilatesDimensionWidth);
 
   node->setLayoutMeasuredDimension(
-      YGNodeBoundAxis(
+      PilatesNodeBoundAxis(
           node,
-          YGFlexDirectionColumn,
-          (heightMeasureMode == YGMeasureModeUndefined ||
-           heightMeasureMode == YGMeasureModeAtMost)
+          PilatesFlexDirectionColumn,
+          (heightMeasureMode == PilatesMeasureModeUndefined ||
+           heightMeasureMode == PilatesMeasureModeAtMost)
               ? paddingAndBorderAxisColumn
               : availableHeight - marginAxisColumn,
           parentHeight,
           parentWidth),
-      YGDimensionHeight);
+      PilatesDimensionHeight);
 }
 
-static bool YGNodeFixedSizeSetMeasuredDimensions(const YGNodeRef node,
+static bool PilatesNodeFixedSizeSetMeasuredDimensions(const PilatesNodeRef node,
                                                  const float availableWidth,
                                                  const float availableHeight,
-                                                 const YGMeasureMode widthMeasureMode,
-                                                 const YGMeasureMode heightMeasureMode,
+                                                 const PilatesMeasureMode widthMeasureMode,
+                                                 const PilatesMeasureMode heightMeasureMode,
                                                  const float parentWidth,
                                                  const float parentHeight) {
-  if ((widthMeasureMode == YGMeasureModeAtMost && availableWidth <= 0.0f) ||
-      (heightMeasureMode == YGMeasureModeAtMost && availableHeight <= 0.0f) ||
-      (widthMeasureMode == YGMeasureModeExactly && heightMeasureMode == YGMeasureModeExactly)) {
+  if ((widthMeasureMode == PilatesMeasureModeAtMost && availableWidth <= 0.0f) ||
+      (heightMeasureMode == PilatesMeasureModeAtMost && availableHeight <= 0.0f) ||
+      (widthMeasureMode == PilatesMeasureModeExactly && heightMeasureMode == PilatesMeasureModeExactly)) {
     const float marginAxisColumn =
-        node->getMarginForAxis(YGFlexDirectionColumn, parentWidth);
+        node->getMarginForAxis(PilatesFlexDirectionColumn, parentWidth);
     const float marginAxisRow =
-        node->getMarginForAxis(YGFlexDirectionRow, parentWidth);
+        node->getMarginForAxis(PilatesFlexDirectionRow, parentWidth);
 
     node->setLayoutMeasuredDimension(
-        YGNodeBoundAxis(
+        PilatesNodeBoundAxis(
             node,
-            YGFlexDirectionRow,
-            YGFloatIsUndefined(availableWidth) ||
-                    (widthMeasureMode == YGMeasureModeAtMost &&
+            PilatesFlexDirectionRow,
+            PilatesFloatIsUndefined(availableWidth) ||
+                    (widthMeasureMode == PilatesMeasureModeAtMost &&
                      availableWidth < 0.0f)
                 ? 0.0f
                 : availableWidth - marginAxisRow,
             parentWidth,
             parentWidth),
-        YGDimensionWidth);
+        PilatesDimensionWidth);
 
     node->setLayoutMeasuredDimension(
-        YGNodeBoundAxis(
+        PilatesNodeBoundAxis(
             node,
-            YGFlexDirectionColumn,
-            YGFloatIsUndefined(availableHeight) ||
-                    (heightMeasureMode == YGMeasureModeAtMost &&
+            PilatesFlexDirectionColumn,
+            PilatesFloatIsUndefined(availableHeight) ||
+                    (heightMeasureMode == PilatesMeasureModeAtMost &&
                      availableHeight < 0.0f)
                 ? 0.0f
                 : availableHeight - marginAxisColumn,
             parentHeight,
             parentWidth),
-        YGDimensionHeight);
+        PilatesDimensionHeight);
     return true;
   }
 
   return false;
 }
 
-static void YGZeroOutLayoutRecursivly(const YGNodeRef node) {
-  memset(&(node->getLayout()), 0, sizeof(YGLayout));
+static void PilatesZeroOutLayoutRecursivly(const PilatesNodeRef node) {
+  memset(&(node->getLayout()), 0, sizeof(PilatesLayout));
   node->setHasNewLayout(true);
   node->cloneChildrenIfNeeded();
-  const uint32_t childCount = YGNodeGetChildCount(node);
+  const uint32_t childCount = PilatesNodeGetChildCount(node);
   for (uint32_t i = 0; i < childCount; i++) {
-    const YGNodeRef child = node->getChild(i);
-    YGZeroOutLayoutRecursivly(child);
+    const PilatesNodeRef child = node->getChild(i);
+    PilatesZeroOutLayoutRecursivly(child);
   }
 }
 
-static float YGNodeCalculateAvailableInnerDim(
-    const YGNodeRef node,
-    YGFlexDirection axis,
+static float PilatesNodeCalculateAvailableInnerDim(
+    const PilatesNodeRef node,
+    PilatesFlexDirection axis,
     float availableDim,
     float parentDim) {
-  YGFlexDirection direction =
-      YGFlexDirectionIsRow(axis) ? YGFlexDirectionRow : YGFlexDirectionColumn;
-  YGDimension dimension =
-      YGFlexDirectionIsRow(axis) ? YGDimensionWidth : YGDimensionHeight;
+  PilatesFlexDirection direction =
+      PilatesFlexDirectionIsRow(axis) ? PilatesFlexDirectionRow : PilatesFlexDirectionColumn;
+  PilatesDimension dimension =
+      PilatesFlexDirectionIsRow(axis) ? PilatesDimensionWidth : PilatesDimensionHeight;
 
   const float margin = node->getMarginForAxis(direction, parentDim);
   const float paddingAndBorder =
-      YGNodePaddingAndBorderForAxis(node, direction, parentDim);
+      PilatesNodePaddingAndBorderForAxis(node, direction, parentDim);
 
   float availableInnerDim = availableDim - margin - paddingAndBorder;
   // Max dimension overrides predefined dimension value; Min dimension in turn
   // overrides both of the above
-  if (!YGFloatIsUndefined(availableInnerDim)) {
+  if (!PilatesFloatIsUndefined(availableInnerDim)) {
     // We want to make sure our available height does not violate min and max
     // constraints
     const float minInnerDim =
-        YGResolveValue(node->getStyle().minDimensions[dimension], parentDim) -
+        PilatesResolveValue(node->getStyle().minDimensions[dimension], parentDim) -
         paddingAndBorder;
     const float maxInnerDim =
-        YGResolveValue(node->getStyle().maxDimensions[dimension], parentDim) -
+        PilatesResolveValue(node->getStyle().maxDimensions[dimension], parentDim) -
         paddingAndBorder;
     availableInnerDim =
         fmaxf(fminf(availableInnerDim, maxInnerDim), minInnerDim);
@@ -1563,25 +1563,25 @@ static float YGNodeCalculateAvailableInnerDim(
   return availableInnerDim;
 }
 
-static void YGNodeComputeFlexBasisForChildren(
-    const YGNodeRef node,
+static void PilatesNodeComputeFlexBasisForChildren(
+    const PilatesNodeRef node,
     const float availableInnerWidth,
     const float availableInnerHeight,
-    YGMeasureMode widthMeasureMode,
-    YGMeasureMode heightMeasureMode,
-    YGDirection direction,
-    YGFlexDirection mainAxis,
-    const YGConfigRef config,
+    PilatesMeasureMode widthMeasureMode,
+    PilatesMeasureMode heightMeasureMode,
+    PilatesDirection direction,
+    PilatesFlexDirection mainAxis,
+    const PilatesConfigRef config,
     bool performLayout,
     float& totalOuterFlexBasis) {
-  YGNodeRef singleFlexChild = nullptr;
-  YGVector children = node->getChildren();
-  YGMeasureMode measureModeMainDim =
-      YGFlexDirectionIsRow(mainAxis) ? widthMeasureMode : heightMeasureMode;
+  PilatesNodeRef singleFlexChild = nullptr;
+  PilatesVector children = node->getChildren();
+  PilatesMeasureMode measureModeMainDim =
+      PilatesFlexDirectionIsRow(mainAxis) ? widthMeasureMode : heightMeasureMode;
   // If there is only one child with flexGrow + flexShrink it means we can set
   // the computedFlexBasis to 0 instead of measuring and shrinking / flexing the
   // child to exactly match the remaining space
-  if (measureModeMainDim == YGMeasureModeExactly) {
+  if (measureModeMainDim == PilatesMeasureModeExactly) {
     for (auto child : children) {
       if (singleFlexChild != nullptr) {
         if (child->isNodeFlexible()) {
@@ -1599,33 +1599,33 @@ static void YGNodeComputeFlexBasisForChildren(
 
   for (auto child : children) {
     child->resolveDimension();
-    if (child->getStyle().display == YGDisplayNone) {
-      YGZeroOutLayoutRecursivly(child);
+    if (child->getStyle().display == PilatesDisplayNone) {
+      PilatesZeroOutLayoutRecursivly(child);
       child->setHasNewLayout(true);
       child->setDirty(false);
       continue;
     }
     if (performLayout) {
       // Set the initial position (relative to the parent).
-      const YGDirection childDirection = child->resolveDirection(direction);
-      const float mainDim = YGFlexDirectionIsRow(mainAxis)
+      const PilatesDirection childDirection = child->resolveDirection(direction);
+      const float mainDim = PilatesFlexDirectionIsRow(mainAxis)
           ? availableInnerWidth
           : availableInnerHeight;
-      const float crossDim = YGFlexDirectionIsRow(mainAxis)
+      const float crossDim = PilatesFlexDirectionIsRow(mainAxis)
           ? availableInnerHeight
           : availableInnerWidth;
       child->setPosition(
           childDirection, mainDim, crossDim, availableInnerWidth);
     }
 
-    if (child->getStyle().positionType == YGPositionTypeAbsolute) {
+    if (child->getStyle().positionType == PilatesPositionTypeAbsolute) {
       continue;
     }
     if (child == singleFlexChild) {
       child->setLayoutComputedFlexBasisGeneration(gCurrentGenerationCount);
       child->setLayoutComputedFlexBasis(0);
     } else {
-      YGNodeComputeFlexBasisForChild(
+      PilatesNodeComputeFlexBasisForChild(
           node,
           child,
           availableInnerWidth,
@@ -1645,37 +1645,37 @@ static void YGNodeComputeFlexBasisForChildren(
 
 // This function assumes that all the children of node have their
 // computedFlexBasis properly computed(To do this use
-// YGNodeComputeFlexBasisForChildren function).
-// This function calculates YGCollectFlexItemsRowMeasurement
-static YGCollectFlexItemsRowValues YGCalculateCollectFlexItemsRowValues(
-    const YGNodeRef& node,
-    const YGDirection parentDirection,
+// PilatesNodeComputeFlexBasisForChildren function).
+// This function calculates PilatesCollectFlexItemsRowMeasurement
+static PilatesCollectFlexItemsRowValues PilatesCalculateCollectFlexItemsRowValues(
+    const PilatesNodeRef& node,
+    const PilatesDirection parentDirection,
     const float mainAxisParentSize,
     const float availableInnerWidth,
     const float availableInnerMainDim,
     const uint32_t startOfLineIndex,
     const uint32_t lineCount) {
-  YGCollectFlexItemsRowValues flexAlgoRowMeasurement = {};
+  PilatesCollectFlexItemsRowValues flexAlgoRowMeasurement = {};
   flexAlgoRowMeasurement.relativeChildren.reserve(node->getChildren().size());
 
   float sizeConsumedOnCurrentLineIncludingMinConstraint = 0;
-  const YGFlexDirection mainAxis = YGResolveFlexDirection(
+  const PilatesFlexDirection mainAxis = PilatesResolveFlexDirection(
       node->getStyle().flexDirection, node->resolveDirection(parentDirection));
-  const bool isNodeFlexWrap = node->getStyle().flexWrap != YGWrapNoWrap;
+  const bool isNodeFlexWrap = node->getStyle().flexWrap != PilatesWrapNoWrap;
 
   // Add items to the current line until it's full or we run out of items.
   uint32_t endOfLineIndex = startOfLineIndex;
   for (; endOfLineIndex < node->getChildrenCount(); endOfLineIndex++) {
-    const YGNodeRef child = node->getChild(endOfLineIndex);
-    if (child->getStyle().display == YGDisplayNone ||
-        child->getStyle().positionType == YGPositionTypeAbsolute) {
+    const PilatesNodeRef child = node->getChild(endOfLineIndex);
+    if (child->getStyle().display == PilatesDisplayNone ||
+        child->getStyle().positionType == PilatesPositionTypeAbsolute) {
       continue;
     }
     child->setLineIndex(lineCount);
     const float childMarginMainAxis =
         child->getMarginForAxis(mainAxis, availableInnerWidth);
     const float flexBasisWithMinAndMaxConstraints =
-        YGNodeBoundAxisWithinMinAndMax(
+        PilatesNodeBoundAxisWithinMinAndMax(
             child,
             mainAxis,
             child->getLayout().computedFlexBasis,
@@ -1728,30 +1728,30 @@ static YGCollectFlexItemsRowValues YGCalculateCollectFlexItemsRowValues(
 // It distributes the free space to the flexible items and ensures that the size
 // of the flex items abide the min and max constraints. At the end of this
 // function the child nodes would have proper size. Prior using this function
-// please ensure that YGDistributeFreeSpaceFirstPass is called.
-static float YGDistributeFreeSpaceSecondPass(
-    YGCollectFlexItemsRowValues& collectedFlexItemsValues,
-    const YGNodeRef node,
-    const YGFlexDirection mainAxis,
-    const YGFlexDirection crossAxis,
+// please ensure that PilatesDistributeFreeSpaceFirstPass is called.
+static float PilatesDistributeFreeSpaceSecondPass(
+    PilatesCollectFlexItemsRowValues& collectedFlexItemsValues,
+    const PilatesNodeRef node,
+    const PilatesFlexDirection mainAxis,
+    const PilatesFlexDirection crossAxis,
     const float mainAxisParentSize,
     const float availableInnerMainDim,
     const float availableInnerCrossDim,
     const float availableInnerWidth,
     const float availableInnerHeight,
     const bool flexBasisOverflows,
-    const YGMeasureMode measureModeCrossDim,
+    const PilatesMeasureMode measureModeCrossDim,
     const bool performLayout,
-    const YGConfigRef config) {
+    const PilatesConfigRef config) {
   float childFlexBasis = 0;
   float flexShrinkScaledFactor = 0;
   float flexGrowFactor = 0;
   float deltaFreeSpace = 0;
-  const bool isMainAxisRow = YGFlexDirectionIsRow(mainAxis);
-  const bool isNodeFlexWrap = node->getStyle().flexWrap != YGWrapNoWrap;
+  const bool isMainAxisRow = PilatesFlexDirectionIsRow(mainAxis);
+  const bool isNodeFlexWrap = node->getStyle().flexWrap != PilatesWrapNoWrap;
 
   for (auto currentRelativeChild : collectedFlexItemsValues.relativeChildren) {
-    childFlexBasis = YGNodeBoundAxisWithinMinAndMax(
+    childFlexBasis = PilatesNodeBoundAxisWithinMinAndMax(
         currentRelativeChild,
         mainAxis,
         currentRelativeChild->getLayout().computedFlexBasis,
@@ -1774,7 +1774,7 @@ static float YGDistributeFreeSpaceSecondPass(
                   flexShrinkScaledFactor;
         }
 
-        updatedMainSize = YGNodeBoundAxis(
+        updatedMainSize = PilatesNodeBoundAxis(
             currentRelativeChild,
             mainAxis,
             childSize,
@@ -1786,7 +1786,7 @@ static float YGDistributeFreeSpaceSecondPass(
 
       // Is this child able to grow?
       if (flexGrowFactor != 0) {
-        updatedMainSize = YGNodeBoundAxis(
+        updatedMainSize = PilatesNodeBoundAxis(
             currentRelativeChild,
             mainAxis,
             childFlexBasis +
@@ -1807,60 +1807,60 @@ static float YGDistributeFreeSpaceSecondPass(
 
     float childCrossSize;
     float childMainSize = updatedMainSize + marginMain;
-    YGMeasureMode childCrossMeasureMode;
-    YGMeasureMode childMainMeasureMode = YGMeasureModeExactly;
+    PilatesMeasureMode childCrossMeasureMode;
+    PilatesMeasureMode childMainMeasureMode = PilatesMeasureModeExactly;
 
-    if (!YGFloatIsUndefined(currentRelativeChild->getStyle().aspectRatio)) {
+    if (!PilatesFloatIsUndefined(currentRelativeChild->getStyle().aspectRatio)) {
       childCrossSize = isMainAxisRow ? (childMainSize - marginMain) /
               currentRelativeChild->getStyle().aspectRatio
                                      : (childMainSize - marginMain) *
               currentRelativeChild->getStyle().aspectRatio;
-      childCrossMeasureMode = YGMeasureModeExactly;
+      childCrossMeasureMode = PilatesMeasureModeExactly;
 
       childCrossSize += marginCross;
     } else if (
-        !YGFloatIsUndefined(availableInnerCrossDim) &&
-        !YGNodeIsStyleDimDefined(
+        !PilatesFloatIsUndefined(availableInnerCrossDim) &&
+        !PilatesNodeIsStyleDimDefined(
             currentRelativeChild, crossAxis, availableInnerCrossDim) &&
-        measureModeCrossDim == YGMeasureModeExactly &&
+        measureModeCrossDim == PilatesMeasureModeExactly &&
         !(isNodeFlexWrap && flexBasisOverflows) &&
-        YGNodeAlignItem(node, currentRelativeChild) == YGAlignStretch &&
+        PilatesNodeAlignItem(node, currentRelativeChild) == PilatesAlignStretch &&
         currentRelativeChild->marginLeadingValue(crossAxis).unit !=
-            YGUnitAuto &&
+            PilatesUnitAuto &&
         currentRelativeChild->marginTrailingValue(crossAxis).unit !=
-            YGUnitAuto) {
+            PilatesUnitAuto) {
       childCrossSize = availableInnerCrossDim;
-      childCrossMeasureMode = YGMeasureModeExactly;
-    } else if (!YGNodeIsStyleDimDefined(
+      childCrossMeasureMode = PilatesMeasureModeExactly;
+    } else if (!PilatesNodeIsStyleDimDefined(
                    currentRelativeChild, crossAxis, availableInnerCrossDim)) {
       childCrossSize = availableInnerCrossDim;
-      childCrossMeasureMode = YGFloatIsUndefined(childCrossSize)
-          ? YGMeasureModeUndefined
-          : YGMeasureModeAtMost;
+      childCrossMeasureMode = PilatesFloatIsUndefined(childCrossSize)
+          ? PilatesMeasureModeUndefined
+          : PilatesMeasureModeAtMost;
     } else {
       childCrossSize =
-          YGResolveValue(
+          PilatesResolveValue(
               currentRelativeChild->getResolvedDimension(dim[crossAxis]),
               availableInnerCrossDim) +
           marginCross;
       const bool isLoosePercentageMeasurement =
           currentRelativeChild->getResolvedDimension(dim[crossAxis]).unit ==
-              YGUnitPercent &&
-          measureModeCrossDim != YGMeasureModeExactly;
+              PilatesUnitPercent &&
+          measureModeCrossDim != PilatesMeasureModeExactly;
       childCrossMeasureMode =
-          YGFloatIsUndefined(childCrossSize) || isLoosePercentageMeasurement
-          ? YGMeasureModeUndefined
-          : YGMeasureModeExactly;
+          PilatesFloatIsUndefined(childCrossSize) || isLoosePercentageMeasurement
+          ? PilatesMeasureModeUndefined
+          : PilatesMeasureModeExactly;
     }
 
-    YGConstrainMaxSizeForMode(
+    PilatesConstrainMaxSizeForMode(
         currentRelativeChild,
         mainAxis,
         availableInnerMainDim,
         availableInnerWidth,
         &childMainMeasureMode,
         &childMainSize);
-    YGConstrainMaxSizeForMode(
+    PilatesConstrainMaxSizeForMode(
         currentRelativeChild,
         crossAxis,
         availableInnerCrossDim,
@@ -1869,24 +1869,24 @@ static float YGDistributeFreeSpaceSecondPass(
         &childCrossSize);
 
     const bool requiresStretchLayout =
-        !YGNodeIsStyleDimDefined(
+        !PilatesNodeIsStyleDimDefined(
             currentRelativeChild, crossAxis, availableInnerCrossDim) &&
-        YGNodeAlignItem(node, currentRelativeChild) == YGAlignStretch &&
+        PilatesNodeAlignItem(node, currentRelativeChild) == PilatesAlignStretch &&
         currentRelativeChild->marginLeadingValue(crossAxis).unit !=
-            YGUnitAuto &&
-        currentRelativeChild->marginTrailingValue(crossAxis).unit != YGUnitAuto;
+            PilatesUnitAuto &&
+        currentRelativeChild->marginTrailingValue(crossAxis).unit != PilatesUnitAuto;
 
     const float childWidth = isMainAxisRow ? childMainSize : childCrossSize;
     const float childHeight = !isMainAxisRow ? childMainSize : childCrossSize;
 
-    const YGMeasureMode childWidthMeasureMode =
+    const PilatesMeasureMode childWidthMeasureMode =
         isMainAxisRow ? childMainMeasureMode : childCrossMeasureMode;
-    const YGMeasureMode childHeightMeasureMode =
+    const PilatesMeasureMode childHeightMeasureMode =
         !isMainAxisRow ? childMainMeasureMode : childCrossMeasureMode;
 
     // Recursively call the layout algorithm for this child with the updated
     // main size.
-    YGLayoutNodeInternal(
+    PilatesLayoutNodeInternal(
         currentRelativeChild,
         childWidth,
         childHeight,
@@ -1908,9 +1908,9 @@ static float YGDistributeFreeSpaceSecondPass(
 // It distributes the free space to the flexible items.For those flexible items
 // whose min and max constraints are triggered, those flex item's clamped size
 // is removed from the remaingfreespace.
-static void YGDistributeFreeSpaceFirstPass(
-    YGCollectFlexItemsRowValues& collectedFlexItemsValues,
-    const YGFlexDirection mainAxis,
+static void PilatesDistributeFreeSpaceFirstPass(
+    PilatesCollectFlexItemsRowValues& collectedFlexItemsValues,
+    const PilatesFlexDirection mainAxis,
     const float mainAxisParentSize,
     const float availableInnerMainDim,
     const float availableInnerWidth) {
@@ -1921,7 +1921,7 @@ static void YGDistributeFreeSpaceFirstPass(
   float deltaFreeSpace = 0;
 
   for (auto currentRelativeChild : collectedFlexItemsValues.relativeChildren) {
-    float childFlexBasis = YGNodeBoundAxisWithinMinAndMax(
+    float childFlexBasis = PilatesNodeBoundAxisWithinMinAndMax(
         currentRelativeChild,
         mainAxis,
         currentRelativeChild->getLayout().computedFlexBasis,
@@ -1937,7 +1937,7 @@ static void YGDistributeFreeSpaceFirstPass(
             collectedFlexItemsValues.remainingFreeSpace /
                 collectedFlexItemsValues.totalFlexShrinkScaledFactors *
                 flexShrinkScaledFactor;
-        boundMainSize = YGNodeBoundAxis(
+        boundMainSize = PilatesNodeBoundAxis(
             currentRelativeChild,
             mainAxis,
             baseMainSize,
@@ -1963,7 +1963,7 @@ static void YGDistributeFreeSpaceFirstPass(
         baseMainSize = childFlexBasis +
             collectedFlexItemsValues.remainingFreeSpace /
                 collectedFlexItemsValues.totalFlexGrowFactors * flexGrowFactor;
-        boundMainSize = YGNodeBoundAxis(
+        boundMainSize = PilatesNodeBoundAxis(
             currentRelativeChild,
             mainAxis,
             baseMainSize,
@@ -2000,7 +2000,7 @@ static void YGDistributeFreeSpaceFirstPass(
 //
 // This two pass approach for resolving min/max constraints deviates from
 // the spec. The
-// spec (https://www.w3.org/TR/YG-flexbox-1/#resolve-flexible-lengths)
+// spec (https://www.w3.org/TR/Pilates-flexbox-1/#resolve-flexible-lengths)
 // describes a process
 // that needs to be repeated a variable number of times. The algorithm
 // implemented here
@@ -2011,23 +2011,23 @@ static void YGDistributeFreeSpaceFirstPass(
 // At the end of this function the child nodes would have the proper size
 // assigned to them.
 //
-static void YGResolveFlexibleLength(
-    const YGNodeRef node,
-    YGCollectFlexItemsRowValues& collectedFlexItemsValues,
-    const YGFlexDirection mainAxis,
-    const YGFlexDirection crossAxis,
+static void PilatesResolveFlexibleLength(
+    const PilatesNodeRef node,
+    PilatesCollectFlexItemsRowValues& collectedFlexItemsValues,
+    const PilatesFlexDirection mainAxis,
+    const PilatesFlexDirection crossAxis,
     const float mainAxisParentSize,
     const float availableInnerMainDim,
     const float availableInnerCrossDim,
     const float availableInnerWidth,
     const float availableInnerHeight,
     const bool flexBasisOverflows,
-    const YGMeasureMode measureModeCrossDim,
+    const PilatesMeasureMode measureModeCrossDim,
     const bool performLayout,
-    const YGConfigRef config) {
+    const PilatesConfigRef config) {
   const float originalFreeSpace = collectedFlexItemsValues.remainingFreeSpace;
   // First pass: detect the flex items whose min/max constraints trigger
-  YGDistributeFreeSpaceFirstPass(
+  PilatesDistributeFreeSpaceFirstPass(
       collectedFlexItemsValues,
       mainAxis,
       mainAxisParentSize,
@@ -2035,7 +2035,7 @@ static void YGResolveFlexibleLength(
       availableInnerWidth);
 
   // Second pass: resolve the sizes of the flexible items
-  const float distributedFreeSpace = YGDistributeFreeSpaceSecondPass(
+  const float distributedFreeSpace = PilatesDistributeFreeSpaceSecondPass(
       collectedFlexItemsValues,
       node,
       mainAxis,
@@ -2054,32 +2054,32 @@ static void YGResolveFlexibleLength(
       originalFreeSpace - distributedFreeSpace;
 }
 
-static void YGJustifyMainAxis(
-    const YGNodeRef node,
-    YGCollectFlexItemsRowValues& collectedFlexItemsValues,
+static void PilatesJustifyMainAxis(
+    const PilatesNodeRef node,
+    PilatesCollectFlexItemsRowValues& collectedFlexItemsValues,
     const uint32_t& startOfLineIndex,
-    const YGFlexDirection& mainAxis,
-    const YGFlexDirection& crossAxis,
-    const YGMeasureMode& measureModeMainDim,
-    const YGMeasureMode& measureModeCrossDim,
+    const PilatesFlexDirection& mainAxis,
+    const PilatesFlexDirection& crossAxis,
+    const PilatesMeasureMode& measureModeMainDim,
+    const PilatesMeasureMode& measureModeCrossDim,
     const float& mainAxisParentSize,
     const float& parentWidth,
     const float& availableInnerMainDim,
     const float& availableInnerCrossDim,
     const float& availableInnerWidth,
     const bool& performLayout) {
-  const YGStyle style = node->getStyle();
+  const PilatesStyle style = node->getStyle();
 
   // If we are using "at most" rules in the main axis. Calculate the remaining
   // space when constraint by the min size defined for the main axis.
-  if (measureModeMainDim == YGMeasureModeAtMost &&
+  if (measureModeMainDim == PilatesMeasureModeAtMost &&
       collectedFlexItemsValues.remainingFreeSpace > 0) {
-    if (style.minDimensions[dim[mainAxis]].unit != YGUnitUndefined &&
-        YGResolveValue(
+    if (style.minDimensions[dim[mainAxis]].unit != PilatesUnitUndefined &&
+        PilatesResolveValue(
             style.minDimensions[dim[mainAxis]], mainAxisParentSize) >= 0) {
       collectedFlexItemsValues.remainingFreeSpace = fmaxf(
           0,
-          YGResolveValue(
+          PilatesResolveValue(
               style.minDimensions[dim[mainAxis]], mainAxisParentSize) -
               (availableInnerMainDim -
                collectedFlexItemsValues.remainingFreeSpace));
@@ -2092,12 +2092,12 @@ static void YGJustifyMainAxis(
   for (uint32_t i = startOfLineIndex;
        i < collectedFlexItemsValues.endOfLineIndex;
        i++) {
-    const YGNodeRef child = node->getChild(i);
-    if (child->getStyle().positionType == YGPositionTypeRelative) {
-      if (child->marginLeadingValue(mainAxis).unit == YGUnitAuto) {
+    const PilatesNodeRef child = node->getChild(i);
+    if (child->getStyle().positionType == PilatesPositionTypeRelative) {
+      if (child->marginLeadingValue(mainAxis).unit == PilatesUnitAuto) {
         numberOfAutoMarginsOnCurrentLine++;
       }
-      if (child->marginTrailingValue(mainAxis).unit == YGUnitAuto) {
+      if (child->marginTrailingValue(mainAxis).unit == PilatesUnitAuto) {
         numberOfAutoMarginsOnCurrentLine++;
       }
     }
@@ -2108,17 +2108,17 @@ static void YGJustifyMainAxis(
   // and the space between each two elements.
   float leadingMainDim = 0;
   float betweenMainDim = 0;
-  const YGJustify justifyContent = node->getStyle().justifyContent;
+  const PilatesJustify justifyContent = node->getStyle().justifyContent;
 
   if (numberOfAutoMarginsOnCurrentLine == 0) {
     switch (justifyContent) {
-      case YGJustifyCenter:
+      case PilatesJustifyCenter:
         leadingMainDim = collectedFlexItemsValues.remainingFreeSpace / 2;
         break;
-      case YGJustifyFlexEnd:
+      case PilatesJustifyFlexEnd:
         leadingMainDim = collectedFlexItemsValues.remainingFreeSpace;
         break;
-      case YGJustifySpaceBetween:
+      case PilatesJustifySpaceBetween:
         if (collectedFlexItemsValues.itemsOnLine > 1) {
           betweenMainDim =
               fmaxf(collectedFlexItemsValues.remainingFreeSpace, 0) /
@@ -2127,19 +2127,19 @@ static void YGJustifyMainAxis(
           betweenMainDim = 0;
         }
         break;
-      case YGJustifySpaceEvenly:
+      case PilatesJustifySpaceEvenly:
         // Space is distributed evenly across all elements
         betweenMainDim = collectedFlexItemsValues.remainingFreeSpace /
             (collectedFlexItemsValues.itemsOnLine + 1);
         leadingMainDim = betweenMainDim;
         break;
-      case YGJustifySpaceAround:
+      case PilatesJustifySpaceAround:
         // Space on the edges is half of the space between elements
         betweenMainDim = collectedFlexItemsValues.remainingFreeSpace /
             collectedFlexItemsValues.itemsOnLine;
         leadingMainDim = betweenMainDim / 2;
         break;
-      case YGJustifyFlexStart:
+      case PilatesJustifyFlexStart:
         break;
     }
   }
@@ -2153,13 +2153,13 @@ static void YGJustifyMainAxis(
   for (uint32_t i = startOfLineIndex;
        i < collectedFlexItemsValues.endOfLineIndex;
        i++) {
-    const YGNodeRef child = node->getChild(i);
-    const YGStyle childStyle = child->getStyle();
-    const YGLayout childLayout = child->getLayout();
-    if (childStyle.display == YGDisplayNone) {
+    const PilatesNodeRef child = node->getChild(i);
+    const PilatesStyle childStyle = child->getStyle();
+    const PilatesLayout childLayout = child->getLayout();
+    if (childStyle.display == PilatesDisplayNone) {
       continue;
     }
-    if (childStyle.positionType == YGPositionTypeAbsolute &&
+    if (childStyle.positionType == PilatesPositionTypeAbsolute &&
         child->isLeadingPositionDefined(mainAxis)) {
       if (performLayout) {
         // In case the child is position absolute and has left/top being
@@ -2175,8 +2175,8 @@ static void YGJustifyMainAxis(
       // Now that we placed the element, we need to update the variables.
       // We need to do that only for relative elements. Absolute elements
       // do not take part in that phase.
-      if (childStyle.positionType == YGPositionTypeRelative) {
-        if (child->marginLeadingValue(mainAxis).unit == YGUnitAuto) {
+      if (childStyle.positionType == PilatesPositionTypeRelative) {
+        if (child->marginLeadingValue(mainAxis).unit == PilatesUnitAuto) {
           collectedFlexItemsValues.mainDim +=
               collectedFlexItemsValues.remainingFreeSpace /
               numberOfAutoMarginsOnCurrentLine;
@@ -2189,18 +2189,18 @@ static void YGJustifyMainAxis(
               pos[mainAxis]);
         }
 
-        if (child->marginTrailingValue(mainAxis).unit == YGUnitAuto) {
+        if (child->marginTrailingValue(mainAxis).unit == PilatesUnitAuto) {
           collectedFlexItemsValues.mainDim +=
               collectedFlexItemsValues.remainingFreeSpace /
               numberOfAutoMarginsOnCurrentLine;
         }
         bool canSkipFlex =
-            !performLayout && measureModeCrossDim == YGMeasureModeExactly;
+            !performLayout && measureModeCrossDim == PilatesMeasureModeExactly;
         if (canSkipFlex) {
           // If we skipped the flex step, then we can't rely on the
           // measuredDims because
           // they weren't computed. This means we can't call
-          // YGNodeDimWithMargin.
+          // PilatesNodeDimWithMargin.
           collectedFlexItemsValues.mainDim += betweenMainDim +
               child->getMarginForAxis(mainAxis, availableInnerWidth) +
               childLayout.computedFlexBasis;
@@ -2209,13 +2209,13 @@ static void YGJustifyMainAxis(
           // The main dimension is the sum of all the elements dimension plus
           // the spacing.
           collectedFlexItemsValues.mainDim += betweenMainDim +
-              YGNodeDimWithMargin(child, mainAxis, availableInnerWidth);
+              PilatesNodeDimWithMargin(child, mainAxis, availableInnerWidth);
 
           // The cross dimension is the max of the elements dimension since
           // there can only be one element in that cross dimension.
           collectedFlexItemsValues.crossDim = fmaxf(
               collectedFlexItemsValues.crossDim,
-              YGNodeDimWithMargin(child, crossAxis, availableInnerWidth));
+              PilatesNodeDimWithMargin(child, crossAxis, availableInnerWidth));
         }
       } else if (performLayout) {
         child->setLayoutPosition(
@@ -2232,7 +2232,7 @@ static void YGJustifyMainAxis(
 //
 // This is the main routine that implements a subset of the flexbox layout
 // algorithm
-// described in the W3C YG documentation: https://www.w3.org/TR/YG3-flexbox/.
+// described in the W3C Pilates documentation: https://www.w3.org/TR/Pilates3-flexbox/.
 //
 // Limitations of this algorithm, compared to the full standard:
 //  * Display property is always assumed to be 'flex' except for Text nodes,
@@ -2269,7 +2269,7 @@ static void YGJustifyMainAxis(
 //    - node: current node to be sized and layed out
 //    - availableWidth & availableHeight: available size to be used for sizing
 //    the node
-//      or YGUndefined if the size is not available; interpretation depends on
+//      or PilatesUndefined if the size is not available; interpretation depends on
 //      layout
 //      flags
 //    - parentDirection: the inline (text) direction within the parent
@@ -2305,71 +2305,71 @@ static void YGJustifyMainAxis(
 //    support default
 //    minimum main sizes (see above for details). Each of our measure modes maps
 //    to a layout mode
-//    from the spec (https://www.w3.org/TR/YG3-sizing/#terms):
-//      - YGMeasureModeUndefined: max content
-//      - YGMeasureModeExactly: fill available
-//      - YGMeasureModeAtMost: fit content
+//    from the spec (https://www.w3.org/TR/Pilates3-sizing/#terms):
+//      - PilatesMeasureModeUndefined: max content
+//      - PilatesMeasureModeExactly: fill available
+//      - PilatesMeasureModeAtMost: fit content
 //
-//    When calling YGNodelayoutImpl and YGLayoutNodeInternal, if the caller passes
+//    When calling PilatesNodelayoutImpl and PilatesLayoutNodeInternal, if the caller passes
 //    an available size of
-//    undefined then it must also pass a measure mode of YGMeasureModeUndefined
+//    undefined then it must also pass a measure mode of PilatesMeasureModeUndefined
 //    in that dimension.
 //
-static void YGNodelayoutImpl(const YGNodeRef node,
+static void PilatesNodelayoutImpl(const PilatesNodeRef node,
                              const float availableWidth,
                              const float availableHeight,
-                             const YGDirection parentDirection,
-                             const YGMeasureMode widthMeasureMode,
-                             const YGMeasureMode heightMeasureMode,
+                             const PilatesDirection parentDirection,
+                             const PilatesMeasureMode widthMeasureMode,
+                             const PilatesMeasureMode heightMeasureMode,
                              const float parentWidth,
                              const float parentHeight,
                              const bool performLayout,
-                             const YGConfigRef config) {
-  YGAssertWithNode(node,
-                   YGFloatIsUndefined(availableWidth) ? widthMeasureMode == YGMeasureModeUndefined
+                             const PilatesConfigRef config) {
+  PilatesAssertWithNode(node,
+                   PilatesFloatIsUndefined(availableWidth) ? widthMeasureMode == PilatesMeasureModeUndefined
                                                       : true,
                    "availableWidth is indefinite so widthMeasureMode must be "
                    "PilatesMeasureModeUndefined");
-  YGAssertWithNode(node,
-                   YGFloatIsUndefined(availableHeight) ? heightMeasureMode == YGMeasureModeUndefined
+  PilatesAssertWithNode(node,
+                   PilatesFloatIsUndefined(availableHeight) ? heightMeasureMode == PilatesMeasureModeUndefined
                                                        : true,
                    "availableHeight is indefinite so heightMeasureMode must be "
                    "PilatesMeasureModeUndefined");
 
   // Set the resolved resolution in the node's layout.
-  const YGDirection direction = node->resolveDirection(parentDirection);
+  const PilatesDirection direction = node->resolveDirection(parentDirection);
   node->setLayoutDirection(direction);
 
-  const YGFlexDirection flexRowDirection = YGResolveFlexDirection(YGFlexDirectionRow, direction);
-  const YGFlexDirection flexColumnDirection =
-      YGResolveFlexDirection(YGFlexDirectionColumn, direction);
+  const PilatesFlexDirection flexRowDirection = PilatesResolveFlexDirection(PilatesFlexDirectionRow, direction);
+  const PilatesFlexDirection flexColumnDirection =
+      PilatesResolveFlexDirection(PilatesFlexDirectionColumn, direction);
 
   node->setLayoutMargin(
-      node->getLeadingMargin(flexRowDirection, parentWidth), YGEdgeStart);
+      node->getLeadingMargin(flexRowDirection, parentWidth), PilatesEdgeStart);
   node->setLayoutMargin(
-      node->getTrailingMargin(flexRowDirection, parentWidth), YGEdgeEnd);
+      node->getTrailingMargin(flexRowDirection, parentWidth), PilatesEdgeEnd);
   node->setLayoutMargin(
-      node->getLeadingMargin(flexColumnDirection, parentWidth), YGEdgeTop);
+      node->getLeadingMargin(flexColumnDirection, parentWidth), PilatesEdgeTop);
   node->setLayoutMargin(
-      node->getTrailingMargin(flexColumnDirection, parentWidth), YGEdgeBottom);
+      node->getTrailingMargin(flexColumnDirection, parentWidth), PilatesEdgeBottom);
 
-  node->setLayoutBorder(node->getLeadingBorder(flexRowDirection), YGEdgeStart);
-  node->setLayoutBorder(node->getTrailingBorder(flexRowDirection), YGEdgeEnd);
-  node->setLayoutBorder(node->getLeadingBorder(flexColumnDirection), YGEdgeTop);
+  node->setLayoutBorder(node->getLeadingBorder(flexRowDirection), PilatesEdgeStart);
+  node->setLayoutBorder(node->getTrailingBorder(flexRowDirection), PilatesEdgeEnd);
+  node->setLayoutBorder(node->getLeadingBorder(flexColumnDirection), PilatesEdgeTop);
   node->setLayoutBorder(
-      node->getTrailingBorder(flexColumnDirection), YGEdgeBottom);
+      node->getTrailingBorder(flexColumnDirection), PilatesEdgeBottom);
 
   node->setLayoutPadding(
-      node->getLeadingPadding(flexRowDirection, parentWidth), YGEdgeStart);
+      node->getLeadingPadding(flexRowDirection, parentWidth), PilatesEdgeStart);
   node->setLayoutPadding(
-      node->getTrailingPadding(flexRowDirection, parentWidth), YGEdgeEnd);
+      node->getTrailingPadding(flexRowDirection, parentWidth), PilatesEdgeEnd);
   node->setLayoutPadding(
-      node->getLeadingPadding(flexColumnDirection, parentWidth), YGEdgeTop);
+      node->getLeadingPadding(flexColumnDirection, parentWidth), PilatesEdgeTop);
   node->setLayoutPadding(
-      node->getTrailingPadding(flexColumnDirection, parentWidth), YGEdgeBottom);
+      node->getTrailingPadding(flexColumnDirection, parentWidth), PilatesEdgeBottom);
 
   if (node->getMeasure() != nullptr) {
-    YGNodeWithMeasureFuncSetMeasuredDimensions(node,
+    PilatesNodeWithMeasureFuncSetMeasuredDimensions(node,
                                                availableWidth,
                                                availableHeight,
                                                widthMeasureMode,
@@ -2379,9 +2379,9 @@ static void YGNodelayoutImpl(const YGNodeRef node,
     return;
   }
 
-  const uint32_t childCount = YGNodeGetChildCount(node);
+  const uint32_t childCount = PilatesNodeGetChildCount(node);
   if (childCount == 0) {
-    YGNodeEmptyContainerSetMeasuredDimensions(node,
+    PilatesNodeEmptyContainerSetMeasuredDimensions(node,
                                               availableWidth,
                                               availableHeight,
                                               widthMeasureMode,
@@ -2393,7 +2393,7 @@ static void YGNodelayoutImpl(const YGNodeRef node,
 
   // If we're not being asked to perform a full layout we can skip the algorithm if we already know
   // the size
-  if (!performLayout && YGNodeFixedSizeSetMeasuredDimensions(node,
+  if (!performLayout && PilatesNodeFixedSizeSetMeasuredDimensions(node,
                                                              availableWidth,
                                                              availableHeight,
                                                              widthMeasureMode,
@@ -2409,23 +2409,23 @@ static void YGNodelayoutImpl(const YGNodeRef node,
   node->setLayoutHadOverflow(false);
 
   // STEP 1: CALCULATE VALUES FOR REMAINDER OF ALGORITHM
-  const YGFlexDirection mainAxis =
-      YGResolveFlexDirection(node->getStyle().flexDirection, direction);
-  const YGFlexDirection crossAxis = YGFlexDirectionCross(mainAxis, direction);
-  const bool isMainAxisRow = YGFlexDirectionIsRow(mainAxis);
-  const bool isNodeFlexWrap = node->getStyle().flexWrap != YGWrapNoWrap;
+  const PilatesFlexDirection mainAxis =
+      PilatesResolveFlexDirection(node->getStyle().flexDirection, direction);
+  const PilatesFlexDirection crossAxis = PilatesFlexDirectionCross(mainAxis, direction);
+  const bool isMainAxisRow = PilatesFlexDirectionIsRow(mainAxis);
+  const bool isNodeFlexWrap = node->getStyle().flexWrap != PilatesWrapNoWrap;
 
   const float mainAxisParentSize = isMainAxisRow ? parentWidth : parentHeight;
   const float crossAxisParentSize = isMainAxisRow ? parentHeight : parentWidth;
 
   const float leadingPaddingAndBorderCross =
       node->getLeadingPaddingAndBorder(crossAxis, parentWidth);
-  const float paddingAndBorderAxisMain = YGNodePaddingAndBorderForAxis(node, mainAxis, parentWidth);
+  const float paddingAndBorderAxisMain = PilatesNodePaddingAndBorderForAxis(node, mainAxis, parentWidth);
   const float paddingAndBorderAxisCross =
-      YGNodePaddingAndBorderForAxis(node, crossAxis, parentWidth);
+      PilatesNodePaddingAndBorderForAxis(node, crossAxis, parentWidth);
 
-  YGMeasureMode measureModeMainDim = isMainAxisRow ? widthMeasureMode : heightMeasureMode;
-  YGMeasureMode measureModeCrossDim = isMainAxisRow ? heightMeasureMode : widthMeasureMode;
+  PilatesMeasureMode measureModeMainDim = isMainAxisRow ? widthMeasureMode : heightMeasureMode;
+  PilatesMeasureMode measureModeCrossDim = isMainAxisRow ? heightMeasureMode : widthMeasureMode;
 
   const float paddingAndBorderAxisRow =
       isMainAxisRow ? paddingAndBorderAxisMain : paddingAndBorderAxisCross;
@@ -2433,25 +2433,25 @@ static void YGNodelayoutImpl(const YGNodeRef node,
       isMainAxisRow ? paddingAndBorderAxisCross : paddingAndBorderAxisMain;
 
   const float marginAxisRow =
-      node->getMarginForAxis(YGFlexDirectionRow, parentWidth);
+      node->getMarginForAxis(PilatesFlexDirectionRow, parentWidth);
   const float marginAxisColumn =
-      node->getMarginForAxis(YGFlexDirectionColumn, parentWidth);
+      node->getMarginForAxis(PilatesFlexDirectionColumn, parentWidth);
 
   const float minInnerWidth =
-      YGResolveValue(
-          node->getStyle().minDimensions[YGDimensionWidth], parentWidth) -
+      PilatesResolveValue(
+          node->getStyle().minDimensions[PilatesDimensionWidth], parentWidth) -
       paddingAndBorderAxisRow;
   const float maxInnerWidth =
-      YGResolveValue(
-          node->getStyle().maxDimensions[YGDimensionWidth], parentWidth) -
+      PilatesResolveValue(
+          node->getStyle().maxDimensions[PilatesDimensionWidth], parentWidth) -
       paddingAndBorderAxisRow;
   const float minInnerHeight =
-      YGResolveValue(
-          node->getStyle().minDimensions[YGDimensionHeight], parentHeight) -
+      PilatesResolveValue(
+          node->getStyle().minDimensions[PilatesDimensionHeight], parentHeight) -
       paddingAndBorderAxisColumn;
   const float maxInnerHeight =
-      YGResolveValue(
-          node->getStyle().maxDimensions[YGDimensionHeight], parentHeight) -
+      PilatesResolveValue(
+          node->getStyle().maxDimensions[PilatesDimensionHeight], parentHeight) -
       paddingAndBorderAxisColumn;
 
   const float minInnerMainDim = isMainAxisRow ? minInnerWidth : minInnerHeight;
@@ -2459,10 +2459,10 @@ static void YGNodelayoutImpl(const YGNodeRef node,
 
   // STEP 2: DETERMINE AVAILABLE SIZE IN MAIN AND CROSS DIRECTIONS
 
-  float availableInnerWidth = YGNodeCalculateAvailableInnerDim(
-      node, YGFlexDirectionRow, availableWidth, parentWidth);
-  float availableInnerHeight = YGNodeCalculateAvailableInnerDim(
-      node, YGFlexDirectionColumn, availableHeight, parentHeight);
+  float availableInnerWidth = PilatesNodeCalculateAvailableInnerDim(
+      node, PilatesFlexDirectionRow, availableWidth, parentWidth);
+  float availableInnerHeight = PilatesNodeCalculateAvailableInnerDim(
+      node, PilatesFlexDirectionColumn, availableHeight, parentHeight);
 
   float availableInnerMainDim =
       isMainAxisRow ? availableInnerWidth : availableInnerHeight;
@@ -2473,7 +2473,7 @@ static void YGNodelayoutImpl(const YGNodeRef node,
 
   // STEP 3: DETERMINE FLEX BASIS FOR EACH ITEM
 
-  YGNodeComputeFlexBasisForChildren(
+  PilatesNodeComputeFlexBasisForChildren(
       node,
       availableInnerWidth,
       availableInnerHeight,
@@ -2485,12 +2485,12 @@ static void YGNodelayoutImpl(const YGNodeRef node,
       performLayout,
       totalOuterFlexBasis);
 
-  const bool flexBasisOverflows = measureModeMainDim == YGMeasureModeUndefined
+  const bool flexBasisOverflows = measureModeMainDim == PilatesMeasureModeUndefined
       ? false
       : totalOuterFlexBasis > availableInnerMainDim;
   if (isNodeFlexWrap && flexBasisOverflows &&
-      measureModeMainDim == YGMeasureModeAtMost) {
-    measureModeMainDim = YGMeasureModeExactly;
+      measureModeMainDim == PilatesMeasureModeAtMost) {
+    measureModeMainDim = PilatesMeasureModeExactly;
   }
   // STEP 4: COLLECT FLEX ITEMS INTO FLEX LINES
 
@@ -2506,10 +2506,10 @@ static void YGNodelayoutImpl(const YGNodeRef node,
 
   // Max main dimension of all the lines.
   float maxLineMainDim = 0;
-  YGCollectFlexItemsRowValues collectedFlexItemsValues;
+  PilatesCollectFlexItemsRowValues collectedFlexItemsValues;
   for (; endOfLineIndex < childCount;
        lineCount++, startOfLineIndex = endOfLineIndex) {
-    collectedFlexItemsValues = YGCalculateCollectFlexItemsRowValues(
+    collectedFlexItemsValues = PilatesCalculateCollectFlexItemsRowValues(
         node,
         parentDirection,
         mainAxisParentSize,
@@ -2522,7 +2522,7 @@ static void YGNodelayoutImpl(const YGNodeRef node,
     // If we don't need to measure the cross axis, we can skip the entire flex
     // step.
     const bool canSkipFlex =
-        !performLayout && measureModeCrossDim == YGMeasureModeExactly;
+        !performLayout && measureModeCrossDim == PilatesMeasureModeExactly;
 
     // STEP 5: RESOLVING FLEXIBLE LENGTHS ON MAIN AXIS
     // Calculate the remaining available space that needs to be allocated.
@@ -2531,13 +2531,13 @@ static void YGNodelayoutImpl(const YGNodeRef node,
 
     bool sizeBasedOnContent = false;
     // If we don't measure with exact main dimension we want to ensure we don't violate min and max
-    if (measureModeMainDim != YGMeasureModeExactly) {
-      if (!YGFloatIsUndefined(minInnerMainDim) &&
+    if (measureModeMainDim != PilatesMeasureModeExactly) {
+      if (!PilatesFloatIsUndefined(minInnerMainDim) &&
           collectedFlexItemsValues.sizeConsumedOnCurrentLine <
               minInnerMainDim) {
         availableInnerMainDim = minInnerMainDim;
       } else if (
-          !YGFloatIsUndefined(maxInnerMainDim) &&
+          !PilatesFloatIsUndefined(maxInnerMainDim) &&
           collectedFlexItemsValues.sizeConsumedOnCurrentLine >
               maxInnerMainDim) {
         availableInnerMainDim = maxInnerMainDim;
@@ -2559,7 +2559,7 @@ static void YGNodelayoutImpl(const YGNodeRef node,
       }
     }
 
-    if (!sizeBasedOnContent && !YGFloatIsUndefined(availableInnerMainDim)) {
+    if (!sizeBasedOnContent && !PilatesFloatIsUndefined(availableInnerMainDim)) {
       collectedFlexItemsValues.remainingFreeSpace = availableInnerMainDim -
           collectedFlexItemsValues.sizeConsumedOnCurrentLine;
     } else if (collectedFlexItemsValues.sizeConsumedOnCurrentLine < 0) {
@@ -2572,7 +2572,7 @@ static void YGNodelayoutImpl(const YGNodeRef node,
     }
 
     if (!canSkipFlex) {
-      YGResolveFlexibleLength(
+      PilatesResolveFlexibleLength(
           node,
           collectedFlexItemsValues,
           mainAxis,
@@ -2601,7 +2601,7 @@ static void YGNodelayoutImpl(const YGNodeRef node,
     // that are aligned "stretch". We need to compute these stretch values and
     // set the final positions.
 
-    YGJustifyMainAxis(
+    PilatesJustifyMainAxis(
         node,
         collectedFlexItemsValues,
         startOfLineIndex,
@@ -2617,11 +2617,11 @@ static void YGNodelayoutImpl(const YGNodeRef node,
         performLayout);
 
     float containerCrossAxis = availableInnerCrossDim;
-    if (measureModeCrossDim == YGMeasureModeUndefined ||
-        measureModeCrossDim == YGMeasureModeAtMost) {
+    if (measureModeCrossDim == PilatesMeasureModeUndefined ||
+        measureModeCrossDim == PilatesMeasureModeAtMost) {
       // Compute the cross axis from the max cross dimension of the children.
       containerCrossAxis =
-          YGNodeBoundAxis(
+          PilatesNodeBoundAxis(
               node,
               crossAxis,
               collectedFlexItemsValues.crossDim + paddingAndBorderAxisCross,
@@ -2631,13 +2631,13 @@ static void YGNodelayoutImpl(const YGNodeRef node,
     }
 
     // If there's no flex wrap, the cross dimension is defined by the container.
-    if (!isNodeFlexWrap && measureModeCrossDim == YGMeasureModeExactly) {
+    if (!isNodeFlexWrap && measureModeCrossDim == PilatesMeasureModeExactly) {
       collectedFlexItemsValues.crossDim = availableInnerCrossDim;
     }
 
     // Clamp to the min/max size specified on the container.
     collectedFlexItemsValues.crossDim =
-        YGNodeBoundAxis(
+        PilatesNodeBoundAxis(
             node,
             crossAxis,
             collectedFlexItemsValues.crossDim + paddingAndBorderAxisCross,
@@ -2649,11 +2649,11 @@ static void YGNodelayoutImpl(const YGNodeRef node,
     // We can skip child alignment if we're just measuring the container.
     if (performLayout) {
       for (uint32_t i = startOfLineIndex; i < endOfLineIndex; i++) {
-        const YGNodeRef child = node->getChild(i);
-        if (child->getStyle().display == YGDisplayNone) {
+        const PilatesNodeRef child = node->getChild(i);
+        if (child->getStyle().display == PilatesDisplayNone) {
           continue;
         }
-        if (child->getStyle().positionType == YGPositionTypeAbsolute) {
+        if (child->getStyle().positionType == PilatesPositionTypeAbsolute) {
           // If the child is absolutely positioned and has a
           // top/left/bottom/right set, override
           // all the previously computed positions to set it correctly.
@@ -2668,7 +2668,7 @@ static void YGNodelayoutImpl(const YGNodeRef node,
           }
           // If leading position is not defined or calculations result in Nan, default to border + margin
           if (!isChildLeadingPosDefined ||
-              YGFloatIsUndefined(child->getLayout().position[pos[crossAxis]])) {
+              PilatesFloatIsUndefined(child->getLayout().position[pos[crossAxis]])) {
             child->setLayoutPosition(
                 node->getLeadingBorder(crossAxis) +
                     child->getLeadingMargin(crossAxis, availableInnerWidth),
@@ -2680,22 +2680,22 @@ static void YGNodelayoutImpl(const YGNodeRef node,
           // For a relative children, we're either using alignItems (parent) or
           // alignSelf (child) in order to determine the position in the cross
           // axis
-          const YGAlign alignItem = YGNodeAlignItem(node, child);
+          const PilatesAlign alignItem = PilatesNodeAlignItem(node, child);
 
           // If the child uses align stretch, we need to lay it out one more
           // time, this time
           // forcing the cross-axis size to be the computed cross size for the
           // current line.
-          if (alignItem == YGAlignStretch &&
-              child->marginLeadingValue(crossAxis).unit != YGUnitAuto &&
-              child->marginTrailingValue(crossAxis).unit != YGUnitAuto) {
+          if (alignItem == PilatesAlignStretch &&
+              child->marginLeadingValue(crossAxis).unit != PilatesUnitAuto &&
+              child->marginTrailingValue(crossAxis).unit != PilatesUnitAuto) {
             // If the child defines a definite size for its cross axis, there's
             // no need to stretch.
-            if (!YGNodeIsStyleDimDefined(child, crossAxis, availableInnerCrossDim)) {
+            if (!PilatesNodeIsStyleDimDefined(child, crossAxis, availableInnerCrossDim)) {
               float childMainSize =
                   child->getLayout().measuredDimensions[dim[mainAxis]];
               float childCrossSize =
-                  !YGFloatIsUndefined(child->getStyle().aspectRatio)
+                  !PilatesFloatIsUndefined(child->getStyle().aspectRatio)
                   ? ((child->getMarginForAxis(crossAxis, availableInnerWidth) +
                       (isMainAxisRow
                            ? childMainSize / child->getStyle().aspectRatio
@@ -2705,15 +2705,15 @@ static void YGNodelayoutImpl(const YGNodeRef node,
               childMainSize +=
                   child->getMarginForAxis(mainAxis, availableInnerWidth);
 
-              YGMeasureMode childMainMeasureMode = YGMeasureModeExactly;
-              YGMeasureMode childCrossMeasureMode = YGMeasureModeExactly;
-              YGConstrainMaxSizeForMode(child,
+              PilatesMeasureMode childMainMeasureMode = PilatesMeasureModeExactly;
+              PilatesMeasureMode childCrossMeasureMode = PilatesMeasureModeExactly;
+              PilatesConstrainMaxSizeForMode(child,
                                         mainAxis,
                                         availableInnerMainDim,
                                         availableInnerWidth,
                                         &childMainMeasureMode,
                                         &childMainSize);
-              YGConstrainMaxSizeForMode(child,
+              PilatesConstrainMaxSizeForMode(child,
                                         crossAxis,
                                         availableInnerCrossDim,
                                         availableInnerWidth,
@@ -2723,14 +2723,14 @@ static void YGNodelayoutImpl(const YGNodeRef node,
               const float childWidth = isMainAxisRow ? childMainSize : childCrossSize;
               const float childHeight = !isMainAxisRow ? childMainSize : childCrossSize;
 
-              const YGMeasureMode childWidthMeasureMode =
-                  YGFloatIsUndefined(childWidth) ? YGMeasureModeUndefined
-                                                 : YGMeasureModeExactly;
-              const YGMeasureMode childHeightMeasureMode =
-                  YGFloatIsUndefined(childHeight) ? YGMeasureModeUndefined
-                                                  : YGMeasureModeExactly;
+              const PilatesMeasureMode childWidthMeasureMode =
+                  PilatesFloatIsUndefined(childWidth) ? PilatesMeasureModeUndefined
+                                                 : PilatesMeasureModeExactly;
+              const PilatesMeasureMode childHeightMeasureMode =
+                  PilatesFloatIsUndefined(childHeight) ? PilatesMeasureModeUndefined
+                                                  : PilatesMeasureModeExactly;
 
-              YGLayoutNodeInternal(
+              PilatesLayoutNodeInternal(
                   child,
                   childWidth,
                   childHeight,
@@ -2745,20 +2745,20 @@ static void YGNodelayoutImpl(const YGNodeRef node,
             }
           } else {
             const float remainingCrossDim = containerCrossAxis -
-                YGNodeDimWithMargin(child, crossAxis, availableInnerWidth);
+                PilatesNodeDimWithMargin(child, crossAxis, availableInnerWidth);
 
-            if (child->marginLeadingValue(crossAxis).unit == YGUnitAuto &&
-                child->marginTrailingValue(crossAxis).unit == YGUnitAuto) {
+            if (child->marginLeadingValue(crossAxis).unit == PilatesUnitAuto &&
+                child->marginTrailingValue(crossAxis).unit == PilatesUnitAuto) {
               leadingCrossDim += fmaxf(0.0f, remainingCrossDim / 2);
             } else if (
-                child->marginTrailingValue(crossAxis).unit == YGUnitAuto) {
+                child->marginTrailingValue(crossAxis).unit == PilatesUnitAuto) {
               // No-Op
             } else if (
-                child->marginLeadingValue(crossAxis).unit == YGUnitAuto) {
+                child->marginLeadingValue(crossAxis).unit == PilatesUnitAuto) {
               leadingCrossDim += fmaxf(0.0f, remainingCrossDim);
-            } else if (alignItem == YGAlignFlexStart) {
+            } else if (alignItem == PilatesAlignFlexStart) {
               // No-Op
-            } else if (alignItem == YGAlignCenter) {
+            } else if (alignItem == PilatesAlignCenter) {
               leadingCrossDim += remainingCrossDim / 2;
             } else {
               leadingCrossDim += remainingCrossDim;
@@ -2778,26 +2778,26 @@ static void YGNodelayoutImpl(const YGNodeRef node,
   }
 
   // STEP 8: MULTI-LINE CONTENT ALIGNMENT
-  if (performLayout && (lineCount > 1 || YGIsBaselineLayout(node)) &&
-      !YGFloatIsUndefined(availableInnerCrossDim)) {
+  if (performLayout && (lineCount > 1 || PilatesIsBaselineLayout(node)) &&
+      !PilatesFloatIsUndefined(availableInnerCrossDim)) {
     const float remainingAlignContentDim = availableInnerCrossDim - totalLineCrossDim;
 
     float crossDimLead = 0;
     float currentLead = leadingPaddingAndBorderCross;
 
     switch (node->getStyle().alignContent) {
-      case YGAlignFlexEnd:
+      case PilatesAlignFlexEnd:
         currentLead += remainingAlignContentDim;
         break;
-      case YGAlignCenter:
+      case PilatesAlignCenter:
         currentLead += remainingAlignContentDim / 2;
         break;
-      case YGAlignStretch:
+      case PilatesAlignStretch:
         if (availableInnerCrossDim > totalLineCrossDim) {
           crossDimLead = remainingAlignContentDim / lineCount;
         }
         break;
-      case YGAlignSpaceAround:
+      case PilatesAlignSpaceAround:
         if (availableInnerCrossDim > totalLineCrossDim) {
           currentLead += remainingAlignContentDim / (2 * lineCount);
           if (lineCount > 1) {
@@ -2807,14 +2807,14 @@ static void YGNodelayoutImpl(const YGNodeRef node,
           currentLead += remainingAlignContentDim / 2;
         }
         break;
-      case YGAlignSpaceBetween:
+      case PilatesAlignSpaceBetween:
         if (availableInnerCrossDim > totalLineCrossDim && lineCount > 1) {
           crossDimLead = remainingAlignContentDim / (lineCount - 1);
         }
         break;
-      case YGAlignAuto:
-      case YGAlignFlexStart:
-      case YGAlignBaseline:
+      case PilatesAlignAuto:
+      case PilatesAlignFlexStart:
+      case PilatesAlignBaseline:
         break;
     }
 
@@ -2828,28 +2828,28 @@ static void YGNodelayoutImpl(const YGNodeRef node,
       float maxAscentForCurrentLine = 0;
       float maxDescentForCurrentLine = 0;
       for (ii = startIndex; ii < childCount; ii++) {
-        const YGNodeRef child = node->getChild(ii);
-        if (child->getStyle().display == YGDisplayNone) {
+        const PilatesNodeRef child = node->getChild(ii);
+        if (child->getStyle().display == PilatesDisplayNone) {
           continue;
         }
-        if (child->getStyle().positionType == YGPositionTypeRelative) {
+        if (child->getStyle().positionType == PilatesPositionTypeRelative) {
           if (child->getLineIndex() != i) {
             break;
           }
-          if (YGNodeIsLayoutDimDefined(child, crossAxis)) {
+          if (PilatesNodeIsLayoutDimDefined(child, crossAxis)) {
             lineHeight = fmaxf(
                 lineHeight,
                 child->getLayout().measuredDimensions[dim[crossAxis]] +
                     child->getMarginForAxis(crossAxis, availableInnerWidth));
           }
-          if (YGNodeAlignItem(node, child) == YGAlignBaseline) {
-            const float ascent = YGBaseline(child) +
+          if (PilatesNodeAlignItem(node, child) == PilatesAlignBaseline) {
+            const float ascent = PilatesBaseline(child) +
                 child->getLeadingMargin(
-                    YGFlexDirectionColumn, availableInnerWidth);
+                    PilatesFlexDirectionColumn, availableInnerWidth);
             const float descent =
-                child->getLayout().measuredDimensions[YGDimensionHeight] +
+                child->getLayout().measuredDimensions[PilatesDimensionHeight] +
                 child->getMarginForAxis(
-                    YGFlexDirectionColumn, availableInnerWidth) -
+                    PilatesFlexDirectionColumn, availableInnerWidth) -
                 ascent;
             maxAscentForCurrentLine = fmaxf(maxAscentForCurrentLine, ascent);
             maxDescentForCurrentLine = fmaxf(maxDescentForCurrentLine, descent);
@@ -2862,20 +2862,20 @@ static void YGNodelayoutImpl(const YGNodeRef node,
 
       if (performLayout) {
         for (ii = startIndex; ii < endIndex; ii++) {
-          const YGNodeRef child = node->getChild(ii);
-          if (child->getStyle().display == YGDisplayNone) {
+          const PilatesNodeRef child = node->getChild(ii);
+          if (child->getStyle().display == PilatesDisplayNone) {
             continue;
           }
-          if (child->getStyle().positionType == YGPositionTypeRelative) {
-            switch (YGNodeAlignItem(node, child)) {
-              case YGAlignFlexStart: {
+          if (child->getStyle().positionType == PilatesPositionTypeRelative) {
+            switch (PilatesNodeAlignItem(node, child)) {
+              case PilatesAlignFlexStart: {
                 child->setLayoutPosition(
                     currentLead +
                         child->getLeadingMargin(crossAxis, availableInnerWidth),
                     pos[crossAxis]);
                 break;
               }
-              case YGAlignFlexEnd: {
+              case PilatesAlignFlexEnd: {
                 child->setLayoutPosition(
                     currentLead + lineHeight -
                         child->getTrailingMargin(
@@ -2884,7 +2884,7 @@ static void YGNodelayoutImpl(const YGNodeRef node,
                     pos[crossAxis]);
                 break;
               }
-              case YGAlignCenter: {
+              case PilatesAlignCenter: {
                 float childHeight =
                     child->getLayout().measuredDimensions[dim[crossAxis]];
 
@@ -2893,7 +2893,7 @@ static void YGNodelayoutImpl(const YGNodeRef node,
                     pos[crossAxis]);
                 break;
               }
-              case YGAlignStretch: {
+              case PilatesAlignStretch: {
                 child->setLayoutPosition(
                     currentLead +
                         child->getLeadingMargin(crossAxis, availableInnerWidth),
@@ -2901,34 +2901,34 @@ static void YGNodelayoutImpl(const YGNodeRef node,
 
                 // Remeasure child with the line height as it as been only measured with the
                 // parents height yet.
-                if (!YGNodeIsStyleDimDefined(child, crossAxis, availableInnerCrossDim)) {
+                if (!PilatesNodeIsStyleDimDefined(child, crossAxis, availableInnerCrossDim)) {
                   const float childWidth = isMainAxisRow
                       ? (child->getLayout()
-                             .measuredDimensions[YGDimensionWidth] +
+                             .measuredDimensions[PilatesDimensionWidth] +
                          child->getMarginForAxis(mainAxis, availableInnerWidth))
                       : lineHeight;
 
                   const float childHeight = !isMainAxisRow
                       ? (child->getLayout()
-                             .measuredDimensions[YGDimensionHeight] +
+                             .measuredDimensions[PilatesDimensionHeight] +
                          child->getMarginForAxis(
                              crossAxis, availableInnerWidth))
                       : lineHeight;
 
-                  if (!(YGFloatsEqual(
+                  if (!(PilatesFloatsEqual(
                             childWidth,
                             child->getLayout()
-                                .measuredDimensions[YGDimensionWidth]) &&
-                        YGFloatsEqual(
+                                .measuredDimensions[PilatesDimensionWidth]) &&
+                        PilatesFloatsEqual(
                             childHeight,
                             child->getLayout()
-                                .measuredDimensions[YGDimensionHeight]))) {
-                    YGLayoutNodeInternal(child,
+                                .measuredDimensions[PilatesDimensionHeight]))) {
+                    PilatesLayoutNodeInternal(child,
                                          childWidth,
                                          childHeight,
                                          direction,
-                                         YGMeasureModeExactly,
-                                         YGMeasureModeExactly,
+                                         PilatesMeasureModeExactly,
+                                         PilatesMeasureModeExactly,
                                          availableInnerWidth,
                                          availableInnerHeight,
                                          true,
@@ -2938,18 +2938,18 @@ static void YGNodelayoutImpl(const YGNodeRef node,
                 }
                 break;
               }
-              case YGAlignBaseline: {
+              case PilatesAlignBaseline: {
                 child->setLayoutPosition(
-                    currentLead + maxAscentForCurrentLine - YGBaseline(child) +
+                    currentLead + maxAscentForCurrentLine - PilatesBaseline(child) +
                         child->getLeadingPosition(
-                            YGFlexDirectionColumn, availableInnerCrossDim),
-                    YGEdgeTop);
+                            PilatesFlexDirectionColumn, availableInnerCrossDim),
+                    PilatesEdgeTop);
 
                 break;
               }
-              case YGAlignAuto:
-              case YGAlignSpaceBetween:
-              case YGAlignSpaceAround:
+              case PilatesAlignAuto:
+              case PilatesAlignSpaceBetween:
+              case PilatesAlignSpaceAround:
                 break;
             }
           }
@@ -2963,56 +2963,56 @@ static void YGNodelayoutImpl(const YGNodeRef node,
   // STEP 9: COMPUTING FINAL DIMENSIONS
 
   node->setLayoutMeasuredDimension(
-      YGNodeBoundAxis(
+      PilatesNodeBoundAxis(
           node,
-          YGFlexDirectionRow,
+          PilatesFlexDirectionRow,
           availableWidth - marginAxisRow,
           parentWidth,
           parentWidth),
-      YGDimensionWidth);
+      PilatesDimensionWidth);
 
   node->setLayoutMeasuredDimension(
-      YGNodeBoundAxis(
+      PilatesNodeBoundAxis(
           node,
-          YGFlexDirectionColumn,
+          PilatesFlexDirectionColumn,
           availableHeight - marginAxisColumn,
           parentHeight,
           parentWidth),
-      YGDimensionHeight);
+      PilatesDimensionHeight);
 
   // If the user didn't specify a width or height for the node, set the
   // dimensions based on the children.
-  if (measureModeMainDim == YGMeasureModeUndefined ||
-      (node->getStyle().overflow != YGOverflowScroll &&
-       measureModeMainDim == YGMeasureModeAtMost)) {
+  if (measureModeMainDim == PilatesMeasureModeUndefined ||
+      (node->getStyle().overflow != PilatesOverflowScroll &&
+       measureModeMainDim == PilatesMeasureModeAtMost)) {
     // Clamp the size to the min/max size, if specified, and make sure it
     // doesn't go below the padding and border amount.
     node->setLayoutMeasuredDimension(
-        YGNodeBoundAxis(
+        PilatesNodeBoundAxis(
             node, mainAxis, maxLineMainDim, mainAxisParentSize, parentWidth),
         dim[mainAxis]);
 
   } else if (
-      measureModeMainDim == YGMeasureModeAtMost &&
-      node->getStyle().overflow == YGOverflowScroll) {
+      measureModeMainDim == PilatesMeasureModeAtMost &&
+      node->getStyle().overflow == PilatesOverflowScroll) {
     node->setLayoutMeasuredDimension(
         fmaxf(
             fminf(
                 availableInnerMainDim + paddingAndBorderAxisMain,
-                YGNodeBoundAxisWithinMinAndMax(
+                PilatesNodeBoundAxisWithinMinAndMax(
                     node, mainAxis, maxLineMainDim, mainAxisParentSize)),
             paddingAndBorderAxisMain),
         dim[mainAxis]);
   }
 
-  if (measureModeCrossDim == YGMeasureModeUndefined ||
-      (node->getStyle().overflow != YGOverflowScroll &&
-       measureModeCrossDim == YGMeasureModeAtMost)) {
+  if (measureModeCrossDim == PilatesMeasureModeUndefined ||
+      (node->getStyle().overflow != PilatesOverflowScroll &&
+       measureModeCrossDim == PilatesMeasureModeAtMost)) {
     // Clamp the size to the min/max size, if specified, and make sure it
     // doesn't go below the padding and border amount.
 
     node->setLayoutMeasuredDimension(
-        YGNodeBoundAxis(
+        PilatesNodeBoundAxis(
             node,
             crossAxis,
             totalLineCrossDim + paddingAndBorderAxisCross,
@@ -3021,13 +3021,13 @@ static void YGNodelayoutImpl(const YGNodeRef node,
         dim[crossAxis]);
 
   } else if (
-      measureModeCrossDim == YGMeasureModeAtMost &&
-      node->getStyle().overflow == YGOverflowScroll) {
+      measureModeCrossDim == PilatesMeasureModeAtMost &&
+      node->getStyle().overflow == PilatesOverflowScroll) {
     node->setLayoutMeasuredDimension(
         fmaxf(
             fminf(
                 availableInnerCrossDim + paddingAndBorderAxisCross,
-                YGNodeBoundAxisWithinMinAndMax(
+                PilatesNodeBoundAxisWithinMinAndMax(
                     node,
                     crossAxis,
                     totalLineCrossDim + paddingAndBorderAxisCross,
@@ -3037,10 +3037,10 @@ static void YGNodelayoutImpl(const YGNodeRef node,
   }
 
   // As we only wrapped in normal direction yet, we need to reverse the positions on wrap-reverse.
-  if (performLayout && node->getStyle().flexWrap == YGWrapWrapReverse) {
+  if (performLayout && node->getStyle().flexWrap == PilatesWrapWrapReverse) {
     for (uint32_t i = 0; i < childCount; i++) {
-      const YGNodeRef child = YGNodeGetChild(node, i);
-      if (child->getStyle().positionType == YGPositionTypeRelative) {
+      const PilatesNodeRef child = PilatesNodeGetChild(node, i);
+      if (child->getStyle().positionType == PilatesPositionTypeRelative) {
         child->setLayoutPosition(
             node->getLayout().measuredDimensions[dim[crossAxis]] -
                 child->getLayout().position[pos[crossAxis]] -
@@ -3053,10 +3053,10 @@ static void YGNodelayoutImpl(const YGNodeRef node,
   if (performLayout) {
     // STEP 10: SIZING AND POSITIONING ABSOLUTE CHILDREN
     for (auto child : node->getChildren()) {
-      if (child->getStyle().positionType != YGPositionTypeAbsolute) {
+      if (child->getStyle().positionType != PilatesPositionTypeAbsolute) {
         continue;
       }
-      YGNodeAbsoluteLayoutChild(
+      PilatesNodeAbsoluteLayoutChild(
           node,
           child,
           availableInnerWidth,
@@ -3068,23 +3068,23 @@ static void YGNodelayoutImpl(const YGNodeRef node,
 
     // STEP 11: SETTING TRAILING POSITIONS FOR CHILDREN
     const bool needsMainTrailingPos =
-        mainAxis == YGFlexDirectionRowReverse || mainAxis == YGFlexDirectionColumnReverse;
+        mainAxis == PilatesFlexDirectionRowReverse || mainAxis == PilatesFlexDirectionColumnReverse;
     const bool needsCrossTrailingPos =
-        crossAxis == YGFlexDirectionRowReverse || crossAxis == YGFlexDirectionColumnReverse;
+        crossAxis == PilatesFlexDirectionRowReverse || crossAxis == PilatesFlexDirectionColumnReverse;
 
     // Set trailing position if necessary.
     if (needsMainTrailingPos || needsCrossTrailingPos) {
       for (uint32_t i = 0; i < childCount; i++) {
-        const YGNodeRef child = node->getChild(i);
-        if (child->getStyle().display == YGDisplayNone) {
+        const PilatesNodeRef child = node->getChild(i);
+        if (child->getStyle().display == PilatesDisplayNone) {
           continue;
         }
         if (needsMainTrailingPos) {
-          YGNodeSetChildTrailingPosition(node, child, mainAxis);
+          PilatesNodeSetChildTrailingPosition(node, child, mainAxis);
         }
 
         if (needsCrossTrailingPos) {
-          YGNodeSetChildTrailingPosition(node, child, crossAxis);
+          PilatesNodeSetChildTrailingPosition(node, child, crossAxis);
         }
       }
     }
@@ -3098,7 +3098,7 @@ bool gPrintSkips = false;
 
 static const char *spacer = "                                                            ";
 
-static const char *YGSpacer(const unsigned long level) {
+static const char *PilatesSpacer(const unsigned long level) {
   const size_t spacerLen = strlen(spacer);
   if (level > spacerLen) {
     return &spacer[0];
@@ -3107,54 +3107,54 @@ static const char *YGSpacer(const unsigned long level) {
   }
 }
 
-static const char *YGMeasureModeName(const YGMeasureMode mode, const bool performLayout) {
-  const char *kMeasureModeNames[YGMeasureModeCount] = {"UNDEFINED", "EXACTLY", "AT_MOST"};
-  const char *kLayoutModeNames[YGMeasureModeCount] = {"LAY_UNDEFINED",
+static const char *PilatesMeasureModeName(const PilatesMeasureMode mode, const bool performLayout) {
+  const char *kMeasureModeNames[PilatesMeasureModeCount] = {"UNDEFINED", "EXACTLY", "AT_MOST"};
+  const char *kLayoutModeNames[PilatesMeasureModeCount] = {"LAY_UNDEFINED",
                                                       "LAY_EXACTLY",
                                                       "LAY_AT_"
                                                       "MOST"};
 
-  if (mode >= YGMeasureModeCount) {
+  if (mode >= PilatesMeasureModeCount) {
     return "";
   }
 
   return performLayout ? kLayoutModeNames[mode] : kMeasureModeNames[mode];
 }
 
-static inline bool YGMeasureModeSizeIsExactAndMatchesOldMeasuredSize(YGMeasureMode sizeMode,
+static inline bool PilatesMeasureModeSizeIsExactAndMatchesOldMeasuredSize(PilatesMeasureMode sizeMode,
                                                                      float size,
                                                                      float lastComputedSize) {
-  return sizeMode == YGMeasureModeExactly && YGFloatsEqual(size, lastComputedSize);
+  return sizeMode == PilatesMeasureModeExactly && PilatesFloatsEqual(size, lastComputedSize);
 }
 
-static inline bool YGMeasureModeOldSizeIsUnspecifiedAndStillFits(YGMeasureMode sizeMode,
+static inline bool PilatesMeasureModeOldSizeIsUnspecifiedAndStillFits(PilatesMeasureMode sizeMode,
                                                                  float size,
-                                                                 YGMeasureMode lastSizeMode,
+                                                                 PilatesMeasureMode lastSizeMode,
                                                                  float lastComputedSize) {
-  return sizeMode == YGMeasureModeAtMost && lastSizeMode == YGMeasureModeUndefined &&
-         (size >= lastComputedSize || YGFloatsEqual(size, lastComputedSize));
+  return sizeMode == PilatesMeasureModeAtMost && lastSizeMode == PilatesMeasureModeUndefined &&
+         (size >= lastComputedSize || PilatesFloatsEqual(size, lastComputedSize));
 }
 
-static inline bool YGMeasureModeNewMeasureSizeIsStricterAndStillValid(YGMeasureMode sizeMode,
+static inline bool PilatesMeasureModeNewMeasureSizeIsStricterAndStillValid(PilatesMeasureMode sizeMode,
                                                                       float size,
-                                                                      YGMeasureMode lastSizeMode,
+                                                                      PilatesMeasureMode lastSizeMode,
                                                                       float lastSize,
                                                                       float lastComputedSize) {
-  return lastSizeMode == YGMeasureModeAtMost && sizeMode == YGMeasureModeAtMost &&
-         lastSize > size && (lastComputedSize <= size || YGFloatsEqual(size, lastComputedSize));
+  return lastSizeMode == PilatesMeasureModeAtMost && sizeMode == PilatesMeasureModeAtMost &&
+         lastSize > size && (lastComputedSize <= size || PilatesFloatsEqual(size, lastComputedSize));
 }
 
-float YGRoundValueToPixelGrid(const float value,
+float PilatesRoundValueToPixelGrid(const float value,
                               const float pointScaleFactor,
                               const bool forceCeil,
                               const bool forceFloor) {
   const float roundingError = fmax(0.0001, 0.01 * pointScaleFactor);
   float scaledValue = value * pointScaleFactor;
   float fractial = fmodf(scaledValue, 1.0);
-  if (YGFloatsEqualWithPrecision(fractial, 0.0, roundingError)) {
+  if (PilatesFloatsEqualWithPrecision(fractial, 0.0, roundingError)) {
     // First we check if the value is already rounded
     scaledValue = scaledValue - fractial;
-  } else if (YGFloatsEqualWithPrecision(fractial, 1.0, roundingError)) {
+  } else if (PilatesFloatsEqualWithPrecision(fractial, 1.0, roundingError)) {
     scaledValue = scaledValue - fractial + 1.0;
   } else if (forceCeil) {
     // Next we check if we need to use forced rounding
@@ -3164,94 +3164,94 @@ float YGRoundValueToPixelGrid(const float value,
   } else {
     // Finally we just round the value
     scaledValue = scaledValue - fractial +
-        (fractial > 0.5f || YGFloatsEqualWithPrecision(fractial, 0.5f, roundingError) ? 1.0f : 0.0f);
+        (fractial > 0.5f || PilatesFloatsEqualWithPrecision(fractial, 0.5f, roundingError) ? 1.0f : 0.0f);
   }
   return scaledValue / pointScaleFactor;
 }
 
-bool YGNodeCanUseCachedMeasurement(const YGMeasureMode widthMode,
+bool PilatesNodeCanUseCachedMeasurement(const PilatesMeasureMode widthMode,
                                    const float width,
-                                   const YGMeasureMode heightMode,
+                                   const PilatesMeasureMode heightMode,
                                    const float height,
-                                   const YGMeasureMode lastWidthMode,
+                                   const PilatesMeasureMode lastWidthMode,
                                    const float lastWidth,
-                                   const YGMeasureMode lastHeightMode,
+                                   const PilatesMeasureMode lastHeightMode,
                                    const float lastHeight,
                                    const float lastComputedWidth,
                                    const float lastComputedHeight,
                                    const float marginRow,
                                    const float marginColumn,
-                                   const YGConfigRef config) {
+                                   const PilatesConfigRef config) {
   if (lastComputedHeight < 0 || lastComputedWidth < 0) {
     return false;
   }
   bool useRoundedComparison =
       config != nullptr && config->pointScaleFactor != 0;
   const float effectiveWidth =
-      useRoundedComparison ? YGRoundValueToPixelGrid(width, config->pointScaleFactor, false, false)
+      useRoundedComparison ? PilatesRoundValueToPixelGrid(width, config->pointScaleFactor, false, false)
                            : width;
   const float effectiveHeight =
-      useRoundedComparison ? YGRoundValueToPixelGrid(height, config->pointScaleFactor, false, false)
+      useRoundedComparison ? PilatesRoundValueToPixelGrid(height, config->pointScaleFactor, false, false)
                            : height;
   const float effectiveLastWidth =
       useRoundedComparison
-          ? YGRoundValueToPixelGrid(lastWidth, config->pointScaleFactor, false, false)
+          ? PilatesRoundValueToPixelGrid(lastWidth, config->pointScaleFactor, false, false)
           : lastWidth;
   const float effectiveLastHeight =
       useRoundedComparison
-          ? YGRoundValueToPixelGrid(lastHeight, config->pointScaleFactor, false, false)
+          ? PilatesRoundValueToPixelGrid(lastHeight, config->pointScaleFactor, false, false)
           : lastHeight;
 
   const bool hasSameWidthSpec =
-      lastWidthMode == widthMode && YGFloatsEqual(effectiveLastWidth, effectiveWidth);
+      lastWidthMode == widthMode && PilatesFloatsEqual(effectiveLastWidth, effectiveWidth);
   const bool hasSameHeightSpec =
-      lastHeightMode == heightMode && YGFloatsEqual(effectiveLastHeight, effectiveHeight);
+      lastHeightMode == heightMode && PilatesFloatsEqual(effectiveLastHeight, effectiveHeight);
 
   const bool widthIsCompatible =
-      hasSameWidthSpec || YGMeasureModeSizeIsExactAndMatchesOldMeasuredSize(widthMode,
+      hasSameWidthSpec || PilatesMeasureModeSizeIsExactAndMatchesOldMeasuredSize(widthMode,
                                                                             width - marginRow,
                                                                             lastComputedWidth) ||
-      YGMeasureModeOldSizeIsUnspecifiedAndStillFits(widthMode,
+      PilatesMeasureModeOldSizeIsUnspecifiedAndStillFits(widthMode,
                                                     width - marginRow,
                                                     lastWidthMode,
                                                     lastComputedWidth) ||
-      YGMeasureModeNewMeasureSizeIsStricterAndStillValid(
+      PilatesMeasureModeNewMeasureSizeIsStricterAndStillValid(
           widthMode, width - marginRow, lastWidthMode, lastWidth, lastComputedWidth);
 
   const bool heightIsCompatible =
-      hasSameHeightSpec || YGMeasureModeSizeIsExactAndMatchesOldMeasuredSize(heightMode,
+      hasSameHeightSpec || PilatesMeasureModeSizeIsExactAndMatchesOldMeasuredSize(heightMode,
                                                                              height - marginColumn,
                                                                              lastComputedHeight) ||
-      YGMeasureModeOldSizeIsUnspecifiedAndStillFits(heightMode,
+      PilatesMeasureModeOldSizeIsUnspecifiedAndStillFits(heightMode,
                                                     height - marginColumn,
                                                     lastHeightMode,
                                                     lastComputedHeight) ||
-      YGMeasureModeNewMeasureSizeIsStricterAndStillValid(
+      PilatesMeasureModeNewMeasureSizeIsStricterAndStillValid(
           heightMode, height - marginColumn, lastHeightMode, lastHeight, lastComputedHeight);
 
   return widthIsCompatible && heightIsCompatible;
 }
 
 //
-// This is a wrapper around the YGNodelayoutImpl function. It determines
+// This is a wrapper around the PilatesNodelayoutImpl function. It determines
 // whether the layout request is redundant and can be skipped.
 //
 // Parameters:
-//  Input parameters are the same as YGNodelayoutImpl (see above)
+//  Input parameters are the same as PilatesNodelayoutImpl (see above)
 //  Return parameter is true if layout was performed, false if skipped
 //
-bool YGLayoutNodeInternal(const YGNodeRef node,
+bool PilatesLayoutNodeInternal(const PilatesNodeRef node,
                           const float availableWidth,
                           const float availableHeight,
-                          const YGDirection parentDirection,
-                          const YGMeasureMode widthMeasureMode,
-                          const YGMeasureMode heightMeasureMode,
+                          const PilatesDirection parentDirection,
+                          const PilatesMeasureMode widthMeasureMode,
+                          const PilatesMeasureMode heightMeasureMode,
                           const float parentWidth,
                           const float parentHeight,
                           const bool performLayout,
                           const char *reason,
-                          const YGConfigRef config) {
-  YGLayout* layout = &node->getLayout();
+                          const PilatesConfigRef config) {
+  PilatesLayout* layout = &node->getLayout();
 
   gDepth++;
 
@@ -3262,13 +3262,13 @@ bool YGLayoutNodeInternal(const YGNodeRef node,
   if (needToVisitNode) {
     // Invalidate the cached results.
     layout->nextCachedMeasurementsIndex = 0;
-    layout->cachedLayout.widthMeasureMode = (YGMeasureMode) -1;
-    layout->cachedLayout.heightMeasureMode = (YGMeasureMode) -1;
+    layout->cachedLayout.widthMeasureMode = (PilatesMeasureMode) -1;
+    layout->cachedLayout.heightMeasureMode = (PilatesMeasureMode) -1;
     layout->cachedLayout.computedWidth = -1;
     layout->cachedLayout.computedHeight = -1;
   }
 
-  YGCachedMeasurement* cachedResults = nullptr;
+  PilatesCachedMeasurement* cachedResults = nullptr;
 
   // Determine whether the results are already cached. We maintain a separate
   // cache for layouts and measurements. A layout operation modifies the
@@ -3284,12 +3284,12 @@ bool YGLayoutNodeInternal(const YGNodeRef node,
   // all possible.
   if (node->getMeasure() != nullptr) {
     const float marginAxisRow =
-        node->getMarginForAxis(YGFlexDirectionRow, parentWidth);
+        node->getMarginForAxis(PilatesFlexDirectionRow, parentWidth);
     const float marginAxisColumn =
-        node->getMarginForAxis(YGFlexDirectionColumn, parentWidth);
+        node->getMarginForAxis(PilatesFlexDirectionColumn, parentWidth);
 
     // First, try to use the layout cache.
-    if (YGNodeCanUseCachedMeasurement(widthMeasureMode,
+    if (PilatesNodeCanUseCachedMeasurement(widthMeasureMode,
                                       availableWidth,
                                       heightMeasureMode,
                                       availableHeight,
@@ -3306,7 +3306,7 @@ bool YGLayoutNodeInternal(const YGNodeRef node,
     } else {
       // Try to use the measurement cache.
       for (uint32_t i = 0; i < layout->nextCachedMeasurementsIndex; i++) {
-        if (YGNodeCanUseCachedMeasurement(widthMeasureMode,
+        if (PilatesNodeCanUseCachedMeasurement(widthMeasureMode,
                                           availableWidth,
                                           heightMeasureMode,
                                           availableHeight,
@@ -3325,16 +3325,16 @@ bool YGLayoutNodeInternal(const YGNodeRef node,
       }
     }
   } else if (performLayout) {
-    if (YGFloatsEqual(layout->cachedLayout.availableWidth, availableWidth) &&
-        YGFloatsEqual(layout->cachedLayout.availableHeight, availableHeight) &&
+    if (PilatesFloatsEqual(layout->cachedLayout.availableWidth, availableWidth) &&
+        PilatesFloatsEqual(layout->cachedLayout.availableHeight, availableHeight) &&
         layout->cachedLayout.widthMeasureMode == widthMeasureMode &&
         layout->cachedLayout.heightMeasureMode == heightMeasureMode) {
       cachedResults = &layout->cachedLayout;
     }
   } else {
     for (uint32_t i = 0; i < layout->nextCachedMeasurementsIndex; i++) {
-      if (YGFloatsEqual(layout->cachedMeasurements[i].availableWidth, availableWidth) &&
-          YGFloatsEqual(layout->cachedMeasurements[i].availableHeight, availableHeight) &&
+      if (PilatesFloatsEqual(layout->cachedMeasurements[i].availableWidth, availableWidth) &&
+          PilatesFloatsEqual(layout->cachedMeasurements[i].availableHeight, availableHeight) &&
           layout->cachedMeasurements[i].widthMeasureMode == widthMeasureMode &&
           layout->cachedMeasurements[i].heightMeasureMode == heightMeasureMode) {
         cachedResults = &layout->cachedMeasurements[i];
@@ -3344,20 +3344,20 @@ bool YGLayoutNodeInternal(const YGNodeRef node,
   }
 
   if (!needToVisitNode && cachedResults != nullptr) {
-    layout->measuredDimensions[YGDimensionWidth] = cachedResults->computedWidth;
-    layout->measuredDimensions[YGDimensionHeight] = cachedResults->computedHeight;
+    layout->measuredDimensions[PilatesDimensionWidth] = cachedResults->computedWidth;
+    layout->measuredDimensions[PilatesDimensionHeight] = cachedResults->computedHeight;
 
     if (gPrintChanges && gPrintSkips) {
-      YGLog(node, YGLogLevelVerbose, "%s%d.{[skipped] ", YGSpacer(gDepth), gDepth);
+      PilatesLog(node, PilatesLogLevelVerbose, "%s%d.{[skipped] ", PilatesSpacer(gDepth), gDepth);
       if (node->getPrintFunc() != nullptr) {
         node->getPrintFunc()(node);
       }
-      YGLog(
+      PilatesLog(
           node,
-          YGLogLevelVerbose,
+          PilatesLogLevelVerbose,
           "wm: %s, hm: %s, aw: %f ah: %f => d: (%f, %f) %s\n",
-          YGMeasureModeName(widthMeasureMode, performLayout),
-          YGMeasureModeName(heightMeasureMode, performLayout),
+          PilatesMeasureModeName(widthMeasureMode, performLayout),
+          PilatesMeasureModeName(heightMeasureMode, performLayout),
           availableWidth,
           availableHeight,
           cachedResults->computedWidth,
@@ -3366,28 +3366,28 @@ bool YGLayoutNodeInternal(const YGNodeRef node,
     }
   } else {
     if (gPrintChanges) {
-      YGLog(
+      PilatesLog(
           node,
-          YGLogLevelVerbose,
+          PilatesLogLevelVerbose,
           "%s%d.{%s",
-          YGSpacer(gDepth),
+          PilatesSpacer(gDepth),
           gDepth,
           needToVisitNode ? "*" : "");
       if (node->getPrintFunc() != nullptr) {
         node->getPrintFunc()(node);
       }
-      YGLog(
+      PilatesLog(
           node,
-          YGLogLevelVerbose,
+          PilatesLogLevelVerbose,
           "wm: %s, hm: %s, aw: %f ah: %f %s\n",
-          YGMeasureModeName(widthMeasureMode, performLayout),
-          YGMeasureModeName(heightMeasureMode, performLayout),
+          PilatesMeasureModeName(widthMeasureMode, performLayout),
+          PilatesMeasureModeName(heightMeasureMode, performLayout),
           availableWidth,
           availableHeight,
           reason);
     }
 
-    YGNodelayoutImpl(node,
+    PilatesNodelayoutImpl(node,
                      availableWidth,
                      availableHeight,
                      parentDirection,
@@ -3399,38 +3399,38 @@ bool YGLayoutNodeInternal(const YGNodeRef node,
                      config);
 
     if (gPrintChanges) {
-      YGLog(
+      PilatesLog(
           node,
-          YGLogLevelVerbose,
+          PilatesLogLevelVerbose,
           "%s%d.}%s",
-          YGSpacer(gDepth),
+          PilatesSpacer(gDepth),
           gDepth,
           needToVisitNode ? "*" : "");
       if (node->getPrintFunc() != nullptr) {
         node->getPrintFunc()(node);
       }
-      YGLog(
+      PilatesLog(
           node,
-          YGLogLevelVerbose,
+          PilatesLogLevelVerbose,
           "wm: %s, hm: %s, d: (%f, %f) %s\n",
-          YGMeasureModeName(widthMeasureMode, performLayout),
-          YGMeasureModeName(heightMeasureMode, performLayout),
-          layout->measuredDimensions[YGDimensionWidth],
-          layout->measuredDimensions[YGDimensionHeight],
+          PilatesMeasureModeName(widthMeasureMode, performLayout),
+          PilatesMeasureModeName(heightMeasureMode, performLayout),
+          layout->measuredDimensions[PilatesDimensionWidth],
+          layout->measuredDimensions[PilatesDimensionHeight],
           reason);
     }
 
     layout->lastParentDirection = parentDirection;
 
     if (cachedResults == nullptr) {
-      if (layout->nextCachedMeasurementsIndex == YG_MAX_CACHED_RESULT_COUNT) {
+      if (layout->nextCachedMeasurementsIndex == Pilates_MAX_CACHED_RESULT_COUNT) {
         if (gPrintChanges) {
-          YGLog(node, YGLogLevelVerbose, "Out of cache entries!\n");
+          PilatesLog(node, PilatesLogLevelVerbose, "Out of cache entries!\n");
         }
         layout->nextCachedMeasurementsIndex = 0;
       }
 
-      YGCachedMeasurement *newCacheEntry;
+      PilatesCachedMeasurement *newCacheEntry;
       if (performLayout) {
         // Use the single layout cache entry.
         newCacheEntry = &layout->cachedLayout;
@@ -3444,18 +3444,18 @@ bool YGLayoutNodeInternal(const YGNodeRef node,
       newCacheEntry->availableHeight = availableHeight;
       newCacheEntry->widthMeasureMode = widthMeasureMode;
       newCacheEntry->heightMeasureMode = heightMeasureMode;
-      newCacheEntry->computedWidth = layout->measuredDimensions[YGDimensionWidth];
-      newCacheEntry->computedHeight = layout->measuredDimensions[YGDimensionHeight];
+      newCacheEntry->computedWidth = layout->measuredDimensions[PilatesDimensionWidth];
+      newCacheEntry->computedHeight = layout->measuredDimensions[PilatesDimensionHeight];
     }
   }
 
   if (performLayout) {
     node->setLayoutDimension(
-        node->getLayout().measuredDimensions[YGDimensionWidth],
-        YGDimensionWidth);
+        node->getLayout().measuredDimensions[PilatesDimensionWidth],
+        PilatesDimensionWidth);
     node->setLayoutDimension(
-        node->getLayout().measuredDimensions[YGDimensionHeight],
-        YGDimensionHeight);
+        node->getLayout().measuredDimensions[PilatesDimensionHeight],
+        PilatesDimensionHeight);
 
     node->setHasNewLayout(true);
     node->setDirty(false);
@@ -3466,8 +3466,8 @@ bool YGLayoutNodeInternal(const YGNodeRef node,
   return (needToVisitNode || cachedResults == nullptr);
 }
 
-void YGConfigSetPointScaleFactor(const YGConfigRef config, const float pixelsInPoint) {
-  YGAssertWithConfig(config, pixelsInPoint >= 0.0f, "Scale factor should not be less than zero");
+void PilatesConfigSetPointScaleFactor(const PilatesConfigRef config, const float pixelsInPoint) {
+  PilatesAssertWithConfig(config, pixelsInPoint >= 0.0f, "Scale factor should not be less than zero");
 
   // We store points for Pixel as we will use it for rounding
   if (pixelsInPoint == 0.0f) {
@@ -3478,7 +3478,7 @@ void YGConfigSetPointScaleFactor(const YGConfigRef config, const float pixelsInP
   }
 }
 
-static void YGRoundToPixelGrid(const YGNodeRef node,
+static void PilatesRoundToPixelGrid(const PilatesNodeRef node,
                                const float pointScaleFactor,
                                const float absoluteLeft,
                                const float absoluteTop) {
@@ -3486,11 +3486,11 @@ static void YGRoundToPixelGrid(const YGNodeRef node,
     return;
   }
 
-  const float nodeLeft = node->getLayout().position[YGEdgeLeft];
-  const float nodeTop = node->getLayout().position[YGEdgeTop];
+  const float nodeLeft = node->getLayout().position[PilatesEdgeLeft];
+  const float nodeTop = node->getLayout().position[PilatesEdgeTop];
 
-  const float nodeWidth = node->getLayout().dimensions[YGDimensionWidth];
-  const float nodeHeight = node->getLayout().dimensions[YGDimensionHeight];
+  const float nodeWidth = node->getLayout().dimensions[PilatesDimensionWidth];
+  const float nodeHeight = node->getLayout().dimensions[PilatesDimensionHeight];
 
   const float absoluteNodeLeft = absoluteLeft + nodeLeft;
   const float absoluteNodeTop = absoluteTop + nodeTop;
@@ -3500,54 +3500,54 @@ static void YGRoundToPixelGrid(const YGNodeRef node,
 
   // If a node has a custom measure function we never want to round down its size as this could
   // lead to unwanted text truncation.
-  const bool textRounding = node->getNodeType() == YGNodeTypeText;
+  const bool textRounding = node->getNodeType() == PilatesNodeTypeText;
 
   node->setLayoutPosition(
-      YGRoundValueToPixelGrid(nodeLeft, pointScaleFactor, false, textRounding),
-      YGEdgeLeft);
+      PilatesRoundValueToPixelGrid(nodeLeft, pointScaleFactor, false, textRounding),
+      PilatesEdgeLeft);
 
   node->setLayoutPosition(
-      YGRoundValueToPixelGrid(nodeTop, pointScaleFactor, false, textRounding),
-      YGEdgeTop);
+      PilatesRoundValueToPixelGrid(nodeTop, pointScaleFactor, false, textRounding),
+      PilatesEdgeTop);
 
   // We multiply dimension by scale factor and if the result is close to the whole number, we don't
   // have any fraction
   // To verify if the result is close to whole number we want to check both floor and ceil numbers
-  const bool hasFractionalWidth = !YGFloatsEqual(fmodf(nodeWidth * pointScaleFactor, 1.0), 0) &&
-                                  !YGFloatsEqual(fmodf(nodeWidth * pointScaleFactor, 1.0), 1.0);
-  const bool hasFractionalHeight = !YGFloatsEqual(fmodf(nodeHeight * pointScaleFactor, 1.0), 0) &&
-                                   !YGFloatsEqual(fmodf(nodeHeight * pointScaleFactor, 1.0), 1.0);
+  const bool hasFractionalWidth = !PilatesFloatsEqual(fmodf(nodeWidth * pointScaleFactor, 1.0), 0) &&
+                                  !PilatesFloatsEqual(fmodf(nodeWidth * pointScaleFactor, 1.0), 1.0);
+  const bool hasFractionalHeight = !PilatesFloatsEqual(fmodf(nodeHeight * pointScaleFactor, 1.0), 0) &&
+                                   !PilatesFloatsEqual(fmodf(nodeHeight * pointScaleFactor, 1.0), 1.0);
 
   node->setLayoutDimension(
-      YGRoundValueToPixelGrid(
+      PilatesRoundValueToPixelGrid(
           absoluteNodeRight,
           pointScaleFactor,
           (textRounding && hasFractionalWidth),
           (textRounding && !hasFractionalWidth)) -
-          YGRoundValueToPixelGrid(
+          PilatesRoundValueToPixelGrid(
               absoluteNodeLeft, pointScaleFactor, false, textRounding),
-      YGDimensionWidth);
+      PilatesDimensionWidth);
 
   node->setLayoutDimension(
-      YGRoundValueToPixelGrid(
+      PilatesRoundValueToPixelGrid(
           absoluteNodeBottom,
           pointScaleFactor,
           (textRounding && hasFractionalHeight),
           (textRounding && !hasFractionalHeight)) -
-          YGRoundValueToPixelGrid(
+          PilatesRoundValueToPixelGrid(
               absoluteNodeTop, pointScaleFactor, false, textRounding),
-      YGDimensionHeight);
+      PilatesDimensionHeight);
 
-  const uint32_t childCount = YGNodeGetChildCount(node);
+  const uint32_t childCount = PilatesNodeGetChildCount(node);
   for (uint32_t i = 0; i < childCount; i++) {
-    YGRoundToPixelGrid(YGNodeGetChild(node, i), pointScaleFactor, absoluteNodeLeft, absoluteNodeTop);
+    PilatesRoundToPixelGrid(PilatesNodeGetChild(node, i), pointScaleFactor, absoluteNodeLeft, absoluteNodeTop);
   }
 }
 
-void YGNodeCalculateLayout(const YGNodeRef node,
+void PilatesNodeCalculateLayout(const PilatesNodeRef node,
                            const float parentWidth,
                            const float parentHeight,
-                           const YGDirection parentDirection) {
+                           const PilatesDirection parentDirection) {
   // Increment the generation count. This will force the recursive routine to
   // visit
   // all dirty nodes at least once. Subsequent visits will be skipped if the
@@ -3555,47 +3555,47 @@ void YGNodeCalculateLayout(const YGNodeRef node,
   // parameters don't change.
   gCurrentGenerationCount++;
   node->resolveDimension();
-  float width = YGUndefined;
-  YGMeasureMode widthMeasureMode = YGMeasureModeUndefined;
-  if (YGNodeIsStyleDimDefined(node, YGFlexDirectionRow, parentWidth)) {
+  float width = PilatesUndefined;
+  PilatesMeasureMode widthMeasureMode = PilatesMeasureModeUndefined;
+  if (PilatesNodeIsStyleDimDefined(node, PilatesFlexDirectionRow, parentWidth)) {
     width =
-        YGResolveValue(
-            node->getResolvedDimension(dim[YGFlexDirectionRow]), parentWidth) +
-        node->getMarginForAxis(YGFlexDirectionRow, parentWidth);
-    widthMeasureMode = YGMeasureModeExactly;
+        PilatesResolveValue(
+            node->getResolvedDimension(dim[PilatesFlexDirectionRow]), parentWidth) +
+        node->getMarginForAxis(PilatesFlexDirectionRow, parentWidth);
+    widthMeasureMode = PilatesMeasureModeExactly;
   } else if (
-      YGResolveValue(
-          node->getStyle().maxDimensions[YGDimensionWidth], parentWidth) >=
+      PilatesResolveValue(
+          node->getStyle().maxDimensions[PilatesDimensionWidth], parentWidth) >=
       0.0f) {
-    width = YGResolveValue(
-        node->getStyle().maxDimensions[YGDimensionWidth], parentWidth);
-    widthMeasureMode = YGMeasureModeAtMost;
+    width = PilatesResolveValue(
+        node->getStyle().maxDimensions[PilatesDimensionWidth], parentWidth);
+    widthMeasureMode = PilatesMeasureModeAtMost;
   } else {
     width = parentWidth;
-    widthMeasureMode = YGFloatIsUndefined(width) ? YGMeasureModeUndefined : YGMeasureModeExactly;
+    widthMeasureMode = PilatesFloatIsUndefined(width) ? PilatesMeasureModeUndefined : PilatesMeasureModeExactly;
   }
 
-  float height = YGUndefined;
-  YGMeasureMode heightMeasureMode = YGMeasureModeUndefined;
-  if (YGNodeIsStyleDimDefined(node, YGFlexDirectionColumn, parentHeight)) {
-    height = YGResolveValue(
-                 node->getResolvedDimension(dim[YGFlexDirectionColumn]),
+  float height = PilatesUndefined;
+  PilatesMeasureMode heightMeasureMode = PilatesMeasureModeUndefined;
+  if (PilatesNodeIsStyleDimDefined(node, PilatesFlexDirectionColumn, parentHeight)) {
+    height = PilatesResolveValue(
+                 node->getResolvedDimension(dim[PilatesFlexDirectionColumn]),
                  parentHeight) +
-        node->getMarginForAxis(YGFlexDirectionColumn, parentWidth);
-    heightMeasureMode = YGMeasureModeExactly;
+        node->getMarginForAxis(PilatesFlexDirectionColumn, parentWidth);
+    heightMeasureMode = PilatesMeasureModeExactly;
   } else if (
-      YGResolveValue(
-          node->getStyle().maxDimensions[YGDimensionHeight], parentHeight) >=
+      PilatesResolveValue(
+          node->getStyle().maxDimensions[PilatesDimensionHeight], parentHeight) >=
       0.0f) {
-    height = YGResolveValue(
-        node->getStyle().maxDimensions[YGDimensionHeight], parentHeight);
-    heightMeasureMode = YGMeasureModeAtMost;
+    height = PilatesResolveValue(
+        node->getStyle().maxDimensions[PilatesDimensionHeight], parentHeight);
+    heightMeasureMode = PilatesMeasureModeAtMost;
   } else {
     height = parentHeight;
-    heightMeasureMode = YGFloatIsUndefined(height) ? YGMeasureModeUndefined : YGMeasureModeExactly;
+    heightMeasureMode = PilatesFloatIsUndefined(height) ? PilatesMeasureModeUndefined : PilatesMeasureModeExactly;
   }
 
-  if (YGLayoutNodeInternal(
+  if (PilatesLayoutNodeInternal(
           node,
           width,
           height,
@@ -3609,34 +3609,34 @@ void YGNodeCalculateLayout(const YGNodeRef node,
           node->getConfig())) {
     node->setPosition(
         node->getLayout().direction, parentWidth, parentHeight, parentWidth);
-    YGRoundToPixelGrid(node, node->getConfig()->pointScaleFactor, 0.0f, 0.0f);
+    PilatesRoundToPixelGrid(node, node->getConfig()->pointScaleFactor, 0.0f, 0.0f);
 
     if (gPrintTree) {
-      YGNodePrint(
+      PilatesNodePrint(
           node,
-          (YGPrintOptions)(
-              YGPrintOptionsLayout | YGPrintOptionsChildren |
-              YGPrintOptionsStyle));
+          (PilatesPrintOptions)(
+              PilatesPrintOptionsLayout | PilatesPrintOptionsChildren |
+              PilatesPrintOptionsStyle));
     }
   }
 
-  // We want to get rid off `useLegacyStretchBehaviour` from YGConfig. But we
+  // We want to get rid off `useLegacyStretchBehaviour` from PilatesConfig. But we
   // aren't sure whether client's of pilates have gotten rid off this flag or not.
-  // So logging this in YGLayout would help to find out the call sites depending
+  // So logging this in PilatesLayout would help to find out the call sites depending
   // on this flag. This check would be removed once we are sure no one is
   // dependent on this flag anymore. The flag
-  // `shouldDiffLayoutWithoutLegacyStretchBehaviour` in YGConfig will help to
+  // `shouldDiffLayoutWithoutLegacyStretchBehaviour` in PilatesConfig will help to
   // run experiments.
   if (node->getConfig()->shouldDiffLayoutWithoutLegacyStretchBehaviour &&
       node->didUseLegacyFlag()) {
-    const YGNodeRef originalNode = YGNodeDeepClone(node);
+    const PilatesNodeRef originalNode = PilatesNodeDeepClone(node);
     originalNode->resolveDimension();
     // Recursively mark nodes as dirty
     originalNode->markDirtyAndPropogateDownwards();
     gCurrentGenerationCount++;
     // Rerun the layout, and calculate the diff
     originalNode->setAndPropogateUseLegacyFlag(false);
-    if (YGLayoutNodeInternal(
+    if (PilatesLayoutNodeInternal(
             originalNode,
             width,
             height,
@@ -3653,7 +3653,7 @@ void YGNodeCalculateLayout(const YGNodeRef node,
           parentWidth,
           parentHeight,
           parentWidth);
-      YGRoundToPixelGrid(
+      PilatesRoundToPixelGrid(
           originalNode,
           originalNode->getConfig()->pointScaleFactor,
           0.0f,
@@ -3664,108 +3664,108 @@ void YGNodeCalculateLayout(const YGNodeRef node,
           !originalNode->isLayoutTreeEqualToNode(*node));
 
       if (gPrintTree) {
-        YGNodePrint(
+        PilatesNodePrint(
             originalNode,
-            (YGPrintOptions)(
-                YGPrintOptionsLayout | YGPrintOptionsChildren |
-                YGPrintOptionsStyle));
+            (PilatesPrintOptions)(
+                PilatesPrintOptionsLayout | PilatesPrintOptionsChildren |
+                PilatesPrintOptionsStyle));
       }
     }
-    YGConfigFreeRecursive(originalNode);
-    YGNodeFreeRecursive(originalNode);
+    PilatesConfigFreeRecursive(originalNode);
+    PilatesNodeFreeRecursive(originalNode);
   }
 }
 
-void YGConfigSetLogger(const YGConfigRef config, YGLogger logger) {
+void PilatesConfigSetLogger(const PilatesConfigRef config, PilatesLogger logger) {
   if (logger != nullptr) {
     config->logger = logger;
   } else {
 #ifdef ANDROID
-    config->logger = &YGAndroidLog;
+    config->logger = &PilatesAndroidLog;
 #else
-    config->logger = &YGDefaultLog;
+    config->logger = &PilatesDefaultLog;
 #endif
   }
 }
 
-static void YGVLog(const YGConfigRef config,
-                   const YGNodeRef node,
-                   YGLogLevel level,
+static void PilatesVLog(const PilatesConfigRef config,
+                   const PilatesNodeRef node,
+                   PilatesLogLevel level,
                    const char *format,
                    va_list args) {
-  const YGConfigRef logConfig = config != nullptr ? config : &gYGConfigDefaults;
+  const PilatesConfigRef logConfig = config != nullptr ? config : &gPilatesConfigDefaults;
   logConfig->logger(logConfig, node, level, format, args);
 
-  if (level == YGLogLevelFatal) {
+  if (level == PilatesLogLevelFatal) {
     abort();
   }
 }
 
-void YGLogWithConfig(const YGConfigRef config, YGLogLevel level, const char *format, ...) {
+void PilatesLogWithConfig(const PilatesConfigRef config, PilatesLogLevel level, const char *format, ...) {
   va_list args;
   va_start(args, format);
-  YGVLog(config, nullptr, level, format, args);
+  PilatesVLog(config, nullptr, level, format, args);
   va_end(args);
 }
 
-void YGLog(const YGNodeRef node, YGLogLevel level, const char *format, ...) {
+void PilatesLog(const PilatesNodeRef node, PilatesLogLevel level, const char *format, ...) {
   va_list args;
   va_start(args, format);
-  YGVLog(
+  PilatesVLog(
       node == nullptr ? nullptr : node->getConfig(), node, level, format, args);
   va_end(args);
 }
 
-void YGAssert(const bool condition, const char *message) {
+void PilatesAssert(const bool condition, const char *message) {
   if (!condition) {
-    YGLog(nullptr, YGLogLevelFatal, "%s\n", message);
+    PilatesLog(nullptr, PilatesLogLevelFatal, "%s\n", message);
   }
 }
 
-void YGAssertWithNode(const YGNodeRef node, const bool condition, const char *message) {
+void PilatesAssertWithNode(const PilatesNodeRef node, const bool condition, const char *message) {
   if (!condition) {
-    YGLog(node, YGLogLevelFatal, "%s\n", message);
+    PilatesLog(node, PilatesLogLevelFatal, "%s\n", message);
   }
 }
 
-void YGAssertWithConfig(const YGConfigRef config, const bool condition, const char *message) {
+void PilatesAssertWithConfig(const PilatesConfigRef config, const bool condition, const char *message) {
   if (!condition) {
-    YGLogWithConfig(config, YGLogLevelFatal, "%s\n", message);
+    PilatesLogWithConfig(config, PilatesLogLevelFatal, "%s\n", message);
   }
 }
 
-void YGConfigSetExperimentalFeatureEnabled(const YGConfigRef config,
-                                           const YGExperimentalFeature feature,
+void PilatesConfigSetExperimentalFeatureEnabled(const PilatesConfigRef config,
+                                           const PilatesExperimentalFeature feature,
                                            const bool enabled) {
   config->experimentalFeatures[feature] = enabled;
 }
 
-inline bool YGConfigIsExperimentalFeatureEnabled(const YGConfigRef config,
-                                                 const YGExperimentalFeature feature) {
+inline bool PilatesConfigIsExperimentalFeatureEnabled(const PilatesConfigRef config,
+                                                 const PilatesExperimentalFeature feature) {
   return config->experimentalFeatures[feature];
 }
 
-void YGConfigSetUseWebDefaults(const YGConfigRef config, const bool enabled) {
+void PilatesConfigSetUseWebDefaults(const PilatesConfigRef config, const bool enabled) {
   config->useWebDefaults = enabled;
 }
 
-void YGConfigSetUseLegacyStretchBehaviour(const YGConfigRef config,
+void PilatesConfigSetUseLegacyStretchBehaviour(const PilatesConfigRef config,
                                           const bool useLegacyStretchBehaviour) {
   config->useLegacyStretchBehaviour = useLegacyStretchBehaviour;
 }
 
-bool YGConfigGetUseWebDefaults(const YGConfigRef config) {
+bool PilatesConfigGetUseWebDefaults(const PilatesConfigRef config) {
   return config->useWebDefaults;
 }
 
-void YGConfigSetContext(const YGConfigRef config, void *context) {
+void PilatesConfigSetContext(const PilatesConfigRef config, void *context) {
   config->context = context;
 }
 
-void *YGConfigGetContext(const YGConfigRef config) {
+void *PilatesConfigGetContext(const PilatesConfigRef config) {
   return config->context;
 }
 
-void YGConfigSetNodeClonedFunc(const YGConfigRef config, const YGNodeClonedFunc callback) {
+void PilatesConfigSetNodeClonedFunc(const PilatesConfigRef config, const PilatesNodeClonedFunc callback) {
   config->cloneNodeCallback = callback;
 }

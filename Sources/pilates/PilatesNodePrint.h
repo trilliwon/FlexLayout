@@ -12,10 +12,10 @@
 namespace facebook {
 namespace pilates {
 
-void YGNodeToString(
+void PilatesNodeToString(
     std::string* str,
-    YGNodeRef node,
-    YGPrintOptions options,
+    PilatesNodeRef node,
+    PilatesPrintOptions options,
     uint32_t level);
 
 } // namespace pilates

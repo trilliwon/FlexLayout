@@ -7,20 +7,20 @@
 
 #include "Utils.h"
 
-YGFlexDirection YGFlexDirectionCross(
-    const YGFlexDirection flexDirection,
-    const YGDirection direction) {
-  return YGFlexDirectionIsColumn(flexDirection)
-      ? YGResolveFlexDirection(YGFlexDirectionRow, direction)
-      : YGFlexDirectionColumn;
+PilatesFlexDirection PilatesFlexDirectionCross(
+    const PilatesFlexDirection flexDirection,
+    const PilatesDirection direction) {
+  return PilatesFlexDirectionIsColumn(flexDirection)
+      ? PilatesResolveFlexDirection(PilatesFlexDirectionRow, direction)
+      : PilatesFlexDirectionColumn;
 }
 
-bool YGValueEqual(const YGValue a, const YGValue b) {
+bool PilatesValueEqual(const PilatesValue a, const PilatesValue b) {
   if (a.unit != b.unit) {
     return false;
   }
 
-  if (a.unit == YGUnitUndefined ||
+  if (a.unit == PilatesUnitUndefined ||
       (std::isnan(a.value) && std::isnan(b.value))) {
     return true;
   }

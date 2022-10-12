@@ -8,11 +8,11 @@
 #pragma once
 
 #ifdef __cplusplus
-#define YG_EXTERN_C_BEGIN extern "C" {
-#define YG_EXTERN_C_END }
+#define Pilates_EXTERN_C_BEGIN extern "C" {
+#define Pilates_EXTERN_C_END }
 #else
-#define YG_EXTERN_C_BEGIN
-#define YG_EXTERN_C_END
+#define Pilates_EXTERN_C_BEGIN
+#define Pilates_EXTERN_C_END
 #endif
 
 #ifdef _WINDLL
@@ -33,9 +33,9 @@
 // Cannot use NSInteger as NSInteger has a different size than int (which is the default type of a
 // enum).
 // Therefor when linking the Pilates C library into obj-c the header is a missmatch for the Pilates ABI.
-#define YG_ENUM_BEGIN(name) NS_ENUM(int, name)
-#define YG_ENUM_END(name)
+#define Pilates_ENUM_BEGIN(name) NS_ENUM(int, name)
+#define Pilates_ENUM_END(name)
 #else
-#define YG_ENUM_BEGIN(name) enum name
-#define YG_ENUM_END(name) name
+#define Pilates_ENUM_BEGIN(name) enum name
+#define Pilates_ENUM_END(name) name
 #endif

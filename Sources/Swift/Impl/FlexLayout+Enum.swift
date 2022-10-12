@@ -16,166 +16,166 @@ import UIKit
 
 import FlexLayoutPilates
 
-extension YGFlexDirection {
-    static let column = YGFlexDirectionColumn
-    static let columnReverse = YGFlexDirectionColumnReverse
-    static let row = YGFlexDirectionRow
-    static let rowReverse = YGFlexDirectionRowReverse
+extension PilatesFlexDirection {
+    static let column = PilatesFlexDirectionColumn
+    static let columnReverse = PilatesFlexDirectionColumnReverse
+    static let row = PilatesFlexDirectionRow
+    static let rowReverse = PilatesFlexDirectionRowReverse
 }
 
-extension YGJustify {
-    static let flexStart = YGJustifyFlexStart
-    static let center = YGJustifyCenter
-    static let flexEnd = YGJustifyFlexEnd
-    static let spaceBetween = YGJustifySpaceBetween
-    static let spaceAround = YGJustifySpaceAround
-    static let spaceEvenly = YGJustifySpaceEvenly
+extension PilatesJustify {
+    static let flexStart = PilatesJustifyFlexStart
+    static let center = PilatesJustifyCenter
+    static let flexEnd = PilatesJustifyFlexEnd
+    static let spaceBetween = PilatesJustifySpaceBetween
+    static let spaceAround = PilatesJustifySpaceAround
+    static let spaceEvenly = PilatesJustifySpaceEvenly
 }
 
-extension YGAlign {
-    static let auto = YGAlignAuto
-    static let baseline = YGAlignBaseline
-    static let stretch = YGAlignStretch
-    static let flexStart = YGAlignFlexStart
-    static let center = YGAlignCenter
-    static let flexEnd = YGAlignFlexEnd
-    static let spaceBetween = YGAlignSpaceBetween
-    static let spaceAround = YGAlignSpaceAround
+extension PilatesAlign {
+    static let auto = PilatesAlignAuto
+    static let baseline = PilatesAlignBaseline
+    static let stretch = PilatesAlignStretch
+    static let flexStart = PilatesAlignFlexStart
+    static let center = PilatesAlignCenter
+    static let flexEnd = PilatesAlignFlexEnd
+    static let spaceBetween = PilatesAlignSpaceBetween
+    static let spaceAround = PilatesAlignSpaceAround
 }
 
-extension YGWrap {
-    static let noWrap = YGWrapNoWrap
-    static let wrap = YGWrapWrap
-    static let wrapReverse = YGWrapWrapReverse
+extension PilatesWrap {
+    static let noWrap = PilatesWrapNoWrap
+    static let wrap = PilatesWrapWrap
+    static let wrapReverse = PilatesWrapWrapReverse
 }
 
-extension YGPositionType {
-    static let relative = YGPositionTypeRelative
-    static let absolute = YGPositionTypeAbsolute
+extension PilatesPositionType {
+    static let relative = PilatesPositionTypeRelative
+    static let absolute = PilatesPositionTypeAbsolute
 }
 
-extension YGDirection {
-    static let LTR = YGDirectionLTR
-    static let RTL = YGDirectionRTL
-    static let inherit = YGDirectionInherit
+extension PilatesDirection {
+    static let LTR = PilatesDirectionLTR
+    static let RTL = PilatesDirectionRTL
+    static let inherit = PilatesDirectionInherit
 }
 
-extension YGDisplay {
-    static let flex = YGDisplayFlex
-    static let none = YGDisplayNone
+extension PilatesDisplay {
+    static let flex = PilatesDisplayFlex
+    static let none = PilatesDisplayNone
 }
 
-extension YGUnit {
-    static let percent = YGUnitPercent
-    static let point = YGUnitPoint
+extension PilatesUnit {
+    static let percent = PilatesUnitPercent
+    static let point = PilatesUnitPoint
 }
 
 extension Flex.Direction {
-    var pilatesValue: YGFlexDirection {
+    var pilatesValue: PilatesFlexDirection {
         switch self {
-        case .column:        return YGFlexDirection.column
-        case .columnReverse: return YGFlexDirection.columnReverse
-        case .row:           return YGFlexDirection.row
-        case .rowReverse:    return YGFlexDirection.rowReverse
+        case .column:        return PilatesFlexDirection.column
+        case .columnReverse: return PilatesFlexDirection.columnReverse
+        case .row:           return PilatesFlexDirection.row
+        case .rowReverse:    return PilatesFlexDirection.rowReverse
         }
     }
 }
 
 extension Flex.JustifyContent {
-    var pilatesValue: YGJustify {
+    var pilatesValue: PilatesJustify {
         switch self {
-        case .start:        return YGJustify.flexStart
-        case .center:       return YGJustify.center
-        case .end:          return YGJustify.flexEnd
-        case .spaceBetween: return YGJustify.spaceBetween
-        case .spaceAround:  return YGJustify.spaceAround
-        case .spaceEvenly:  return YGJustify.spaceEvenly
+        case .start:        return PilatesJustify.flexStart
+        case .center:       return PilatesJustify.center
+        case .end:          return PilatesJustify.flexEnd
+        case .spaceBetween: return PilatesJustify.spaceBetween
+        case .spaceAround:  return PilatesJustify.spaceAround
+        case .spaceEvenly:  return PilatesJustify.spaceEvenly
         }
     }
 }
 
 extension Flex.AlignContent {
-    var pilatesValue: YGAlign {
+    var pilatesValue: PilatesAlign {
         switch self {
-        case .stretch:      return YGAlign.stretch
-        case .start:        return YGAlign.flexStart
-        case .center:       return YGAlign.center
-        case .end:          return YGAlign.flexEnd
-        case .spaceBetween: return YGAlign.spaceBetween
-        case .spaceAround:  return YGAlign.spaceAround
+        case .stretch:      return PilatesAlign.stretch
+        case .start:        return PilatesAlign.flexStart
+        case .center:       return PilatesAlign.center
+        case .end:          return PilatesAlign.flexEnd
+        case .spaceBetween: return PilatesAlign.spaceBetween
+        case .spaceAround:  return PilatesAlign.spaceAround
         }
     }
 }
 
 extension Flex.AlignItems {
-    var pilatesValue: YGAlign {
+    var pilatesValue: PilatesAlign {
         switch self {
-        case .stretch:      return YGAlign.stretch
-        case .start:        return YGAlign.flexStart
-        case .center:       return YGAlign.center
-        case .end:          return YGAlign.flexEnd
-        case .baseline:     return YGAlign.baseline
+        case .stretch:      return PilatesAlign.stretch
+        case .start:        return PilatesAlign.flexStart
+        case .center:       return PilatesAlign.center
+        case .end:          return PilatesAlign.flexEnd
+        case .baseline:     return PilatesAlign.baseline
         }
     }
 }
 
 extension Flex.AlignSelf {
-    var pilatesValue: YGAlign {
+    var pilatesValue: PilatesAlign {
         switch self {
-        case .auto:         return YGAlign.auto
-        case .stretch:      return YGAlign.stretch
-        case .start:        return YGAlign.flexStart
-        case .center:       return YGAlign.center
-        case .end:          return YGAlign.flexEnd
-        case .baseline:     return YGAlign.baseline
+        case .auto:         return PilatesAlign.auto
+        case .stretch:      return PilatesAlign.stretch
+        case .start:        return PilatesAlign.flexStart
+        case .center:       return PilatesAlign.center
+        case .end:          return PilatesAlign.flexEnd
+        case .baseline:     return PilatesAlign.baseline
         }
     }
 }
 
 extension Flex.Wrap {
-    var pilatesValue: YGWrap {
+    var pilatesValue: PilatesWrap {
         switch self {
-        case .noWrap:      return YGWrap.noWrap
-        case .wrap:        return YGWrap.wrap
-        case .wrapReverse: return YGWrap.wrapReverse
+        case .noWrap:      return PilatesWrap.noWrap
+        case .wrap:        return PilatesWrap.wrap
+        case .wrapReverse: return PilatesWrap.wrapReverse
         }
     }
 }
 
 extension Flex.Position {
-    var pilatesValue: YGPositionType {
+    var pilatesValue: PilatesPositionType {
         switch self {
-        case .relative: return YGPositionType.relative
-        case .absolute: return YGPositionType.absolute
+        case .relative: return PilatesPositionType.relative
+        case .absolute: return PilatesPositionType.absolute
         }
     }
 }
 
 extension Flex.LayoutDirection {
-    var pilatesValue: YGDirection {
+    var pilatesValue: PilatesDirection {
         switch self {
-        case .ltr: return YGDirection.LTR
-        case .rtl: return YGDirection.RTL
-        default:   return YGDirection.inherit
+        case .ltr: return PilatesDirection.LTR
+        case .rtl: return PilatesDirection.RTL
+        default:   return PilatesDirection.inherit
         }
     }
 }
 
 extension Flex.Display {
-    var pilatesValue: YGDisplay {
+    var pilatesValue: PilatesDisplay {
         switch self {
-        case .flex: return YGDisplay.flex
-        case .none: return YGDisplay.none
+        case .flex: return PilatesDisplay.flex
+        case .none: return PilatesDisplay.none
         }
     }
 }
 
 /*extension Flex.Overflow {
-    var pilatesValue: YGOverflow {
+    var pilatesValue: PilatesOverflow {
         switch self {
-        case .visible: return YGOverflow.visible
-        case .hidden:  return YGOverflow.hidden
-        case .scroll:  return YGOverflow.scroll
+        case .visible: return PilatesOverflow.visible
+        case .hidden:  return PilatesOverflow.hidden
+        case .scroll:  return PilatesOverflow.scroll
         }
     }
 }*/

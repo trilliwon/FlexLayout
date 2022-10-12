@@ -10,19 +10,19 @@ import UIKit
 import FlexLayoutPilates
 
 extension Flex {
-    func valueOrUndefined(_ value: CGFloat?) -> YGValue {
+    func valueOrUndefined(_ value: CGFloat?) -> PilatesValue {
         if let value = value {
-            return YGValue(value)
+            return PilatesValue(value)
         } else {
-            return YGValueUndefined
+            return PilatesValueUndefined
         }
     }
     
-    func valueOrAuto(_ value: CGFloat?) -> YGValue {
+    func valueOrAuto(_ value: CGFloat?) -> PilatesValue {
         if let value = value {
-            return YGValue(value)
+            return PilatesValue(value)
         } else {
-            return YGValueAuto
+            return PilatesValueAuto
         }
     }
 }
