@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014-present, Facebook, Inc.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -116,12 +116,12 @@ YG_VALUE_EDGE_PROPERTY(lowercased_name, capitalized_name, capitalized_name, YGEd
 
 YGValue YGPointValue(CGFloat value)
 {
-  return (YGValue) { .value = (float) value, .unit = (YGUnit) YGUnitPoint };
+  return (YGValue) { .value = (float)value, .unit = YGUnitPoint };
 }
 
 YGValue YGPercentValue(CGFloat value)
 {
-  return (YGValue) { .value = (float) value, .unit = YGUnitPercent };
+  return (YGValue) { .value = (float)value, .unit = YGUnitPercent };
 }
 
 static YGConfigRef globalConfig;
@@ -129,6 +129,7 @@ static YGConfigRef globalConfig;
 @interface YGLayout ()
 
 @property (nonatomic, weak, readonly) UIView *view;
+@property(nonatomic, assign, readonly) BOOL isUIView;
 
 @end
 
@@ -153,24 +154,7 @@ static YGConfigRef globalConfig;
     YGNodeSetContext(_node, (__bridge void *) view);
     _isEnabled = NO;
     _isIncludedInLayout = YES;
-
-    if ([view isKindOfClass:[UILabel class]]) {
-      if (YGNodeGetBaselineFunc(_node) == NULL) {
-        YGNodeSetBaselineFunc(_node, YGMeasureBaselineLabel);
-      }
-    }
-
-    if ([view isKindOfClass:[UITextView class]]) {
-      if (YGNodeGetBaselineFunc(_node) == NULL) {
-        YGNodeSetBaselineFunc(_node, YGMeasureBaselineTextView);
-      }
-    }
-
-    if ([view isKindOfClass:[UITextField class]]) {
-      if (YGNodeGetBaselineFunc(_node) == NULL) {
-        YGNodeSetBaselineFunc(_node, YGMeasureBaselineTextField);
-      }
-    }
+    _isUIView = [view isMemberOfClass:[UIView class]];
   }
 
   return self;
@@ -196,7 +180,7 @@ static YGConfigRef globalConfig;
   // the measure function. Since we already know that this is a leaf,
   // this *should* be fine. Forgive me Hack Gods.
   const YGNodeRef node = self.node;
-  if (YGNodeGetMeasureFunc(node) == NULL) {
+  if (YGNodeHasMeasureFunc(node)) {
     YGNodeSetMeasureFunc(node, YGMeasureView);
   }
 
@@ -245,6 +229,7 @@ YG_PROPERTY(YGWrap, flexWrap, FlexWrap)
 YG_PROPERTY(YGOverflow, overflow, Overflow)
 YG_PROPERTY(YGDisplay, display, Display)
 
+YG_PROPERTY(CGFloat, flex, Flex)
 YG_PROPERTY(CGFloat, flexGrow, FlexGrow)
 YG_PROPERTY(CGFloat, flexShrink, FlexShrink)
 YG_AUTO_VALUE_PROPERTY(flexBasis, FlexBasis)
@@ -338,42 +323,6 @@ YG_PROPERTY(CGFloat, aspectRatio, AspectRatio)
 
 #pragma mark - Private
 
-static float YGMeasureBaselineLabel(
-  YGNodeRef node,
-  const float width,
-  const float height) {
-
-  UILabel* view = (__bridge UILabel*) YGNodeGetContext(node);
-  return view.font.ascender; // height + view.font.ascender for lastBaseline
-}
-
-static float YGMeasureBaselineTextView(
-  YGNodeRef node,
-  const float width,
-  const float height) {
-
-  UITextView* view = (__bridge UITextView*) YGNodeGetContext(node);
-  return view.font.ascender + view.contentInset.top + view.textContainerInset.top;
-}
-
-static float YGMeasureBaselineTextField(
-  YGNodeRef node,
-  const float width,
-  const float height) {
-
-  UITextField* view = (__bridge UITextField*) YGNodeGetContext(node);
-
-  switch (view.borderStyle) {
-  case UITextBorderStyleNone:
-    return view.font.ascender;
-  case UITextBorderStyleLine:
-    return view.font.ascender + 4;
-  case UITextBorderStyleBezel:
-  case UITextBorderStyleRoundedRect:
-    return view.font.ascender + 7;
-  }
-}
-
 static YGSize YGMeasureView(
   YGNodeRef node,
   float width,
@@ -385,10 +334,20 @@ static YGSize YGMeasureView(
   const CGFloat constrainedHeight = (heightMode == YGMeasureModeUndefined) ? CGFLOAT_MAX: height;
 
   UIView *view = (__bridge UIView*) YGNodeGetContext(node);
-  const CGSize sizeThatFits = [view sizeThatFits:(CGSize) {
-    .width = constrainedWidth,
-    .height = constrainedHeight,
-  }];
+  CGSize sizeThatFits = CGSizeZero;
+
+  // The default implementation of sizeThatFits: returns the existing size of
+  // the view. That means that if we want to layout an empty UIView, which
+  // already has got a frame set, its measured size should be CGSizeZero, but
+  // UIKit returns the existing size.
+  //
+  // See https://github.com/facebook/yoga/issues/606 for more information.
+  if (!view.yoga.isUIView || [view.subviews count] > 0) {
+    sizeThatFits = [view sizeThatFits:(CGSize){
+                                          .width = constrainedWidth,
+                                          .height = constrainedHeight,
+                                      }];
+  }
 
   return (YGSize) {
     .width = (float) YGSanitizeMeasurement(constrainedWidth, sizeThatFits.width, widthMode),
@@ -442,7 +401,7 @@ static void YGAttachNodesFromViewHierachy(UIView *const view)
 
     NSMutableArray<UIView *> *subviewsToInclude = [[NSMutableArray alloc] initWithCapacity:view.subviews.count];
     for (UIView *subview in view.subviews) {
-      if (subview.yoga.isIncludedInLayout) {
+      if (subview.yoga.isEnabled && subview.yoga.isIncludedInLayout) {
         [subviewsToInclude addObject:subview];
       }
     }
@@ -450,12 +409,7 @@ static void YGAttachNodesFromViewHierachy(UIView *const view)
     if (!YGNodeHasExactSameChildren(node, subviewsToInclude)) {
       YGRemoveAllChildren(node);
       for (int i=0; i<subviewsToInclude.count; i++) {
-        YGNodeRef child = subviewsToInclude[i].yoga.node;
-        YGNodeRef parent = YGNodeGetParent(child);
-        if (parent != NULL) {
-          YGNodeRemoveChild(parent, child);
-        }
-        YGNodeInsertChild(node, child, i);
+        YGNodeInsertChild(node, subviewsToInclude[i].yoga.node, i);
       }
     }
 
@@ -471,9 +425,7 @@ static void YGRemoveAllChildren(const YGNodeRef node)
     return;
   }
 
-  while (YGNodeGetChildCount(node) > 0) {
-    YGNodeRemoveChild(node, YGNodeGetChild(node, YGNodeGetChildCount(node) - 1));
-  }
+  YGNodeRemoveAllChildren(node);
 }
 
 static CGFloat YGRoundPixelValue(CGFloat value)

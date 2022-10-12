@@ -8,8 +8,6 @@
 import CoreGraphics
 import FlexLayoutYoga
 
-postfix operator %
-
 extension Int {
     public static postfix func % (value: Int) -> YGValue {
         return YGValue(value: Float(value), unit: .percent)
